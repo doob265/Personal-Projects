@@ -17,6 +17,7 @@ public class baseball{
         private batter[] lineup;
         private String name;
         private boolean isHome;
+        private int score;
 
         public team(pitcher pit, batter[] bats, String name, boolean site){
             this.ace = pit;
@@ -89,25 +90,27 @@ public class baseball{
     }
 
     public int randStats(){
-        double rand = Math.random() * 100;
-        rand %= 5;
-        return (int)rand + 1;
+        Random rand = new Random();
+        int r = Math.abs((rand.nextInt() * 100) % 5);
+        return r + 1;
     }
 
     public int randPos(){
-        double rand = Math.random() * 100;
-        rand %= 9;
-        return (int)rand;
+        Random rand = new Random();
+        int r = Math.abs((rand.nextInt() * 100) % 9);
+        return r;
     }
 
     public int randNum(){
-        double rand = Math.random() * 100;
-        return (int)rand;
+        Random rand = new Random();
+        int r = Math.abs(rand.nextInt() % 100);
+        return r;
     }
 
     public char randHand(){
-        double rand = Math.random() * 100;
-        if((int)rand % 2 == 0){
+        Random rand = new Random();
+        int r = Math.abs(rand.nextInt() * 100);
+        if(r % 2 == 0){
             return 'L';
         }
         return 'R';
@@ -223,7 +226,7 @@ public class baseball{
     public int[] awaySacFly(int[] bases){
         if(bases[1] == 1 && bases[2] == 1){
             bases[1] = 0;
-            bases[3]++;
+            this.away.score++;
             System.out.println("Sac fly. Runner on third comes around to score, runner on 2nd advances to third.");
         }
         else if(bases[1] == 1){
@@ -233,7 +236,7 @@ public class baseball{
         }
         else if(bases[2] == 1){
             bases[2] = 0;
-            bases[3]++;
+            this.away.score++;
             System.out.println("Sac fly, runner on 3nd comes around to score!");
         }
 
@@ -243,7 +246,7 @@ public class baseball{
     public int[] homeSacFly(int[] bases){
         if(bases[1] == 1 && bases[2] == 1){
             bases[1] = 0;
-            bases[4]++;
+            this.home.score++;
             System.out.println("Sac fly. Runner on third comes around to score, runner on 2nd advances to third.");
         }
         else if(bases[1] == 1){
@@ -253,7 +256,7 @@ public class baseball{
         }
         else if(bases[2] == 1){
             bases[2] = 0;
-            bases[4]++;
+            this.home.score++;
             System.out.println("Sac fly, runner on 3nd comes around to score!");
         }
 
@@ -281,7 +284,7 @@ public class baseball{
         }
         else{
             outs++;
-            System.out.println("Out number " + outs);
+            System.out.println("Out number " + outs + ".");
         }
         return outs;
     }
@@ -307,7 +310,7 @@ public class baseball{
         }
         else{
             outs++;
-            System.out.println("Out number " + outs);
+            System.out.println("Out number " + outs + ".");
         }
         return outs;
     }
@@ -381,7 +384,7 @@ public class baseball{
         for(i = 2; i >= 0; i--){
             if(i == 2 && bases[i] == 1){
                 bases[i] = 0;
-                bases[3]++;
+                this.away.score++;
                 System.out.println("One run has scored!");
             }
             else if(bases[i] == 1){
@@ -398,10 +401,10 @@ public class baseball{
         for(i = 2; i >= 0; i--){
             if(i == 2 && bases[i] == 1){
                 bases[i] = 0;
-                bases[4]++;
-                if(inning >= 9 && bases[4] > bases[3]){
+                this.home.score++;
+                if(inning >= 9 && this.home.score > this.away.score){
                     System.out.println();
-                    System.out.println("Walkoff! Game over! The final score is " + this.away.name + " " + bases[3] + ", " + this.home.name + " " + bases[4] + "!");
+                    System.out.println("Walkoff! Game over! The final score is " + this.away.name + " " + this.away.score + ", " + this.home.name + " " + this.home.score + "!");
                     return bases;
                 }
                 System.out.println("One run has scored!");
@@ -420,7 +423,7 @@ public class baseball{
         for(j = 2; j >= 0; j--){
             if(j >= 1 && bases[j] == 1){
                 bases[j] = 0;
-                bases[3]++;
+                this.away.score++;
                 count++;
             }
             else if(j == 0 && bases[j] == 1){
@@ -444,10 +447,10 @@ public class baseball{
         for(j = 2; j >= 0; j--){
             if(j >= 1 && bases[j] == 1){
                 bases[j] = 0;
-                bases[4]++;
-                if(inning >= 9 && bases[4] > bases[3]){
+                this.home.score++;
+                if(inning >= 9 && this.home.score > this.away.score){
                     System.out.println();
-                    System.out.println("Walkoff! Game over! The final score is " + this.away.name + " " + bases[3] + ", " + this.home.name + " " + bases[4] + "!");
+                    System.out.println("Walkoff! Game over! The final score is " + this.away.name + " " + this.away.score + ", " + this.home.name + " " + this.home.score + "!");
                     return bases;
                 }
                 count++;
@@ -472,7 +475,7 @@ public class baseball{
         for(j = 2; j >= 0; j--){
             if(bases[j] == 1){
                 bases[j] = 0;
-                bases[3]++;
+                this.away.score++;
                 count++;
             }
         }
@@ -491,10 +494,10 @@ public class baseball{
         for(j = 2; j >= 0; j--){
             if(bases[j] == 1){
                 bases[j] = 0;
-                bases[4]++;
-                if(inning >= 9 && bases[4] > bases[3]){
+                this.home.score++;
+                if(inning >= 9 && this.home.score > this.away.score){
                     System.out.println();
-                    System.out.println("Walkoff! Game over! The final score is " + this.away.name + " " + bases[3] + ", " + this.home.name + " " + bases[4] + "!");
+                    System.out.println("Walkoff! Game over! The final score is " + this.away.name + " " + this.away.score + ", " + this.home.name + " " + this.home.score + "!");
                     return bases;
                 }
                 count++;
@@ -515,11 +518,11 @@ public class baseball{
         for(j = 0; j < 3; j++){
             if(bases[j] == 1){
                 bases[j] = 0;
-                bases[3]++;
+                this.away.score++;
                 count++;
             }
         }
-        bases[3]++;
+        this.away.score++;
         count++;
         if(count > 1){
             System.out.println(count + " runs have scored!");
@@ -535,16 +538,16 @@ public class baseball{
         for(j = 0; j < 3; j++){
             if(bases[j] == 1){
                 bases[j] = 0;
-                bases[3]++;
-                if(inning >= 9 && bases[4] > bases[3]){
+                this.home.score++;
+                if(inning >= 9 && this.home.score > this.away.score){
                     System.out.println();
-                    System.out.println("Walkoff! Game over! The final score is " + this.away.name + " " + bases[3] + ", " + this.home.name + " " + bases[4] + "!");
+                    System.out.println("Walkoff! Game over! The final score is " + this.away.name + " " + this.away.score + ", " + this.home.name + " " + this.home.score + "!");
                     return bases;
                 }
                 count++;
             }
         }
-        bases[4]++;
+        this.home.score++;
         count++;
         if(count > 1){
             System.out.println(count + " runs have scored!");
@@ -570,7 +573,7 @@ public class baseball{
             System.out.println();
             System.out.println("Top of the " + i + " inning. ");
             while(outs < 3){
-                if(bases[3] > 100 || bases[4] > 100){
+                if(this.away.score > 100 || this.home.score > 100){
                     System.out.println("Score exceeded");
                     return;
                 }
@@ -608,14 +611,14 @@ public class baseball{
                 bases[j] = 0;
             }
             System.out.println();
-            if(i == 9 && bases[4] > bases[3]){
+            if(i == 9 && this.home.score > this.away.score){
                 System.out.println();
-                System.out.println("Game over! The final score is " + this.away.name + " " + bases[3] + ", " + this.home.name + " " + bases[4] + ".");
+                System.out.println("Game over! The final score is " + this.away.name + " " + this.away.score + ", " + this.home.name + " " + this.home.score + ".");
                 return;
             }
             System.out.println("Bottom of the " + i + " inning. ");
             while(outs < 3){
-                if(bases[4] > 100 || bases[3] > 100){
+                if(this.home.score > 100 || this.away.score > 100){
                     System.out.println("Score exceeded");
                     return;
                 }
@@ -633,55 +636,53 @@ public class baseball{
                 else if(outcome == 1){
                     System.out.println("Single!");
                     bases = homeSingle(bases, i);
-                    if(i == 9 && bases[4] > bases[3]){
+                    if(i == 9 && this.home.score > this.away.score){
                         return;
                     }
                 }
                 else if(outcome == 2){
                     System.out.println("Double!");
                     bases = homeDouble(bases, i);
-                    if(i == 9 && bases[4] > bases[3]){
+                    if(i == 9 && this.home.score > this.away.score){
                         return;
                     }
                 }
                 else if(outcome == 3){
                     System.out.println("Triple!");
                     bases = homeTriple(bases, i);
-                    if(i == 9 && bases[4] > bases[3]){
+                    if(i == 9 && this.home.score > this.away.score){
                         return;
                     }
                 }
                 else if(outcome == 4){
                     System.out.println("HR!");
                     bases = homeHR(bases, i);
-                    if(i == 9 && bases[4] > bases[3]){
+                    if(i == 9 && this.home.score > this.away.score){
                         return;
                     }
                 }
 
                 hspot = (hspot + 1) % 9;
             }
-            System.out.println("Inning " + i + " is over. The score is now " + this.away.name + " " + bases[3] + ", " + this.home.name + " " + bases[4] + ".");
+            System.out.println("Inning " + i + " is over. The score is now " + this.away.name + " " + this.away.score + ", " + this.home.name + " " + this.home.score + ".");
         }
 
-        if(bases[4] == bases[3]){
-            bases = this.extras(bases[4], bases[3]);
+        if(this.home.score == this.away.score){
+            bases = this.extras();
         }
         System.out.println();
-        System.out.println("Game over! The final score is " + this.away.name + " " + bases[3] + ", " + this.home.name + " " + bases[4] + ".");
+        System.out.println("Game over! The final score is " + this.away.name + " " + this.away.score + ", " + this.home.name + " " + this.home.score + ".");
     }
 
-    public int[] extras(int hscore, int rscore){
+    public int[] extras(){
         int i, j, outs, hspot = 1, rspot = 1, outcome, to;
         int[]bases = new int[5];
-        bases[3] = rscore;
-        bases[4] = hscore;
         Random r = new Random();
 
         System.out.println("Extra innings!");
         i = 10;
-        while(bases[4] == bases[3]){
-            if(i >= 50 || bases[4] > 100 || bases[3] > 100){
+        while(this.away.score == this.home.score){
+            if(i >= 50 || this.away.score > 100 || this.home.score > 100){
                 System.out.println("Time exceeded");
                 return bases;
             }
@@ -692,7 +693,7 @@ public class baseball{
             System.out.println();
             System.out.println("Top of the " + i + " inning. ");
             while(outs < 3){
-                if(bases[4] > 100 || bases[3] > 100){
+                if(this.away.score > 100 || this.home.score > 100){
                     System.out.println("Score exceeded");
                     return bases;
                 }
@@ -732,7 +733,7 @@ public class baseball{
             System.out.println();
             System.out.println("Bottom of the " + i + " inning. ");
             while(outs < 3){
-                if(bases[3] > 100 || bases[4] > 100){
+                if(this.away.score > 100 || this.home.score > 100){
                     System.out.println("Score exceeded");
                     return bases;
                 }
@@ -750,35 +751,35 @@ public class baseball{
                 else if(outcome == 1){
                     System.out.println("Single!");
                     bases = homeSingle(bases, i);
-                    if(bases[4] > bases[3]){
+                    if(this.home.score > this.away.score){
                         return bases;
                     }
                 }
                 else if(outcome == 2){
                     System.out.println("Double!");
                     bases = homeDouble(bases, i);
-                    if(bases[4] > bases[3]){
+                    if(this.home.score > this.away.score){
                         return bases;
                     }
                 }
                 else if(outcome == 3){
                     System.out.println("Triple!");
                     bases = homeTriple(bases, i);
-                    if(bases[4] > bases[3]){
+                    if(this.home.score > this.away.score){
                         return bases;
                     }
                 }
                 else if(outcome == 4){
                     System.out.println("HR!");
                     bases = homeHR(bases, i);
-                    if(bases[4] > bases[3]){
+                    if(this.home.score > this.away.score){
                         return bases;
                     }
                 }
 
                 hspot = (hspot + 1) % 9;
             }
-            System.out.println("Inning " + i + " is over. The score is now " + this.away.name + " " + bases[3] + ", " + this.home.name + " " + bases[4] + ".");
+            System.out.println("Inning " + i + " is over. The score is now " + this.away.name + " " + this.away.score + ", " + this.home.name + " " + this.home.score + ".");
             i++;
         }
         return bases;
