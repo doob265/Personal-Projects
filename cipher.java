@@ -1,4 +1,4 @@
-//Mark Dubin, 8/6/20, Cipher Collection
+//Mark Dubin, 8/23/20, Cipher Collection
 import java.util.Scanner;
 
 //class declaration
@@ -8,11 +8,11 @@ public class cipher{
         String choice;
         int cho;
         Scanner scan = new Scanner(System.in);
-        System.out.println("Press 1 to encrypt using Caesar's Cipher, 2 to decrypt using Caesar's Cipher, 3 to encrypt using the Vigenère Cipher, 4 to decrypt using the Vigenère Cipher, or 5 to exit.");
+        System.out.println("Press 1 to encrypt using Caesar's Cipher, 2 to decrypt using Caesar's Cipher, 3 to encrypt using the Vigenère Cipher, 4 to decrypt using the Vigenère Cipher, 5 to encrpyt using the Affine Cipher, 6 to decrypt using the Affine Cipher, or 7 to exit.");
         choice = scan.nextLine();
         //ensures valid input
         while(!menuCheck(choice)){
-            System.out.println("Sorry, please try again. Press 1 to encrypt using Caesar's Cipher, 2 to decrypt using Caesar's Cipher, 3 to encrypt using the Vigenère Cipher, 4 to decrypt using the Vigenère Cipher, or 5 to exit.");
+            System.out.println("Sorry, please try again. Press 1 to encrypt using Caesar's Cipher, 2 to decrypt using Caesar's Cipher, 3 to encrypt using the Vigenère Cipher, 4 to decrypt using the Vigenère Cipher, 5 to encrpyt using the Affine Cipher, 6 to decrypt using the Affine Cipher, or 7 to exit.");
             choice = scan.nextLine();
         }
         //convert to int and return
@@ -24,7 +24,7 @@ public class cipher{
     public static boolean menuCheck(String choice){
         int i;
         for(i = 0; i < choice.length(); i++){
-            if(choice.codePointAt(i) < 49 || choice.codePointAt(i) > 53){
+            if(choice.codePointAt(i) < 49 || choice.codePointAt(i) > 55){
                 return false;
             }
         }
@@ -210,16 +210,65 @@ public class cipher{
         word = ret;
         return word;
     }
+
+    public static String affineEncrypt(String word, int a, int b){
+        //alphabet char array used for reference, char array temp used to perform shift
+        char[] alph = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}, temp = word.toCharArray();
+        int i, count = 0, result;
+        for(i = 0; i < word.length(); i++){
+            //these chars are allowed, but don't get shifted, so skip interior during this iteration
+            if(temp[i] != ' ' && temp[i] != '.' && temp[i] != '!' && temp[i] != '?' && temp[i] != '\'' && temp[i] != '"' && temp[i] != ',' && temp[i] != ';'){
+                //find numeric value of letter
+                count = 0;
+                while(temp[i] != alph[count]){
+                    count++;
+                }
+                //perform shift based on a and b, reassign
+                result = ((a * count) + b) % 26;
+                temp[i] = alph[result];
+            }
+        }
+
+        //reformat char array into string, return
+        String ret = new String(temp);
+        word = ret;
+        return word;
+    }
+
+    public static String affineDecrypt(String word, int a, int b){
+        //alphabet char array used for reference, char array temp used to perform shift
+        char[] alph = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}, temp = word.toCharArray();
+        int i, count = 0, result;
+        for(i = 0; i < word.length(); i++){
+            //these chars are allowed, but don't get shifted, so skip interior during this iteration
+            if(temp[i] != ' ' && temp[i] != '.' && temp[i] != '!' && temp[i] != '?' && temp[i] != '\'' && temp[i] != '"' && temp[i] != ',' && temp[i] != ';'){
+                //find numeric value of letter
+                count = 0;
+                while(temp[i] != alph[count]){
+                    count++;
+                }
+                //perform shift based on a and b, reassign
+                a = 1 / a;
+                result = ((a * count) - b) % 26;
+                temp[i] = alph[result];
+            }
+        }
+
+        //reformat char array into string, return
+        String ret = new String(temp);
+        word = ret;
+        return word;
+    }
     
     //main driver function
     public static void main(String[]args){
-        int key, choice = 0;
+        int key, choice = 0, aa;
         Scanner scan = new Scanner(System.in);
-        String word, temp, k;
+        String word, temp, k, a, b;
 
         //while loop used to continually execute until user is done with program
         System.out.print("Welcome! ");
-        while(choice != 5){
+        while(choice != 7){
             choice = menu();
             //caesar encrypt
             if(choice == 1){
@@ -342,6 +391,90 @@ public class cipher{
                 //perform decryption
                 System.out.println("Decrypting " + word + ", using the key " + k + "."); 
                 word = vigenereDecrypt(word, k);
+                System.out.println("Decryption: " + word);
+            }
+            //affine encrypt
+            else if(choice == 5){
+                System.out.println("Enter word or string to encrypt, only entering alphabetic characters a-z.");
+                word = scan.nextLine();
+                word = word.toLowerCase();
+        
+                //ensure user input is valid
+                while(!strCheck(word, 0, 0)){
+                    System.out.println("Sorry, please only enter alphabetical letters a-z.");
+                    word = scan.nextLine();
+                    word.toLowerCase();
+                }
+        
+                System.out.println("Enter a, please only enter digits 0-9, and a positive number coprime to 26...");
+                a = scan.nextLine();
+
+                //ensure user input is valid
+                while(!intCheck(a)){
+                    System.out.println("Sorry, please only enter numerical digits 0-9, and a positive number coprime to 26...");
+                    a = scan.nextLine();
+                }
+
+                System.out.println("Enter b, please only enter digits 0-9, and a positive number coprime to 26...");
+                b = scan.nextLine();
+
+                //ensure user input is valid
+                while(!intCheck(b)){
+                    System.out.println("Sorry, please only enter numerical digits 0-9, and a positive number coprime to 26...");
+                    temp = scan.nextLine();
+                }
+
+                //reformat key to proper length
+                key = Integer.parseInt(b);
+                key %= 26;
+
+                aa = Integer.parseInt(a);
+        
+                //perform encryption
+                System.out.println("Encrypting " + word + ", a is " + aa + " b is " + key); 
+                word = affineEncrypt(word, aa, key);
+                System.out.println("Encryption: " + word);
+            }
+            //affine decrypt
+            else if(choice == 6){
+                System.out.println("Enter word or string to decrypt, only entering alphabetic characters a-z.");
+                word = scan.nextLine();
+                word = word.toLowerCase();
+        
+                //ensure user input is valid
+                while(!strCheck(word, 0, 0)){
+                    System.out.println("Sorry, please only enter alphabetical letters a-z.");
+                    word = scan.nextLine();
+                    word.toLowerCase();
+                }
+        
+                System.out.println("Enter a, please only enter digits 0-9, and a positive number coprime to 26...");
+                a = scan.nextLine();
+
+                //ensure user input is valid
+                while(!intCheck(a)){
+                    System.out.println("Sorry, please only enter numerical digits 0-9, and a positive number coprime to 26...");
+                    a = scan.nextLine();
+                }
+
+                System.out.println("Enter b, please only enter digits 0-9, and a positive number coprime to 26...");
+                b = scan.nextLine();
+
+                //ensure user input is valid
+                while(!intCheck(b)){
+                    System.out.println("Sorry, please only enter numerical digits 0-9, and a positive number coprime to 26...");
+                    temp = scan.nextLine();
+                }
+
+                //reformat key to proper length
+                key = Integer.parseInt(b);
+                key %= 26;
+
+                aa = Integer.parseInt(a);
+        
+                //perform decryption
+                System.out.println("Decrypting " + word + ", a is " + aa + " b is " + key); 
+                word = affineDecrypt(word, aa, key);
                 System.out.println("Decryption: " + word);
             }
         }
