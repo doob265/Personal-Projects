@@ -1,5 +1,5 @@
 /*Mark Dubin
-  8/23/20
+  8/27/20
   Baseball Simulation*/
 
   //imports
@@ -259,107 +259,199 @@ import java.util.Random;
         return word;
     }
 
+    //stealing base method for away team
     public batter[] awaySteal(batter[] bases){
         Random rand = new Random();
+        String name;
+        //calculations for randomization
         int r = Math.abs(rand.nextInt() % 5), resistance = (this.home.lineup[1].arm + this.home.ace.velo) / 2;
-        if(bases[0] != null && bases[1] == null){
+
+        //runner on 1st and 2nd, no runner on 3rd
+        if(bases[0] != null && bases[1] != null && bases[2] == null){
+            System.out.println("Double steal attempt!");
+            if(bases[1].speed > resistance && bases[1].speed > r){
+                bases[2] = bases[1];
+                bases[1] = bases[0];
+                bases[0] = null;
+                System.out.println(bases[2].name + " was able to steal third, and " + bases[1].name + " was able to steal second!");
+            }
+            //thrown out at 3rd
+            else{
+                name = bases[1].name;
+                bases[1] = bases[0];
+                bases[0] = null;
+                this.outs++;
+                if(this.outs >= 3){
+                    System.out.println(name + " tried to steal third, but was thrown out by the catcher! Out number " + this.outs + ".");
+                }
+                else{
+                    System.out.println(name + " tried to steal third, but was thrown out by the catcher! Out number " + this.outs + ". " + bases[1].name + " was able to steal second!");
+                }
+            }
+        }
+        //runner on 1st, no runner on 2nd
+        else if(bases[0] != null && bases[1] == null){
+            //base stolen
             if(bases[0].speed > resistance && bases[0].speed > r){
                 bases[1] = bases[0];
                 bases[0] = null;
-                System.out.println("Runner on first was able to steal second!");
+                System.out.println(bases[1].name + " was able to steal second!");
             }
+            //thrown out
             else{
+                name = bases[0].name;
                 bases[0] = null;
                 this.outs++;
-                System.out.println("Runner on first tried to steal second, but was thrown out by the catcher! Out number " + this.outs + ".");
+                System.out.println(name + " tried to steal second, but was thrown out by the catcher! Out number " + this.outs + ".");
             }
         }
+        //runner on 2nd, no runner on 3rd
         else if(bases[1] != null && bases[2] == null){
+            //base stolen
             if(bases[1].speed > resistance && bases[1].speed > r){
                 bases[2] = bases[1];
                 bases[1] = null;
-                System.out.println("Runner on second was able to steal third!");
+                System.out.println(bases[2].name + " was able to steal third!");
             }
+            //thrown out
             else{
+                name = bases[1].name;
                 bases[1] = null;
                 this.outs++;
-                System.out.println("Runner on first tried to steal second, but was thrown out by the catcher! Out number " + this.outs + ".");
+                System.out.println(name + " tried to steal third, but was thrown out by the catcher! Out number " + this.outs + ".");
             }
         }
         return bases;
     }
 
+    //stealing base method for away team
     public batter[] homeSteal(batter[] bases){
         Random rand = new Random();
+        String name;
+        //calculations for randomization
         int r = Math.abs(rand.nextInt() % 5), resistance = (this.away.lineup[1].arm + this.away.ace.velo) / 2;
-        if(bases[0] != null && bases[1] == null){
+
+        //runner on 1st and 2nd, no runner on 3rd
+        if(bases[0] != null && bases[1] != null && bases[2] == null){
+            System.out.println("Double steal attempt!");
+            if(bases[1].speed > resistance && bases[1].speed > r){
+                bases[2] = bases[1];
+                bases[1] = bases[0];
+                bases[0] = null;
+                System.out.println(bases[2].name + " was able to steal third, and " + bases[1].name + " was able to steal second!");
+            }
+            //thrown out at 3rd
+            else{
+                name = bases[1].name;
+                bases[1] = bases[0];
+                bases[0] = null;
+                this.outs++;
+                if(this.outs >= 3){
+                    System.out.println(name + " tried to steal third, but was thrown out by the catcher! Out number " + this.outs + ".");
+                }
+                else{
+                    System.out.println(name + " tried to steal third, but was thrown out by the catcher! Out number " + this.outs + ". " + bases[1].name + " was able to steal second!");
+                }
+            }
+        }
+        //runner on 1st, no runner on 2nd
+        else if(bases[0] != null && bases[1] == null){
+            //base stolen
             if(bases[0].speed > resistance && bases[0].speed > r){
                 bases[1] = bases[0];
                 bases[0] = null;
-                System.out.println("Runner on first was able to steal second!");
+                System.out.println(bases[1].name + " was able to steal second!");
             }
+            //thrown out
             else{
+                name = bases[0].name;
                 bases[0] = null;
                 this.outs++;
-                System.out.println("Runner on first tried to steal second, but was thrown out by the catcher! Out number " + this.outs + ".");
+                System.out.println(name + " tried to steal second, but was thrown out by the catcher! Out number " + this.outs + ".");
             }
         }
+        //runner on 2nd, no runner on 3rd
         else if(bases[1] != null && bases[2] == null){
+            //base stolen
             if(bases[1].speed > resistance && bases[1].speed > r){
                 bases[2] = bases[1];
                 bases[1] = null;
-                System.out.println("Runner on second was able to steal third!");
+                System.out.println(bases[2].name + " was able to steal third!");
             }
+            //thrown out
             else{
+                name = bases[1].name;
                 bases[1] = null;
                 this.outs++;
-                System.out.println("Runner on first tried to steal second, but was thrown out by the catcher! Out number " + this.outs + ".");
+                System.out.println(name + " tried to steal third, but was thrown out by the catcher! Out number " + this.outs + ".");
             }
         }
         return bases;
     }
 
+    //determines outcome of at bat, how many bases (if any) batter will advance
     public int outcome(batter b, pitcher p){
         Random r = new Random();
         int tb = 0, hit = (b.hit * b.eye * b.power * b.speed) / 60, pitch = (p.acc * p.velo) / 25;
         double rand = Math.abs(r.nextDouble() % 5);
 
+        //0 bases gained
         if(pitch >= hit){
             return tb;
-        } if(hit > pitch){
+        } 
+        //at least one base will be gained
+        else if(hit > pitch){
             rand = r.nextDouble() % 5;
             return Math.abs(((b.power * b.eye)) - (int)rand) % 5;
         }
         return tb;
     }
 
+    //method for away team hitting a sacrifice fly
     public batter[] awaySacFly(batter[] bases, int to){
         Random rand = new Random();
         int r = Math.abs(rand.nextInt() % 5);
+        batter s, t;
+        //runners on 2nd and 3rd
         if(bases[1] != null && bases[2] != null){
+            s = bases[1];
+            t = bases[2];
+            bases[2] = bases[1];
             bases[1] = null;
             this.away.score++;
-            System.out.println("Batter hit a sac fly. Runner on third comes around to score, runner on 2nd advances to third.");
+            System.out.println("Batter hit a sac fly. " + t.name + " comes around to score, " + s.name + " advances to third.");
         }
+        //runner on 2nd
         else if(bases[1] != null){
+            //advances safely
             if(bases[1].speed > this.home.lineup[to].arm || bases[1].speed > r){
+                s = bases[1];
                 bases[2] = bases[1];
                 bases[1] = null;
-                System.out.println("Batter hit a sac fly, runner on 2nd advances to third.");
+                System.out.println("Batter hit a sac fly, " + s.name + " advances to third.");
             }
+            //thrown out
             else{
-                System.out.println("Batter hit a sac fly, runner got doubled off trying to advance to third!");
+                s = bases[1];
+                bases[1] = null;
+                System.out.println("Batter hit a sac fly, " + s.name + " got doubled off trying to advance to third!");
                 this.outs++;
             }
         }
+        //runner on 3rd
         else if(bases[2] != null){
+            //advances safely
             if(bases[2].speed > this.home.lineup[to].arm || bases[2].speed > r){
+                t = bases[2];
                 bases[2] = null;
                 this.away.score++;
-                System.out.println("Batter hit a sac fly, runner on 3nd comes around to score!");
+                System.out.println("Batter hit a sac fly, " + t.name + " comes around to score!");
             }
+            //thrown out
             else{
-                System.out.println("Batter hit a sac fly, runner got doubled off trying to come home and score!");
+                t = bases[2];
+                bases[2] = null;
+                System.out.println("Batter hit a sac fly, " + t.name + " got doubled off trying to come home and score!");
                 this.outs++;
             }
         }
@@ -367,33 +459,60 @@ import java.util.Random;
         return bases;
     }
 
-    public batter[] homeSacFly(batter[] bases, int to){
+    public batter[] homeSacFly(batter[] bases, int to, int inning){
         Random rand = new Random();
         int r = Math.abs(rand.nextInt() % 5);
+        batter s, t;
+        //runners on 2nd and 3rd
         if(bases[1] != null && bases[2] != null){
+            s = bases[1];
+            t = bases[2];
+            bases[2] = bases[1];
             bases[1] = null;
             this.home.score++;
-            System.out.println("Batter hit a sac fly. Runner on third comes around to score, runner on 2nd advances to third.");
+            System.out.println("Batter hit a sac fly. " + t.name + " comes around to score, " + s.name + " advances to third.");
+            if(inning >= 9 && this.home.score > this.away.score){
+                System.out.println();
+                System.out.println("Walkoff! Game over! The final score is " + this.away.name + " " + this.away.score + ", " + this.home.name + " " + this.home.score + "!");
+                return bases;
+            }
         }
+        //runner on 2nd
         else if(bases[1] != null){
+            //advances safely
             if(bases[1].speed > this.away.lineup[to].arm || bases[1].speed > r){
+                s = bases[1];
                 bases[2] = bases[1];
                 bases[1] = null;
-                System.out.println("Batter hit a sac fly, runner on 2nd advances to third.");
+                System.out.println("Batter hit a sac fly, " + s.name + " advances to third.");
             }
+            //thrown out
             else{
-                System.out.println("Batter hit a sac fly, runner got doubled off trying to advance to third!");
+                s = bases[1];
+                bases[1] = null;
+                System.out.println("Batter hit a sac fly, " + s.name + " got doubled off trying to advance to third!");
                 this.outs++;
             }
         }
+        //runner on 3rd
         else if(bases[2] != null){
+            //advances safely
             if(bases[2].speed > this.away.lineup[to].arm || bases[2].speed > r){
+                t = bases[2];
                 bases[2] = null;
                 this.home.score++;
-                System.out.println("Batter hit a sac fly, runner on 3nd comes around to score!");
+                System.out.println("Batter hit a sac fly, " + t.name + " comes around to score!");
+                if(inning >= 9 && this.home.score > this.away.score){
+                    System.out.println();
+                    System.out.println("Walkoff! Game over! The final score is " + this.away.name + " " + this.away.score + ", " + this.home.name + " " + this.home.score + "!");
+                    return bases;
+                }
             }
+            //thrown out
             else{
-                System.out.println("Batter hit a sac fly, runner got doubled off trying to come home and score!");
+                t = bases[2];
+                bases[2] = null;
+                System.out.println("Batter hit a sac fly, " + t.name + " got doubled off trying to come home and score!");
                 this.outs++;
             }
         }
@@ -401,24 +520,41 @@ import java.util.Random;
         return bases;
     }
 
+    //method to handle away time recording an out or multiple outs
     public void awayOut(batter[] bases, int to){
         Random r = new Random();
         int roll;
         roll = Math.abs(r.nextInt() % 5);
-        if(bases[0] != null && this.outs < 2 && to < 5 && this.home.lineup[to].field > roll){
+        //double play, hit to pitcher
+        if(bases[0] != null && this.outs < 2 && to == 0 && this.home.ace.field > roll){
             bases[0] = null;
             this.outs+= 2;
             System.out.println("Double play! There are now " + this.outs + " outs.");
         }
+        //triple play hit to pitcher
+        else if(this.outs == 0 && bases[0] != null && bases[1] != null && to == 0 && this.home.ace.field > roll){
+            bases[0] = null;
+            this.outs+= 3;
+            System.out.println("Triple play! There are now " + this.outs + " outs.");
+        }
+        //double play, hit to infielder
+        else if(bases[0] != null && this.outs < 2 && to < 5 && this.home.lineup[to].field > roll){
+            bases[0] = null;
+            this.outs+= 2;
+            System.out.println("Double play! There are now " + this.outs + " outs.");
+        }
+        //triple play hit to infielder
         else if(this.outs == 0 && bases[0] != null && bases[1] != null && to < 5 && this.home.lineup[to].field > roll){
             bases[0] = null;
             this.outs+= 3;
             System.out.println("Triple play! There are now " + this.outs + " outs.");
         }
-        else if(this.outs < 2 && to > 4 && to < 8 && (bases[1] != null || bases[2] != null)){
+        //sac fly hit to outfielder
+        else if(this.outs < 2 && to > 4 && to < 8 && (bases[1] != null || bases[2] != null) && this.away.lineup[to].field > roll){
             this.outs++;
             bases = awaySacFly(bases, to);
         }
+        //ordinary out
         else{
             this.outs++;
             System.out.println("Out number " + this.outs + ".");
@@ -426,24 +562,41 @@ import java.util.Random;
         return;
     }
 
-    public void homeOut(batter[] bases, int to){
+    //method to handle home time recording an out or multiple outs
+    public void homeOut(batter[] bases, int to, int inning){
         Random r = new Random();
         int roll;
         roll = Math.abs(r.nextInt() % 5);
-        if(bases[0] != null && this.outs < 2 && to < 5 && this.home.lineup[to].field > roll){
+        //double play, hit to pitcher
+        if(bases[0] != null && this.outs < 2 && to == 5 && this.away.ace.field > roll){
             bases[0] = null;
             this.outs+= 2;
             System.out.println("Double play! There are now " + this.outs + " outs.");
         }
-        else if(this.outs == 0 && bases[0] != null && bases[1] != null && to < 5 && this.home.lineup[to].field > roll){
+        //triple play, hit to infielder
+        else if(this.outs == 0 && bases[0] != null && bases[1] != null && to == 0 && this.away.ace.field > roll){
             bases[0] = null;
             this.outs+= 3;
             System.out.println("Triple play! There are now " + this.outs + " outs.");
         }
-        else if(this.outs < 2 && to > 4 && to < 8 && (bases[1] != null || bases[2] != null)){
-            this.outs++;
-            bases = homeSacFly(bases, to);
+        //double play, hit to infielder
+        if(bases[0] != null && this.outs < 2 && to < 5 && this.away.lineup[to].field > roll){
+            bases[0] = null;
+            this.outs+= 2;
+            System.out.println("Double play! There are now " + this.outs + " outs.");
         }
+        //triple play, hit to infielder
+        else if(this.outs == 0 && bases[0] != null && bases[1] != null && to < 5 && this.away.lineup[to].field > roll){
+            bases[0] = null;
+            this.outs+= 3;
+            System.out.println("Triple play! There are now " + this.outs + " outs.");
+        }
+        //sac fly, hit to outfielder
+        else if(this.outs < 2 && to > 4 && to < 8 && (bases[1] != null || bases[2] != null) && this.away.lineup[to].field > roll){
+            this.outs++;
+            bases = homeSacFly(bases, to, inning);
+        }
+        //ordinary out
         else{
             this.outs++;
             System.out.println("Out number " + this.outs + ".");
@@ -451,16 +604,20 @@ import java.util.Random;
         return;
     }
 
+    //method user to check if an error has occured
     public boolean errorCheck(int field){
         Random r = new Random();
         boolean error = false;
         int roll, i;
         roll = Math.abs(r.nextInt() % 5);
+        //roll twice to greatly reduce odds of errors
         for(i = 0; i < 2; i++){
             Math.abs(roll = r.nextInt() % 5);
+            //must be true twice for error to occur
             if(field < roll){
                 error = true;
             }
+            //error will not occur, return false
             else{
                 error = false;
                 return error;
@@ -469,75 +626,96 @@ import java.util.Random;
         return error;
     }
 
+    //method used to handle errors committed by home team
     public batter[] awayError(batter[] bases, batter atBat){
         Random r = new Random();
         int roll;
         roll = Math.abs(r.nextInt() % 100);
+        //one-base error
         if(roll <= 70){
-            System.out.println("Error! Batter made it to 1st base.");
+            System.out.println("Error! " + atBat.name + " made it to 1st base!");
+            //hit methods used since errors function in exact same way
             bases = awaySingle(bases, atBat);
         }
+        //two-base error
         else if(roll >= 71 && roll <= 90){
-            System.out.println("Error! Batter made it to 2nd base.");
+            System.out.println("Error! " + atBat.name + " made it to 2nd base!");
             bases = awayDouble(bases, atBat);
         }
+        //three-base error
         else if(roll >= 91 && roll <= 97){
-            System.out.println("Error! Batter made it to 3rd base.");
+            System.out.println("Error! " + atBat.name + " made it to 3rd base!");
             bases = awayTriple(bases, atBat);
         }
+        //four-base error
         else{
-            System.out.println("Error! Batter came all the way around to score!");
+            System.out.println("Error! " + atBat.name + " came all the way around to score!");
             bases = awayHR(bases);
         }
         return bases;
     }
 
+    //error used to handle errors committed by away team
     public batter[] homeError(batter[] bases, int inning, batter atBat){
         Random r = new Random();
         int roll;
         roll = Math.abs(r.nextInt() % 100);
+        //one-base error
         if(roll <= 70){
-            System.out.println("Error! Batter made it to 1st base.");
+            System.out.println("Error! " + atBat.name + " made it to 1st base!");
+            //hit methods used since errors function in exact same way
             bases = homeSingle(bases, inning, atBat);
         }
+        //two-base error
         else if(roll >= 71 && roll <= 90){
-            System.out.println("Error! Batter made it to 2nd base.");
+            System.out.println("Error! " + atBat.name + " made it to 2nd base!");
             bases = homeDouble(bases, inning, atBat);
         }
+        //three-base error
         else if(roll >= 91 && roll <= 97){
-            System.out.println("Error! Batter made it to 3rd base.");
+            System.out.println("Error! " + atBat.name + " made it to 3rd base!");
             bases = homeTriple(bases, inning, atBat);
         }
+        //four-base error
         else{
-            System.out.println("Error! Batter came all the way around to score!");
+            System.out.println("Error! " + atBat.name + " came all the way around to score!");
             bases = homeHR(bases, inning);
         }
         return bases;
     }
 
+    //method to handle away team hitting a single
     public batter[] awaySingle(batter[] bases, batter atBat){
         int i;
+        //deal with each base in reverse order
         for(i = 2; i >= 0; i--){
+            //runner on 3rd comes in to score
             if(i == 2 && bases[i] != null){
                 bases[i] = null;
                 this.away.score++;
                 System.out.println("One run has scored!");
             }
+            //runner on any other base advances
             else if(bases[i] != null){
                 bases[i+1] = bases[i];
                 bases[i] = null;
             }
         }
+        //put batter on 1st
         bases[0] = atBat;
         return bases;
     }
 
+    //method to handle home team hitting a single
     public batter[] homeSingle(batter[] bases, int inning, batter atBat){
         int i;
+        //deal with each base in reverse order
         for(i = 2; i >= 0; i--){
+            //runner on 3rd scores
             if(i == 2 && bases[i] != null){
                 bases[i] = null;
                 this.home.score++;
+                //if bottom 9 or later and home score greater than away, game over
                 if(inning >= 9 && this.home.score > this.away.score){
                     System.out.println();
                     System.out.println("Walkoff! Game over! The final score is " + this.away.name + " " + this.away.score + ", " + this.home.name + " " + this.home.score + "!");
@@ -545,29 +723,37 @@ import java.util.Random;
                 }
                 System.out.println("One run has scored!");
             }
+            //runner on any other bases moves up one base
             else if(bases[i] != null){
                 bases[i+1] = bases[i];
                 bases[i] = null;
             }
         }
+        //put batter on 1st
         bases[0] = atBat;
         return bases;
     }
 
+    //method to handle away team hitting a double
     public batter[] awayDouble(batter[] bases, batter atBat){
         int j, count = 0;
+        //deal with each base in reverse
         for(j = 2; j >= 0; j--){
+            //runner on 2nd or 3rd come in to score
             if(j >= 1 && bases[j] != null){
                 bases[j] = null;
                 this.away.score++;
                 count++;
             }
+            //runner on 1st moves to 3rd
             else if(j == 0 && bases[j] != null){
                 bases[j+2] = bases[j];
                 bases[j] = null;
             }
         }
+        //put batter on 2nd
         bases[1] = atBat;
+        //grammar
         if(count > 1){
             System.out.println(count + " runs have scored!");
         }
@@ -578,12 +764,16 @@ import java.util.Random;
         return bases;
     }
 
+    //method to handle home team hitting a double
     public batter[] homeDouble(batter[] bases, int inning, batter atBat){
         int j, count = 0;
+        //deal with each base in reverse order
         for(j = 2; j >= 0; j--){
+            //runner on 2nd/3rd score
             if(j >= 1 && bases[j] != null){
                 bases[j] = null;
                 this.home.score++;
+                //walkoff check
                 if(inning >= 9 && this.home.score > this.away.score){
                     System.out.println();
                     System.out.println("Walkoff! Game over! The final score is " + this.away.name + " " + this.away.score + ", " + this.home.name + " " + this.home.score + "!");
@@ -591,12 +781,15 @@ import java.util.Random;
                 }
                 count++;
             }
+            //runner on 1st moves to 3rd
             else if(j == 0 && bases[j] != null){
                 bases[j+2] = bases[j];
                 bases[j] = atBat;
             }
         }
+        //put batter on 2nd
         bases[1] = atBat;
+        //grammar check
         if(count > 1){
             System.out.println(count + " runs have scored!");
         }
@@ -606,8 +799,10 @@ import java.util.Random;
         return bases;
     }
 
+    //method to handle away team hitting a triple
     public batter[] awayTriple(batter[] bases, batter atBat){
         int j, count = 0;
+        //go through each base, if any has a runner they score
         for(j = 2; j >= 0; j--){
             if(bases[j] != null){
                 bases[j] = null;
@@ -615,7 +810,9 @@ import java.util.Random;
                 count++;
             }
         }
+        //move batter to 3rd
         bases[2] = atBat;
+        //grammar check
         if(count > 1){
             System.out.println(count + " runs have scored!");
         }
@@ -625,12 +822,15 @@ import java.util.Random;
         return bases;
     }
 
+    //method to handle home team hitting a triple
     public batter[] homeTriple(batter[] bases, int inning, batter atBat){
         int j, count = 0;
+        //go through each base, any runner scores
         for(j = 2; j >= 0; j--){
             if(bases[j] != null){
                 bases[j] = null;
                 this.home.score++;
+                //walkoff checker
                 if(inning >= 9 && this.home.score > this.away.score){
                     System.out.println();
                     System.out.println("Walkoff! Game over! The final score is " + this.away.name + " " + this.away.score + ", " + this.home.name + " " + this.home.score + "!");
@@ -639,7 +839,9 @@ import java.util.Random;
                 count++;
             }
         }
+        //put batter on 3rd
         bases[2] = atBat;
+        //grammar check
         if(count > 1){
             System.out.println(count + " runs have scored!");
         }
@@ -649,8 +851,10 @@ import java.util.Random;
         return bases;
     }
 
+    //method to handle away team hitting a HR
     public batter[] awayHR(batter[] bases){
         int j, count = 0;
+        //any runner on base scores
         for(j = 0; j < 3; j++){
             if(bases[j] != null){
                 bases[j] = null;
@@ -658,8 +862,10 @@ import java.util.Random;
                 count++;
             }
         }
+        //add one more for the batter
         this.away.score++;
         count++;
+        //grammar check
         if(count > 1){
             System.out.println(count + " runs have scored!");
         }
@@ -669,12 +875,15 @@ import java.util.Random;
         return bases;
     }
 
+    //method to handle home team hitting a HR
     public batter[] homeHR(batter[] bases, int inning){
         int j, count = 0;
+        //any runner on base scores
         for(j = 0; j < 3; j++){
             if(bases[j] != null){
                 bases[j] = null;
                 this.home.score++;
+                //walkoff check
                 if(inning >= 9 && this.home.score > this.away.score){
                     System.out.println();
                     System.out.println("Walkoff! Game over! The final score is " + this.away.name + " " + this.away.score + ", " + this.home.name + " " + this.home.score + "!");
@@ -683,8 +892,10 @@ import java.util.Random;
                 count++;
             }
         }
+        //add one more run for batter
         this.home.score++;
         count++;
+        //grammar check
         if(count > 1){
             System.out.println(count + " runs have scored!");
         }
@@ -694,6 +905,7 @@ import java.util.Random;
         return bases;
     }
 
+    //method that handles the gameplay
     public void playBall(){
         int i, j, hspot = 1, rspot = 1, outcome, to, roll;
         batter[] bases = new batter[3];
@@ -701,128 +913,174 @@ import java.util.Random;
 
         System.out.println("Time to play ball!");
 
+        //outer loop will run 9 times, the amount of innings in a normal game
         for(i = 1; i <= 9; i++){
+            //new inning, reset outs and bases
             this.outs = 0;
             for(j = 0; j < 3; j++){
                 bases[j] = null;
             }
             System.out.println();
             System.out.println("Top of the " + i + " inning. ");
+            //while loop will continue to run until top of inning ends
             while(this.outs < 3){
+                //prevents infinite loop in the case of extreme outlier case
                 if(this.away.score > 100 || this.home.score > 100){
                     System.out.println("Score exceeded");
                     return;
                 }
                 System.out.println("Now up to bat, number " + this.away.lineup[rspot].num + ", " + this.away.lineup[rspot].name + "!");
+                //stolen base checker to see if runner on base attempts/succeeds in stealing
                 roll = Math.abs(r.nextInt() % 4);
-                if(this.away.lineup[rspot].speed >= 3 && roll == 0 && bases[0] != null || bases[1] != null){
+                if(roll == 0 && ((bases[0] != null && bases[0].speed >= 3) || (bases[1] != null && bases[1].speed >= 3))){
                     bases = awaySteal(bases);
                 }
-                outcome = this.outcome(this.away.lineup[rspot], this.home.ace);
+                //in case picked off runner ended inning
                 if(this.outs >= 3){
                     outcome = -1;
                 }
+                //if not, get outcome 
+                else{
+                outcome = this.outcome(this.away.lineup[rspot], this.home.ace);
+                }
+                //out was/should be recorded
                 if(outcome == 0){
+                    //get position ball was hit to
                     to = Math.abs(r.nextInt() % 9);
+                    //error on account of pitcher
                     if(to == 0 && errorCheck(this.home.ace.field)){
                         bases = awayError(bases, this.away.lineup[rspot]);
                     }
+                    //error on account of position player
                     else if(errorCheck(this.home.lineup[to].field)){
                         bases = awayError(bases, this.away.lineup[rspot]);
                     }
+                    //no error, out(s) recorded
                     else{
                         awayOut(bases, to);
                     }
                 }
+                //single
                 else if(outcome == 1){
                     System.out.println("Single!");
                     bases = awaySingle(bases, this.away.lineup[rspot]);
                 }
+                //double
                 else if(outcome == 2){
                     System.out.println("Double!");
                     bases = awayDouble(bases, this.away.lineup[rspot]);
                 }
+                //triple
                 else if(outcome == 3){
                     System.out.println("Triple!");
                     bases = awayTriple(bases, this.away.lineup[rspot]);
                 }
+                //HR
                 else if(outcome == 4){
                     System.out.println("HR!");
                     bases = awayHR(bases);
                 }
+                //advance spot in lineup by 1, wrap back to beginning if at end
                 rspot = (rspot + 1) % 9;
             }
+            //top of inning over, reset outs and bases
             this.outs = 0;
             for(j = 0; j < 3; j++){
                 bases[j] = null;
             }
             System.out.println();
+            //game over check, if true return
             if(i == 9 && this.home.score > this.away.score){
                 System.out.println();
                 System.out.println("Game over! The final score is " + this.away.name + " " + this.away.score + ", " + this.home.name + " " + this.home.score + ".");
                 return;
             }
             System.out.println("Bottom of the " + i + " inning. ");
+            //will run until bottom of inning ends or walkoff
             while(this.outs < 3){
+                //prevents infinite loop in rare outlier case
                 if(this.home.score > 100 || this.away.score > 100){
                     System.out.println("Score exceeded");
                     return;
                 }
                 System.out.println("Now up to bat, number " + this.home.lineup[hspot].num + ", " + this.home.lineup[hspot].name + "!");
+                //stolen base check
                 roll = Math.abs(r.nextInt() % 4);
-                if(this.home.lineup[hspot].speed >= 3 && roll == 0 && bases[0] != null || bases[1] != null){
+                if(roll == 0 && ((bases[0] != null && bases[0].speed >= 3) || (bases[1] != null && bases[1].speed >= 3))){
                     bases = homeSteal(bases);
                 }
-                outcome = this.outcome(this.home.lineup[hspot], this.away.ace);
+                //if picked off runner ended inning
                 if(this.outs >= 3){
                     outcome = -1;
                 }
+                //if not, get outcome of at bat
+                else{
+                    outcome = this.outcome(this.home.lineup[hspot], this.away.ace);
+                }
+                //out/error
                 if(outcome == 0){
+                    //get position ball was hit to
                     to = Math.abs(r.nextInt() % 9);
+                    //error by pitcher
                     if(to == 0 && errorCheck(this.away.ace.field)){
                         bases = homeError(bases, i, this.home.lineup[hspot]);
                     }
+                    //error by fielder
                     else if(errorCheck(this.away.lineup[to].field)){
                         bases = homeError(bases, i, this.home.lineup[hspot]);
                     }
+                    //out(s)
                     else{
-                        homeOut(bases, to);
+                        homeOut(bases, to, i);
+                    }
+                    //walkoff check
+                    if(i == 9 && this.home.score > this.away.score){
+                        return;
                     }
                 }
+                //single
                 else if(outcome == 1){
                     System.out.println("Single!");
                     bases = homeSingle(bases, i, this.home.lineup[hspot]);
+                    //walkoff check
                     if(i == 9 && this.home.score > this.away.score){
                         return;
                     }
                 }
+                //double
                 else if(outcome == 2){
                     System.out.println("Double!");
                     bases = homeDouble(bases, i, this.home.lineup[hspot]);
+                    //walkoff check
                     if(i == 9 && this.home.score > this.away.score){
                         return;
                     }
                 }
+                //triple
                 else if(outcome == 3){
                     System.out.println("Triple!");
                     bases = homeTriple(bases, i, this.home.lineup[hspot]);
+                    //walkoff check
                     if(i == 9 && this.home.score > this.away.score){
                         return;
                     }
                 }
+                //HR
                 else if(outcome == 4){
                     System.out.println("HR!");
                     bases = homeHR(bases, i);
+                    //walkoff check
                     if(i == 9 && this.home.score > this.away.score){
                         return;
                     }
                 }
-
+                //advance home lineup by 1 spot, if at the end loop back around
                 hspot = (hspot + 1) % 9;
             }
             System.out.println("Inning " + i + " is over. The score is now " + this.away.name + " " + this.away.score + ", " + this.home.name + " " + this.home.score + ".");
         }
 
+        //if game still tied after 9 innings, go to extra innings
         if(this.home.score == this.away.score){
             this.extras();
         }
@@ -830,6 +1088,7 @@ import java.util.Random;
         System.out.println("Game over! The final score is " + this.away.name + " " + this.away.score + ", " + this.home.name + " " + this.home.score + ".");
     }
 
+    //if game goes to extra innings, this method will take over for gameplay
     public void extras(){
         int i, j, hspot = 1, rspot = 1, outcome, to;
         batter[] bases = new int[3];
@@ -837,123 +1096,168 @@ import java.util.Random;
         int roll;
 
         System.out.println("Extra innings!");
+        //i keeps track of what inning it is
         i = 10;
+        //gameplay will continue until someone wins or extremely long scenario
         while(this.away.score == this.home.score){
+            //prevent infinite loop in rare scenarios
             if(i >= 50 || this.away.score > 100 || this.home.score > 100){
                 System.out.println("Time exceeded");
                 return;
             }
+            //new inning, reset outs and bases
             this.outs = 0;
             for(j = 0; j < 3; j++){
                 bases[j] = null;
             }
             System.out.println();
             System.out.println("Top of the " + i + " inning. ");
+            //will run until top of inning ends
             while(this.outs < 3){
+                //prevent infinite loop in rare scenario
                 if(this.away.score > 100 || this.home.score > 100){
                     System.out.println("Score exceeded");
                     return;
                 }
                 System.out.println("Now up to bat, number " + this.away.lineup[rspot].num + ", " + this.away.lineup[rspot].name + "!");
+                //stolen base check
                 roll = Math.abs(r.nextInt() % 4);
-                if(this.away.lineup[rspot].speed >= 3 && roll == 0 && bases[0] != null || bases[1] != null){
+                if(roll == 0 && ((bases[0] != null && bases[0].speed >= 3) || (bases[1] != null && bases[1].speed >= 3))){
                     bases = awaySteal(bases);
                 }
-                outcome = this.outcome(this.away.lineup[rspot], this.home.ace);
+                //if inning should end due to picked off runner being out 3
                 if(this.outs >= 3){
                     outcome = -1;
                 }
+                //if not, run at bat
+                else{
+                    outcome = this.outcome(this.away.lineup[rspot], this.home.ace);
+                }
+                //out/error
                 if(outcome == 0){
+                    //get position ball was hit to
                     to = Math.abs(r.nextInt() % 9);
+                    //error by pitcher
                     if(to == 0 && errorCheck(this.home.ace.field)){
                         bases = awayError(bases, this.away.lineup[rspot]);
                     }
+                    //error by fielder
                     else if(errorCheck(this.home.lineup[to].field)){
                         bases = awayError(bases, this.away.lineup[rspot]);
                     }
+                    //out(s)
                     else{
                         awayOut(bases, to);
                     }
                 }
+                //single
                 else if(outcome == 1){
                     System.out.println("Single!");
                     bases = awaySingle(bases, this.away.lineup[rspot]);
                 }
+                //double
                 else if(outcome == 2){
                     System.out.println("Double!");
                     bases = awayDouble(bases, this.away.lineup[rspot]);
                 }
+                //triple
                 else if(outcome == 3){
                     System.out.println("Triple!");
                     bases = awayTriple(bases, this.away.lineup[rspot]);
                 }
+                //HR
                 else if(outcome == 4){
                     System.out.println("HR!");
                     bases = awayHR(bases);
                 }
+                //advance road lineup by 1 spot, wrap around if at end
                 rspot = (rspot + 1) % 9;
             }
+            //top of inning over, reset bases and outs
             this.outs = 0;
             for(j = 0; j < 3; j++){
                 bases[j] = null;
             }
             System.out.println();
             System.out.println("Bottom of the " + i + " inning. ");
+            //prevent infinite loop
             while(this.outs < 3){
                 if(this.away.score > 100 || this.home.score > 100){
                     System.out.println("Score exceeded");
                     return;
                 }
                 System.out.println("Now up to bat, number " + this.home.lineup[hspot].num + ", " + this.home.lineup[hspot].name + "!");
+                //stolen base check
                 roll = Math.abs(r.nextInt() % 4);
-                if(this.home.lineup[hspot].speed >= 3 && roll == 0 && bases[0] != null || bases[1] != null){
+                if(roll == 0 && ((bases[0] != null && bases[0].speed >= 3) || (bases[1] != null && bases[1].speed >= 3))){
                     bases = homeSteal(bases);
                 }
-                outcome = this.outcome(this.home.lineup[hspot], this.away.ace);
+                //if picked off runner ends inning
                 if(this.outs >= 3){
                     outcome = -1;
                 }
+                //if not, get outcome of at bat
+                else{
+                    outcome = this.outcome(this.home.lineup[hspot], this.away.ace);
+                }
+                //out/error
                 if(outcome == 0){
+                    //get position ball was hit to
                     to = Math.abs(r.nextInt() % 9);
+                    //error by pitcher
                     if(to == 0 && errorCheck(this.away.ace.field)){
                         bases = homeError(bases, i, this.home.lineup[hspot]);
                     }
+                    //error by fielder
                     if(errorCheck(this.away.lineup[to].field)){
                         bases = homeError(bases, i, this.home.lineup[hspot]);
                     }
+                    //out
                     else{
-                        homeOut(bases, to);
+                        homeOut(bases, to, i);
+                    }
+                    //walkoff check
+                    if(i == 9 && this.home.score > this.away.score){
+                        return;
                     }
                 }
+                //single
                 else if(outcome == 1){
                     System.out.println("Single!");
                     bases = homeSingle(bases, i, this.home.lineup[hspot]);
+                    //walkoff check
                     if(this.home.score > this.away.score){
                         return;
                     }
                 }
+                //double
                 else if(outcome == 2){
                     System.out.println("Double!");
                     bases = homeDouble(bases, i, this.home.lineup[hspot]);
+                    //walkoff check
                     if(this.home.score > this.away.score){
                         return;
                     }
                 }
+                //triple
                 else if(outcome == 3){
                     System.out.println("Triple!");
                     bases = homeTriple(bases, i, this.home.lineup[hspot]);
+                    //walkoff check
                     if(this.home.score > this.away.score){
                         return;
                     }
                 }
+                //HR
                 else if(outcome == 4){
                     System.out.println("HR!");
                     bases = homeHR(bases, i);
+                    //walkoff check
                     if(this.home.score > this.away.score){
                         return;
                     }
                 }
-
+                //advance home lineup by one spot, wrap around if at end
                 hspot = (hspot + 1) % 9;
             }
             System.out.println("Inning " + i + " is over. The score is now " + this.away.name + " " + this.away.score + ", " + this.home.name + " " + this.home.score + ".");
@@ -962,39 +1266,49 @@ import java.util.Random;
         return;
     }
 
-
+    //main method
     public static void main(String[]args){
         Scanner scan = new Scanner(System.in);
         String home, away;
 
+        //scan in home team name
         System.out.println("Please enter a team name for the home team, only entering alphabetic characters a-z.");
         home = scan.nextLine();
         home = home.toLowerCase();
 
+        //continually scan until appropriately formatted name is entered
         while(!strCheck(home)){
             System.out.println("Sorry, please only enter alphabetical letters a-z.");
             home = scan.nextLine();
             home = home.toLowerCase();
         }
+        //readjust caps
         home = capsFix(home);
 
+        //scan in away team name
         System.out.println("Now please enter a team name for the away team, only entering alphabetic characters a-z.");
         away = scan.nextLine();
         away = away.toLowerCase();
 
+        //continually scan until appropriately formatted name is entered
         while(!strCheck(away)){
             System.out.println("Sorry, please only enter alphabetical letters a-z.");
             away = scan.nextLine();
             away = away.toLowerCase();
         }
+        //readjust caps
         away = capsFix(away);
 
+        //create new baseball instance passing in team names
         baseball b = new baseball(home, away);
 
+        //print out detailed stats of each player
         //b.printStats();
+
+        //print out basic starting lineups for each team
         b.startingLineups();
 
+        //simulate the game
         b.playBall();
-
     }
 }
