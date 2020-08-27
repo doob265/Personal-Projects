@@ -1,4 +1,4 @@
-//Mark Dubin, 8/23/20, Cipher Collection
+//Mark Dubin, 8/27/20, Cipher Collection
 import java.util.Scanner;
 
 //class declaration
@@ -17,6 +17,7 @@ public class cipher{
         }
         //convert to int and return
         cho = Integer.parseInt(choice);
+        scan.close();
         return cho;
     }
 
@@ -78,6 +79,17 @@ public class cipher{
         return true;
     }
 
+    //used to ensure user input for ints is acceptable
+    public static boolean binaryIntCheck(String shift){
+        if(shift.length() != 1){
+            return false;
+        }
+        if(shift.codePointAt(0) == 48 || shift.codePointAt(0) == 49){
+            return true;
+        }
+        return false;
+    }
+
     //encryption method for Caesar's Cipher
     public static String caesarEncrypt(String word, int key){
         //alphabet char array used for reference, char array temp used to perform shift
@@ -87,10 +99,7 @@ public class cipher{
             //these chars are allowed, but don't get shifted, so skip interior during this iteration
             if(temp[i] != ' ' && temp[i] != '.' && temp[i] != '!' && temp[i] != '?' && temp[i] != '\'' && temp[i] != '"' && temp[i] != ',' && temp[i] != ';'){
                 //find numeric value of letter
-                count = 0;
-                while(temp[i] != alph[count]){
-                    count++;
-                }
+                count = temp[i] - 'a';
                 //perform shift based on key, reassign
                 count += key;
                 count %= 26;
@@ -113,10 +122,7 @@ public class cipher{
             //these chars are allowed, but don't get shifted, so skip interior during this iteration
             if(temp[i] != ' ' && temp[i] != '.' && temp[i] != '!' && temp[i] != '?' && temp[i] != '\'' && temp[i] != '"' && temp[i] != ',' && temp[i] != ';'){
                 //find numeric value of letter
-                count = 0;
-                while(temp[i] != alph[count]){
-                    count++;
-                }
+                count = temp[i] - 'a';
                 //perform shift based on key, reassign
                 key -= 26;
                 count -= key;
@@ -149,14 +155,8 @@ public class cipher{
 
         for(i = 0; i < word.length(); i++){
             //find cooresponding letters numeric values
-            count = 0;
-            while(wor[i] != alph[count]){
-                count++;
-            }
-            track = 0;
-            while(k[i] != alph[track]){
-                track++;
-            }
+            count = wor[i] - 'a';
+            track = k[i] - 'a';
 
             //find new letter, reassign
             temp = matrix[count][track];
@@ -186,14 +186,8 @@ public class cipher{
 
         for(i = 0; i < word.length(); i++){
             //find cooresponding letters numeric values
-            count = 0;
-            while(wor[i] != alph[count]){
-                count++;
-            }
-            track = 0;
-            while(k[i] != alph[track]){
-                track++;
-            }
+            count = wor[i] - 'a';
+            track = k[i] - 'a';
 
             //find row where cipher letter appears
             temp = 0;
@@ -219,10 +213,7 @@ public class cipher{
             //these chars are allowed, but don't get shifted, so skip interior during this iteration
             if(temp[i] != ' ' && temp[i] != '.' && temp[i] != '!' && temp[i] != '?' && temp[i] != '\'' && temp[i] != '"' && temp[i] != ',' && temp[i] != ';'){
                 //find numeric value of letter
-                count = 0;
-                while(temp[i] != alph[count]){
-                    count++;
-                }
+                count = temp[i] - 'a';
                 //perform shift based on a and b, reassign
                 result = ((a * count) + b) % 26;
                 temp[i] = alph[result];
@@ -235,23 +226,51 @@ public class cipher{
         return word;
     }
 
+    //affine cipher decryption
     public static String affineDecrypt(String word, int a, int b){
         //alphabet char array used for reference, char array temp used to perform shift
         char[] alph = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}, temp = word.toCharArray();
-        int i, count = 0, result;
-        for(i = 0; i < word.length(); i++){
-            //these chars are allowed, but don't get shifted, so skip interior during this iteration
-            if(temp[i] != ' ' && temp[i] != '.' && temp[i] != '!' && temp[i] != '?' && temp[i] != '\'' && temp[i] != '"' && temp[i] != ',' && temp[i] != ';'){
-                //find numeric value of letter
-                count = 0;
-                while(temp[i] != alph[count]){
-                    count++;
-                }
-                //perform shift based on a and b, reassign
-                a = 1 / a;
-                result = ((a * count) - b) % 26;
-                temp[i] = alph[result];
+        int i = 0, count = 0, result = 0, diff, v = -1;
+        int valid[] = {1,3,5,7,9,11,15,17,19,21,23,25};
+        int inverse[] = {1,9,21,15,3,19,7,23,11,5,17,25};
+        double div;
+
+        //find a within valid array, assign index
+        while(v == -1){
+            if(valid[i] == a){
+                v = i;
             }
+            else{
+                i++;
+            }
+        }
+        
+        //inverse contains cooresponding mod inverse value, adjusts a and b accordingly
+        b = -b * inverse[v];
+        a = inverse[v];
+
+        //finds value that is divisble, reassigns
+        for(i = 0; i < 25; i++){
+            diff = b-i;
+            div = (double)diff / 26.0;
+            //determines if div is divisible by 1 (an integer)
+            if((div == Math.floor(div)) && !Double.isInfinite(div)){
+                b = i;
+                i = 26;
+            }
+        }
+
+        //performs actual decryption
+        for(i = 0; i < word.length(); i++){
+            //find numeric value of letter
+            count = temp[i] - 'a';
+            //perform shift based on a and b, reassign
+            result = ((a * count + b) % 26);
+            //if result goes negative, put back into proper range
+            if(result < 0){
+                result += 26;
+            }
+            temp[i] = alph[result];
         }
 
         //reformat char array into string, return
@@ -262,9 +281,10 @@ public class cipher{
     
     //main driver function
     public static void main(String[]args){
-        int key, choice = 0, aa;
+        int key, choice = 0, aa, bru, i, j;
         Scanner scan = new Scanner(System.in);
-        String word, temp, k, a, b;
+        String word, temp, k, a, b, brute;
+        int[] validA = {1,3,5,7,9,11,15,17,19,21,23,25};
 
         //while loop used to continually execute until user is done with program
         System.out.print("Welcome! ");
@@ -304,6 +324,17 @@ public class cipher{
 
             //caesar decryption
             else if(choice == 2){
+                //check if user wants to brute force, or if they have a and b ready
+                System.out.println("Please enter 1 if you already have a shift key, or 0 if you want to brute-force decrypt.");
+                brute = scan.nextLine();
+                //ensure user input is valid
+                while(!binaryIntCheck(brute)){
+                    System.out.println("Sorry, please enter 1 if you already have a shift key, or 0 if you want to brute-force decrypt.");
+                    brute = scan.nextLine();
+                }
+                bru = Integer.parseInt(brute);
+
+                //get ciphertext from user
                 System.out.println("Enter word or string to decrypt, only entering alphabetic characters a-z.");
                 word = scan.nextLine();
                 word = word.toLowerCase();
@@ -315,23 +346,39 @@ public class cipher{
                     word.toLowerCase();
                 }
         
-                System.out.println("Enter number of shifts you would like to do on " + word + ". Please only enter digits 0-9, and a positive number less than 27.");
-                temp = scan.nextLine();
-
-                //ensure user input is valid
-                while(!intCheck(temp)){
-                    System.out.println("Sorry, please only enter numerical digits 0-9, and a positive number less than 27.");
+                //key ready
+                if(bru == 1){
+                    System.out.println("Enter number of shifts you would like to do on " + word + ". Please only enter digits 0-9, and a positive number less than 27.");
                     temp = scan.nextLine();
+    
+                    //ensure user input is valid
+                    while(!intCheck(temp)){
+                        System.out.println("Sorry, please only enter numerical digits 0-9, and a positive number less than 27.");
+                        temp = scan.nextLine();
+                    }
+    
+                    //reformat key to proper length
+                    key = Integer.parseInt(temp);
+                    key %= 26;
+            
+                    //perform decryption
+                    System.out.println("Decrypting " + word + ", shifting " + key + " times..."); 
+                    word = caesarDecrypt(word, key);
+                    System.out.println("Decryption: " + word);
                 }
-
-                //reformat key to proper length
-                key = Integer.parseInt(temp);
-                key %= 26;
-        
-                //perform decryption
-                System.out.println("Decrypting " + word + ", shifting " + key + " times..."); 
-                word = caesarDecrypt(word, key);
-                System.out.println("Decryption: " + word);
+                //brute
+                else{
+                    temp = word;
+                    //perform decryption
+                    for(i = 1; i < 26; i++){
+                        word = temp;
+                        System.out.println();
+                        System.out.println("Decrypting " + word + ", shifting " + i + " times..."); 
+                        word = caesarDecrypt(word, i);
+                        System.out.println("Decryption: " + word);
+                        System.out.println();
+                    }
+                }
             }
 
             //vigenere encryption
@@ -437,6 +484,16 @@ public class cipher{
             }
             //affine decrypt
             else if(choice == 6){
+                //check if user wants to brute force, or if they have a and b ready
+                System.out.println("Please enter 1 if you already have a value for a and b, or 0 if you want to brute-force decrypt.");
+                brute = scan.nextLine();
+                //ensure user input is valid
+                while(!binaryIntCheck(brute)){
+                    System.out.println("Sorry, please enter 1 if you already have a value for a and b, or 0 if you want to brute-force decrypt.");
+                    brute = scan.nextLine();
+                }
+                bru = Integer.parseInt(brute);
+
                 System.out.println("Enter word or string to decrypt, only entering alphabetic characters a-z.");
                 word = scan.nextLine();
                 word = word.toLowerCase();
@@ -448,34 +505,64 @@ public class cipher{
                     word.toLowerCase();
                 }
         
-                System.out.println("Enter a, please only enter digits 0-9, and a positive number coprime to 26...");
-                a = scan.nextLine();
-
-                //ensure user input is valid
-                while(!intCheck(a)){
-                    System.out.println("Sorry, please only enter numerical digits 0-9, and a positive number coprime to 26...");
+                //key ready
+                if(bru == 1){
+                    System.out.println("Enter a, please only enter digits 0-9, and a positive number coprime to 26...");
                     a = scan.nextLine();
+    
+                    //ensure user input is valid
+                    while(!intCheck(a)){
+                        System.out.println("Sorry, please only enter numerical digits 0-9, and a positive number coprime to 26...");
+                        a = scan.nextLine();
+                    }
+    
+                    System.out.println("Enter b, please only enter digits 0-9, and a positive number coprime to 26...");
+                    b = scan.nextLine();
+    
+                    //ensure user input is valid
+                    while(!intCheck(b)){
+                        System.out.println("Sorry, please only enter numerical digits 0-9, and a positive number coprime to 26...");
+                        temp = scan.nextLine();
+                    }
+    
+                    //reformat key to proper length
+                    key = Integer.parseInt(b);
+                    key %= 26;
+    
+                    aa = Integer.parseInt(a);
+            
+                    //perform decryption
+                    System.out.println("Decrypting " + word + ", a is " + aa + " b is " + key); 
+                    word = affineDecrypt(word, aa, key);
+                    System.out.println("Decryption: " + word);
                 }
-
-                System.out.println("Enter b, please only enter digits 0-9, and a positive number coprime to 26...");
-                b = scan.nextLine();
-
-                //ensure user input is valid
-                while(!intCheck(b)){
-                    System.out.println("Sorry, please only enter numerical digits 0-9, and a positive number coprime to 26...");
-                    temp = scan.nextLine();
-                }
-
-                //reformat key to proper length
-                key = Integer.parseInt(b);
-                key %= 26;
-
-                aa = Integer.parseInt(a);
-        
+                //brute
+                else{
                 //perform decryption
-                System.out.println("Decrypting " + word + ", a is " + aa + " b is " + key); 
-                word = affineDecrypt(word, aa, key);
-                System.out.println("Decryption: " + word);
+                temp = word;
+                //pass through each valid a value to decrypt method
+                for(i = 0; i < validA.length; i++){
+                    for(j = 1; j < 26; j++){
+                        System.out.println("Decrypting " + temp + ", a is " + validA[i] + " b is " + j); 
+                        word = affineDecrypt(temp, validA[i], j);
+                        System.out.println("Decryption: " + word);
+                        System.out.println();
+                    }
+                    //if user is done, they can terminate loop
+                    System.out.println("Would you like to advance to the next valid A value? Enter 1 to advance or 0 if you are finished decrypting");
+                    b = scan.nextLine();
+                    //ensure user input is valid
+                    while(!binaryIntCheck(b)){
+                        System.out.println("Sorry, please enter either 1 if you would like to continue or 0 if you are finished.");
+                        b = scan.nextLine();
+                    }
+                    key = Integer.parseInt(b);
+                    if(key == 0){
+                        j = 27;
+                        i = validA.length + 1;
+                    }
+                }
+                }
             }
         }
 
