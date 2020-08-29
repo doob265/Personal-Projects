@@ -132,7 +132,7 @@ import java.util.Random;
     //return either 'L' or 'R' to be used to determine a specific player's handidness
     public char randHand(){
         Random rand = new Random();
-        int r = Math.abs(rand.nextInt() * 100);
+        int r = Math.abs(rand.nextInt());
         if(r % 2 == 0){
             return 'L';
         }
@@ -1091,7 +1091,7 @@ import java.util.Random;
     //if game goes to extra innings, this method will take over for gameplay
     public void extras(){
         int i, j, hspot = 1, rspot = 1, outcome, to;
-        batter[] bases = new int[3];
+        batter[] bases = new batter[3];
         Random r = new Random();
         int roll;
 
