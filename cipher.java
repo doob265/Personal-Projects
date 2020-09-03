@@ -1,13 +1,12 @@
-//Mark Dubin, 8/27/20, Cipher Collection
+//Mark Dubin, 9/3/20, Cipher Collection
 import java.util.Scanner;
 
 //class declaration
 public class cipher{
     //menu function, gets user input for what encryption/decryption they want to perform
-    public static int menu(){
+    public static int menu(Scanner scan){
         String choice;
         int cho;
-        Scanner scan = new Scanner(System.in);
         System.out.println("Press 1 to encrypt using Caesar's Cipher, 2 to decrypt using Caesar's Cipher, 3 to encrypt using the Vigenère Cipher, 4 to decrypt using the Vigenère Cipher, 5 to encrpyt using the Affine Cipher, 6 to decrypt using the Affine Cipher, or 7 to exit.");
         choice = scan.nextLine();
         //ensures valid input
@@ -17,7 +16,6 @@ public class cipher{
         }
         //convert to int and return
         cho = Integer.parseInt(choice);
-        scan.close();
         return cho;
     }
 
@@ -142,25 +140,21 @@ public class cipher{
     public static String vigenereEncrypt(String word, String key){
         //alphabet char array used for reference, char arrays used to perform shift
         char[] alph = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}, wor = word.toCharArray(), k = key.toCharArray();
-        int i, j, count = 0, track = 0, temp;
-
-        //matrix construction, using ints to represent letters
-        int[][] matrix = new int[26][26];
-        for(i = 0; i < 26; i++){
-            for(j = 0; j < 26; j++){
-                matrix[i][j] = (i + count) % 26;
-                count++;
-            }
-        }
+        int i, count = 0, track = 0, kc = 0, klen = key.length();
 
         for(i = 0; i < word.length(); i++){
             //find cooresponding letters numeric values
             count = wor[i] - 'a';
-            track = k[i] - 'a';
+            track = k[kc] - 'a';
+
+            //keep track of which letter of key to use
+            kc++;
+            kc %= klen;
 
             //find new letter, reassign
-            temp = matrix[count][track];
-            wor[i] = alph[temp];
+            count += track;
+            count %= 26;
+            wor[i] = alph[count];
         }
 
         //reformat char array into string, return
@@ -173,30 +167,24 @@ public class cipher{
     public static String vigenereDecrypt(String word, String key){
         //alphabet char array used for reference, char arrays used to perform shift
         char[] alph = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}, wor = word.toCharArray(), k = key.toCharArray();
-        int i, j, count = 0, track = 0, temp;
-
-        //matrix construction, using ints to represent letters
-        int[][] matrix = new int[26][26];
-        for(i = 0; i < 26; i++){
-            for(j = 0; j < 26; j++){
-                matrix[i][j] = (i + count) % 26;
-                count++;
-            }
-        }
+        int i, count = 0, kk = 0, klen = key.length(), kc = 0;
+        System.out.println("klen: " + klen);
 
         for(i = 0; i < word.length(); i++){
             //find cooresponding letters numeric values
             count = wor[i] - 'a';
-            track = k[i] - 'a';
+            kk = k[kc] - 'a';
 
-            //find row where cipher letter appears
-            temp = 0;
-            while(matrix[track][temp] != count){
-                temp++;
-            }
+            //keep track of which letter of key to use
+            kc++;
+            kc %= klen;
 
-            //reassign
-            wor[i] = alph[temp];
+            //find new letter, reassign
+            kk -= 26;
+            count -= kk;
+            count %= 26;
+            count = Math.abs(count);
+            wor[i] = alph[count];
         }
 
         //reformat string into word, return
@@ -282,17 +270,20 @@ public class cipher{
     //main driver function
     public static void main(String[]args){
         int key, choice = 0, aa, bru, i, j;
-        Scanner scan = new Scanner(System.in);
         String word, temp, k, a, b, brute;
+        Scanner scan = new Scanner(System.in);
         int[] validA = {1,3,5,7,9,11,15,17,19,21,23,25};
 
         //while loop used to continually execute until user is done with program
         System.out.print("Welcome! ");
         while(choice != 7){
-            choice = menu();
+            choice = menu(scan);
             //caesar encrypt
             if(choice == 1){
                 System.out.println("Enter word or string to encrypt, only entering alphabetic characters a-z.");
+                if(scan.hasNextLine()){
+                    System.out.println("has");
+                }
                 word = scan.nextLine();
                 word = word.toLowerCase();
         
@@ -394,13 +385,13 @@ public class cipher{
                     word.toLowerCase();
                 }
 
-                System.out.println("Enter key to use for encryption, only entering alphabetic characters a-z. The key should be the same length as the word you want to encrypt");
+                System.out.println("Enter key to use for encryption, only entering alphabetic characters a-z. If you're using multiple words, don't use spaces between them.");
                 k = scan.nextLine();
                 k = k.toLowerCase();
         
                 //ensure user input is valid
-                while(!strCheck(k, 2, word.length())){
-                    System.out.println("Sorry, please only enter alphabetical letters a-z. Make sure your key has a length of " + word.length() + ".");
+                while(!strCheck(k, 1, 0)){
+                    System.out.println("Sorry, please only enter alphabetical letters a-z. If you're using multiple words, don't use spaces between them.");
                     k = scan.nextLine();
                     k.toLowerCase();
                 }
@@ -424,13 +415,13 @@ public class cipher{
                     word.toLowerCase();
                 }
 
-                System.out.println("Enter key to use for decryption, only entering alphabetic characters a-z. The key should be the same length as the word you want to encrypt");
+                System.out.println("Enter key to use for decryption, only entering alphabetic characters a-z. If you're using multiple words, don't use spaces between them.");
                 k = scan.nextLine();
                 k = k.toLowerCase();
         
                 //ensure valid input
-                while(!strCheck(k, 2, word.length())){
-                    System.out.println("Sorry, please only enter alphabetical letters a-z. Make sure your key has a length of " + word.length() + ".");
+                while(!strCheck(k, 1, 0)){
+                    System.out.println("Sorry, please only enter alphabetical letters a-z. If you're using multiple words, don't use spaces between them.");
                     k = scan.nextLine();
                     k.toLowerCase();
                 }
