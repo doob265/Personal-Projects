@@ -265,7 +265,7 @@ int lvl_one(character user){
                 attack *= 2;
             }
             defense = midget.def;
-            midget.cur_health -= (pow(attack, 2) / pow(defense, 2));
+            midget.cur_health -= (int)(pow(attack, 2) / pow(defense, 2));
             printf("\nYou dealt %d damage to the midget.\n", (int)(pow(attack, 2) / pow(defense, 2)));
         }
         else if(choice == 2){
@@ -281,7 +281,7 @@ int lvl_one(character user){
             }
             if(choice != 2)
                 defense = user.def;
-            user.cur_health -= (pow(attack, 2) / pow(defense, 2));
+            user.cur_health -= (int)(pow(attack, 2) / pow(defense, 2));
             printf("\nThe midget hit you for %d damage.\n", (int)(pow(attack, 2) / pow(defense, 2)));
             
             //if(debug == 1)
