@@ -1,4 +1,4 @@
-//Mark Dubin, 9/20/20, Cipher Collection
+//Mark Dubin, 9/21/20, Cipher Collection
 import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
@@ -23,11 +23,6 @@ public class cipher{
             list[i] = s.nextLine();
         }
 
-        //convert each word to uppercase
-        for(i = 0; i < MAXWORDS; i++){
-            list[i] = list[i].toUpperCase();
-        }
-
         //close scanner and return list
         s.close();
         return list;
@@ -37,11 +32,11 @@ public class cipher{
     public static int menu(Scanner scan){
         String choice;
         int cho;
-        System.out.println("Press 1 to encrypt using Caesar's Cipher, 2 to decrypt using Caesar's Cipher, 3 to encrypt using the Vigenère Cipher, 4 to decrypt using the Vigenère Cipher, 5 to encrpyt using the Affine Cipher, 6 to decrypt using the Affine Cipher, 7 to decrypt using a 2x2 Hill Cipher or 8 to exit.");
+        System.out.println("Press 1 to encrypt using Caesar's Cipher, 2 to decrypt using Caesar's Cipher, 3 to encrypt using the Vigenère Cipher, 4 to decrypt using the Vigenère Cipher, 5 to encrpyt using the Affine Cipher, 6 to decrypt using the Affine Cipher, 7 to encrypt using a 2x2 Hill Cipher, 8 to decrypt using a 2x2 Hill Cipher or 9 to exit.");
         choice = scan.nextLine();
         //ensures valid input
         while(!menuCheck(choice)){
-            System.out.println("Sorry, please try again. Press 1 to encrypt using Caesar's Cipher, 2 to decrypt using Caesar's Cipher, 3 to encrypt using the Vigenère Cipher, 4 to decrypt using the Vigenère Cipher, 5 to encrpyt using the Affine Cipher, 7 to decrypt using a 2x2 Hill Cipher or 8 to exit.");
+            System.out.println("Sorry, please try again. Press 1 to encrypt using Caesar's Cipher, 2 to decrypt using Caesar's Cipher, 3 to encrypt using the Vigenère Cipher, 4 to decrypt using the Vigenère Cipher, 5 to encrpyt using the Affine Cipher, 7 to encrypt using a 2x2 Hill Cipher, 8 to decrypt using a 2x2 Hill Cipher or 9 to exit.");
             choice = scan.nextLine();
         }
         //convert to int and return
@@ -53,7 +48,7 @@ public class cipher{
     public static boolean menuCheck(String choice){
         int i;
         for(i = 0; i < choice.length(); i++){
-            if(choice.codePointAt(i) < 49 || choice.codePointAt(i) > 56){
+            if(choice.codePointAt(i) < 49 || choice.codePointAt(i) > 57){
                 return false;
             }
         }
@@ -102,6 +97,22 @@ public class cipher{
         for(i = 0; i < shift.length(); i++){
             if(shift.codePointAt(i) < 48 || shift.codePointAt(i) > 57){
                 return false;
+            }
+        }
+        return true;
+    }
+
+    //used to ensure user input for hill matrix
+    public static boolean hillIntCheck(String[] nums){
+        int i, j;
+        if(nums.length != 4){
+            return false;
+        }
+        for(i = 0; i < nums.length; i++){
+            for(j = 0; j < nums[i].length(); j++){
+                if(nums[i].codePointAt(j) < 48 || nums[i].codePointAt(j) > 57){
+                    return false;
+                }
             }
         }
         return true;
@@ -198,7 +209,7 @@ public class cipher{
         //alphabet char array used for reference, char arrays used to perform shift
         char[] alph = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}, wor = word.toCharArray(), k = key.toCharArray();
         int i, count = 0, kk = 0, klen = key.length(), kc = 0;
-        System.out.println("klen: " + klen);
+        //System.out.println("klen: " + klen);
 
         for(i = 0; i < word.length(); i++){
             //find cooresponding letters numeric values
@@ -297,8 +308,8 @@ public class cipher{
         return word;
     }
 
-    //performs Hill Cipher Decryption
-    public static String hillDecrypt(String cipher, int[][] key){
+    //performs Hill Cipher Encryption/Decryption
+    public static String hill(String cipher, int[][] key){
         char[] plain = new char[cipher.length()];
         int i, j, sum;
         //two rows
@@ -307,12 +318,11 @@ public class cipher{
             sum = 0;
             //two columns
             for(j = 0; j < 2; j++){
-                //System.out.println(cipher.charAt((j)));
                 //multiply the letter by each value in column of key, add these together
-                sum += (key[i][j]*(cipher.charAt((j))-'A'));
+                sum += (key[i][j]*(cipher.charAt((j))-'a'));
             }
             //get letter into appropriate range
-            plain[i] = (char)((sum%26)+'A');
+            plain[i] = (char)((sum%26)+'a');
         }
         //turn plain into a String, return it
         return new String(plain);
@@ -320,10 +330,10 @@ public class cipher{
     
     //main driver function
     public static void main(String[]args) throws IOException{
-        int key, choice = 0, aa, bru, i, j, k, l, m, n, o, len, count;
+        int key, choice = 0, aa, bru, i, j, k, l, m, n, o, len, count, hillA, hillB, c, d;
         //matrix
         int[][] matrix = new int[2][2];
-        String word, temp, kk, a, b, brute, plain = "", cipher;
+        String word, temp, kk, a, b, brute, plain = "", cipher, ints;
         //get wordlist from file
         String[] words = readFromFile();
         Scanner scan = new Scanner(System.in);
@@ -331,7 +341,7 @@ public class cipher{
 
         //while loop used to continually execute until user is done with program
         System.out.print("Welcome! ");
-        while(choice != 8){
+        while(choice != 9){
             choice = menu(scan);
             //caesar encrypt
             if(choice == 1){
@@ -459,6 +469,15 @@ public class cipher{
 
             //vigenere decryption
             else if(choice == 4){
+                System.out.println("Please enter 1 if you already have a shift key, or 0 if you want to brute-force decrypt based on a top words list.");
+                brute = scan.nextLine();
+                //ensure user input is valid
+                while(!binaryIntCheck(brute)){
+                    System.out.println("Sorry, please enter 1 if you already have a shift key, or 0 if you want to brute-force decrypt.");
+                    brute = scan.nextLine();
+                }
+                bru = Integer.parseInt(brute);
+
                 System.out.println("Enter word or string to decrypt, only entering alphabetic characters a-z. If you're using multiple words, don't use spaces between them.");
                 word = scan.nextLine();
                 word = word.toLowerCase();
@@ -470,21 +489,59 @@ public class cipher{
                     word.toLowerCase();
                 }
 
-                System.out.println("Enter key to use for decryption, only entering alphabetic characters a-z. If you're using multiple words, don't use spaces between them.");
-                kk = scan.nextLine();
-                kk = kk.toLowerCase();
-        
-                //ensure valid input
-                while(!strCheck(kk, 1, 0)){
-                    System.out.println("Sorry, please only enter alphabetical letters a-z. If you're using multiple words, don't use spaces between them.");
+                //key ready
+                if(bru == 1){
+                    System.out.println("Enter key to use for decryption, only entering alphabetic characters a-z. If you're using multiple words, don't use spaces between them.");
                     kk = scan.nextLine();
-                    kk.toLowerCase();
+                    kk = kk.toLowerCase();
+            
+                    //ensure valid input
+                    while(!strCheck(kk, 1, 0)){
+                        System.out.println("Sorry, please only enter alphabetical letters a-z. If you're using multiple words, don't use spaces between them.");
+                        kk = scan.nextLine();
+                        kk.toLowerCase();
+                    }
+    
+                    //perform decryption
+                    System.out.println("Decrypting " + word + ", using the key " + kk + "."); 
+                    //word = word.toUpperCase();
+                    word = vigenereDecrypt(word, kk);
+                    //word = word.toLowerCase();
+                    System.out.println("Decryption: " + word);
                 }
-
-                //perform decryption
-                System.out.println("Decrypting " + word + ", using the key " + kk + "."); 
-                word = vigenereDecrypt(word, kk);
-                System.out.println("Decryption: " + word);
+                //brute
+                else{
+                    System.out.println("Decrypting " + word + "...");
+                    System.out.println();
+                    //save ciphertext before beginning
+                    temp = word;
+                    //perform brute-force decryption, trying every single possible word from list as key until "mate" is found
+                    for(i = 0; i < MAXWORDS; i++){
+                        word = temp;
+                        word = vigenereDecrypt(word, words[i]);
+                        //System.out.println(word);
+                        //reset count
+                        count = 0;
+                        //go through entirety of top words array
+                        for(j = 0; j < words.length; j++){
+                            //check if each word is substring of plaintext
+                            //if(word.contains(words[j])){
+                            if(word.contains(words[j])){
+                                count++;
+                                //if count reaches above target value, print out cooresponding info and terminate
+                                if(count > COUNT){
+                                    //print plaintext and key
+                                    System.out.println("Here is one possibility...");
+                                    System.out.println("Plaintext: " + word + " key: " + words[i]);
+                                    System.out.println();
+                                    j = words.length; 
+                                    //i = MAXWORDS;
+                                }
+                            }
+                        }
+                    }
+                    System.out.println("If the proper plaintext didn't show up, try adjusting the \"COUNT\" variable in the code, and try again.");
+                }
             }
 
             //affine encrypt
@@ -612,68 +669,200 @@ public class cipher{
                 }
             }
         }
+
+        //hill encrypt
         else if(choice == 7){
-        //get ciphertext from user, convert to uppercase, store it's length
-        System.out.println("Please enter the message you want to decrypt.");
-        cipher = scan.nextLine();
-        cipher = cipher.toUpperCase();
-        len = cipher.length();
+            //get ciphertext from user, store it's length
+            System.out.println("Please enter the message you want to encrypt.");
+            plain = scan.nextLine();
+            plain = plain.toLowerCase();
+            while(!strCheck(plain, 0, 0)){
+                System.out.println("Sorry, please only enter alphabetical letters a-z.");
+                plain = scan.nextLine();
+                plain.toLowerCase();
+            }
+            len = plain.length();
 
-        //outermost for loop
-        for(i = 0; i < 26; i++){
-            for(j = 0; j < 26; j++){
-                for(k = 0; k < 26; k++){
-                    //innermost for loop
-                    for(l = 0; l < 26; l++){
-                        //this value will continually get increased for each unique matrix, or 26^4 times
-                        matrix[1][1]++;
-                        matrix[1][1] %= 26;
-                        //reset plain
-                        plain = "";
-                        //convert ciphertext to plaintext
-                        for(m = 0; m< len; m+=2){
-                            //System.out.println(i);
-                            plain = plain.concat(hillDecrypt(cipher.substring(m, m + 2), matrix));
-                        }
+            //ensure input is proper length with padding
+            if(len % 2 == 1){
+                System.out.println("Your input is a letter short, padding with a q.");
+                plain = plain.concat("q");
+                len++;
+            }
 
-                        //reset count
-                        count = 0;
-                        //go through entirety of top words array
-                        for(m = 0; m < words.length; m++){
-                            //check if each word is substring of plaintext
-                            if(plain.contains(words[m])){
-                                count++;
-                                //if count reaches above target value, print out cooresponding info and terminate
-                                if(count > COUNT){
-                                    //print plaintext
-                                    System.out.println(plain);
-                                    //print key
-                                    for(n = 0; n < 2; n++){
-                                        for(o = 0; o < 2; o++){
-                                            System.out.print(matrix[n][o] + " ");
+            //get matrix values
+            System.out.println("Please enter the values for the matrix in this order: a b c d");
+            ints = scan.nextLine();
+            String[] nums = ints.split("\\s+");
+            //keep trying until valid input is given
+            while(!hillIntCheck(nums)){
+                System.out.println("Sorry, try again. Please enter the values for the matrix in this order: a b c d, enter four Integers.");
+                ints = scan.nextLine();
+                nums = ints.split("\\s+");
+            }
+            
+            //parse into ints
+            hillA = Integer.parseInt(nums[0]);
+            hillB = Integer.parseInt(nums[1]);
+            c = Integer.parseInt(nums[2]);
+            d = Integer.parseInt(nums[3]);
+
+            //put in matrix
+            matrix[0][0] = hillA;
+            matrix[0][1] = hillB;
+            matrix[1][0] = c;
+            matrix[1][1] = d;
+
+            //decrypt, print
+            System.out.println("Encrypting " + plain + " with matrix:");
+            for(i = 0; i < 2; i++){
+                for(j = 0; j < 2; j++){
+                    System.out.print(matrix[i][j] + " ");
+                }
+                System.out.println();
+            }
+            //reset cipher
+            cipher = "";
+            //convert ciphertext to plaintext (since encryption and decryption work the same way, same function can be used)
+            for(i = 0; i< len; i+= 2){
+                cipher = cipher.concat(hill(plain.substring(i, i + 2), matrix));
+            }
+            System.out.println("Ciphertext: " + cipher);
+        }
+
+        //hill decrypt
+        else if(choice == 8){
+            //determine if user wants to brute-force or not
+            System.out.println("Please enter 1 if you already have a shift key, or 0 if you want to brute-force decrypt based on a top words list.");
+            brute = scan.nextLine();
+            //ensure user input is valid
+            while(!binaryIntCheck(brute)){
+                System.out.println("Sorry, please enter 1 if you already have a shift key, or 0 if you want to brute-force decrypt.");
+                brute = scan.nextLine();
+             }
+            bru = Integer.parseInt(brute);
+
+            //get ciphertext from user, store it's length
+            System.out.println("Please enter the message you want to decrypt.");
+            cipher = scan.nextLine();
+            cipher = cipher.toLowerCase();
+            while(!strCheck(cipher, 0, 0)){
+                System.out.println("Sorry, please only enter alphabetical letters a-z.");
+                cipher = scan.nextLine();
+                cipher.toLowerCase();
+            }
+            len = cipher.length();
+
+            //ensure input is proper length with padding
+            if(len % 2 == 1){
+                System.out.println("Your input is a letter short, padding with a q.");
+                cipher = cipher.concat("q");
+                len++;
+            }
+
+            //has matrix values
+            if(bru == 1){
+                //get matrix values
+                System.out.println("Please enter the values for the matrix in this order: a b c d");
+                ints = scan.nextLine();
+                String[] nums = ints.split("\\s+");
+                //keep trying until valid input is given
+                while(!hillIntCheck(nums)){
+                    System.out.println("Sorry, try again. Please enter the values for the matrix in this order: a b c d, enter four Integers.");
+                    ints = scan.nextLine();
+                    nums = ints.split("\\s+");
+                }
+                
+                //parse into ints
+                hillA = Integer.parseInt(nums[0]);
+                hillB = Integer.parseInt(nums[1]);
+                c = Integer.parseInt(nums[2]);
+                d = Integer.parseInt(nums[3]);
+
+                //put in matrix
+                matrix[0][0] = hillA;
+                matrix[0][1] = hillB;
+                matrix[1][0] = c;
+                matrix[1][1] = d;
+
+                //print
+                System.out.println("Decrypting " + cipher + " with matrix:");
+                for(i = 0; i < 2; i++){
+                    for(j = 0; j < 2; j++){
+                        System.out.print(matrix[i][j] + " ");
+                    }
+                    System.out.println();
+                }
+                //reset plain
+                plain = "";
+                //convert ciphertext to plaintext
+                for(i = 0; i< len; i+= 2){
+                    plain = plain.concat(hill(cipher.substring(i, i + 2), matrix));
+                }
+                System.out.println("Plaintext: " + plain);
+            }
+            //brute force
+            else{
+                System.out.println("Decrypting " + cipher + "...");
+                //outermost for loop
+                for(i = 0; i < 26; i++){
+                    for(j = 0; j < 26; j++){
+                        for(k = 0; k < 26; k++){
+                            //innermost for loop
+                            for(l = 0; l < 26; l++){
+                                //this value will continually get increased for each unique matrix, or 26^4 times
+                                matrix[1][1]++;
+                                matrix[1][1] %= 26;
+                                //reset plain
+                                plain = "";
+                                //convert ciphertext to plaintext
+                                for(m = 0; m< len; m+=2){
+                                    //System.out.println(i);
+                                    plain = plain.concat(hill(cipher.substring(m, m + 2), matrix));
+                                }
+
+                                //reset count
+                                count = 0;
+                                //go through entirety of top words array
+                                for(m = 0; m < words.length; m++){
+                                    //check if each word is substring of plaintext
+                                    if(plain.contains(words[m])){
+                                        count++;
+                                        //if count reaches above target value, print out cooresponding info and terminate
+                                        if(count > COUNT){
+                                            //print plaintext
+                                            System.out.println(plain);
+                                            //print key
+                                            for(n = 0; n < 2; n++){
+                                                for(o = 0; o < 2; o++){
+                                                    System.out.print(matrix[n][o] + " ");
+                                                }
+                                                System.out.println();
+                                            }
+                                            System.out.println("This should be right. If not, adjust the count variable in the code, and try again.");
+                                            m = words.length;
+                                            l = 26;
+                                            j = 26;
+                                            k = 26;
+                                            i = 26;
                                         }
-                                        System.out.println();
                                     }
-                                    System.out.println("This should be right. If not, increase the count variable in the code, and try again.");
-                                    m = words.length;
                                 }
                             }
+                            //this value will get increased every time the innermost value rolls over, or 26^3 times
+                            matrix[0][1]++;
+                            matrix[0][1] %= 26;
                         }
+                        //this value will get increased 26^2 times
+                        matrix[1][0]++;
+                        matrix[1][0] %= 26;
                     }
-                    //this value will get increased every time the innermost value rolls over, or 26^3 times
-                    matrix[0][1]++;
-                    matrix[0][1] %= 26;
+                    //the outermost value will increase 26 times
+                    matrix[0][0]++;
+                    matrix[0][0] %= 26;
                 }
-                //this value will get increased 26^2 times
-                matrix[1][0]++;
-                matrix[1][0] %= 26;
             }
-            //the outermost value will increase 26 times
-            matrix[0][0]++;
-            matrix[0][0] %= 26;
-        }
-        System.out.println("Message not found. Increase the count variable in the code, and try again.");
-        }
+         }
     }
 
         //user is done, close scanner 
