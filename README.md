@@ -1,5 +1,5 @@
 # Personal-Projects
-A collection of my personal projects. 
+A collection of my personal projects. \n
 Java:
   cipher.java, which contains encryption and decryption for a variety of ciphers (topWords.txt goes with this program)
   baseball.java, which runs a simulation of a baseball game
