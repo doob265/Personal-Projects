@@ -2,7 +2,7 @@
 A collection of my personal projects. <br>
 Java:<br>
   cipher.java, which contains encryption and decryption for a variety of ciphers (topWords.txt goes with this program)<br>
-  baseball.java, which runs a simulation of a baseball game<br>
+  The BaseballFX Folder contains the Java code and assets for a JavaFX Application that runs a simulation of a baseball game.<br>
   The AoC2020 Folder contains my solutions to the 2020 Advent of Code Challenges found at https://adventofcode.com/<br>
  C:<br>
   gameDemo.c, which plays the first level of an RPG style game. The text file, saves.txt, goes with the game<br>
