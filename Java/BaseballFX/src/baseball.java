@@ -1358,7 +1358,7 @@
   
               //7th inning stretch
               if(i == 7){
-                  appendArea("\nTime for the 7th inning stretch!" );
+                  appendArea("\nTime for the 7th inning stretch!");
                   String musicFile = "Ballgame.mp3";
                   Media sound = new Media(new File(musicFile).toURI().toString());
                   MediaPlayer mediaPlayer = new MediaPlayer(sound);
