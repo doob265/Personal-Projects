@@ -74,20 +74,18 @@ public class batter implements player {
 
     //return random number, between 0 and 8, to use for a specific player's position
     public static int randPos(){
-        int r = Math.abs((rand.nextInt() * 100) % 9);
-        return r;
+        return Math.abs((rand.nextInt() * 100) % 9);
     }
 
     //return random number, between 0 and 99, to use for a specific player's jersey number
     public static int randNum(){
-        int r = Math.abs(rand.nextInt() % 100);
-        return r;
+        return Math.abs(rand.nextInt() % 100);
     }
 
     //return either 'L' or 'R' to be used to determine a specific player's handidness
     public static char randHand(){
         int r = Math.abs(rand.nextInt());
-        if(r % 2 == 0){
+        if(r % 100 <= 10){
             return 'L';
         }
         return 'R';

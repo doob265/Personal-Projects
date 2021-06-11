@@ -65,13 +65,13 @@ public class App extends Application {
 
         TextArea homeArea = new TextArea();
         homeArea.setEditable(false);
-        homeArea.setMaxWidth(175);
+        homeArea.setMaxWidth(180);
         homeArea.setMaxHeight(210);
         homeArea.setStyle("text-area-background: green;");
 
         TextArea awayArea = new TextArea();
         awayArea.setEditable(false);
-        awayArea.setMaxWidth(175);
+        awayArea.setMaxWidth(180);
         awayArea.setMaxHeight(210);
         awayArea.setStyle("text-area-background: green;");
 
