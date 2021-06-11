@@ -1011,9 +1011,25 @@
   
       public void finalScoreArea(){
           if(Platform.isFxApplicationThread()){
-              getScoreArea().setText("\tR\tH\tE\n" + away.getTeamName().substring(0, 3) + "\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName().substring(0, 3) + "\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors());
+              if(away.getTeamName().length() >= 3 && home.getTeamName().length() >= 3){
+                getScoreArea().setText("\tR\tH\tE\n" + away.getTeamName().substring(0, 3) + "\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName().substring(0, 3) + "\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors());
+              } else if(home.getTeamName().length() < 3 && away.getTeamName().length() >= 3){
+                getScoreArea().setText("\tR\tH\tE\n" + away.getTeamName().substring(0, 3) + "\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName() + "\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors());
+              } else if(home.getTeamName().length() >= 3 && away.getTeamName().length() < 3){
+                getScoreArea().setText("\tR\tH\tE\n" + away.getTeamName() + "\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName().substring(0, 3) + "\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors());
+              } else{
+                getScoreArea().setText("\tR\tH\tE\n" + away.getTeamName() + "\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName() + "\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors()); 
+              }
           } else{
+            if(away.getTeamName().length() >= 3 && home.getTeamName().length() >= 3){
               Platform.runLater(() -> getScoreArea().setText("\tR\tH\tE\n" + away.getTeamName().substring(0, 3) + "\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName().substring(0, 3) + "\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors()));
+            } else if(home.getTeamName().length() < 3 && away.getTeamName().length() >= 3){
+                Platform.runLater(() -> getScoreArea().setText("\tR\tH\tE\n" + away.getTeamName().substring(0, 3) + "\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName() + "\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors()));
+              } else if(home.getTeamName().length() >= 3 && away.getTeamName().length() < 3){
+                Platform.runLater(() -> getScoreArea().setText("\tR\tH\tE\n" + away.getTeamName() + "\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName().substring(0, 3) + "\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors()));
+              } else{
+                Platform.runLater(() -> getScoreArea().setText("\tR\tH\tE\n" + away.getTeamName() + "\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName() + "\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors())); 
+              }
           }
       }
   
