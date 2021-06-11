@@ -407,6 +407,7 @@
               bases[0] = null;
               outs+= 2;
               appendArea("\n" +"Double play! There are now " + outs + " outs.");
+              away.getLineup()[away.getBattingSpot()].incAbs();
           }
           //triple play hit to pitcher
           else if(outs == 0 && bases[0] != null && bases[1] != null && to == 0 && home.getAce().getField() > roll){
@@ -414,12 +415,14 @@
               bases[1] = null;
               outs+= 3;
               appendArea("\n" + "Triple play! There are now " + outs + " outs.");
+              away.getLineup()[away.getBattingSpot()].incAbs();
           }
           //double play, hit to infielder
           else if(bases[0] != null && outs < 2 && to < 5 && home.getLineup()[to].getField() > roll){
               bases[0] = null;
               outs+= 2;
               appendArea("\n" + "Double play! There are now " + outs + " outs.");
+              away.getLineup()[away.getBattingSpot()].incAbs();
           }
           //triple play hit to infielder
           else if(outs == 0 && bases[0] != null && bases[1] != null && to < 5 && home.getLineup()[to].getField() > roll){
@@ -427,6 +430,7 @@
               bases[1] = null;
               outs+= 3;
               appendArea("\n" + "Triple play! There are now " + outs + " outs.");
+              away.getLineup()[away.getBattingSpot()].incAbs();
           }
           //sac fly hit to outfielder
           else if(outs < 2 && to > 4 && to < 8 && (bases[1] != null || bases[2] != null) && away.getLineup()[to].getField() > roll){
@@ -437,6 +441,7 @@
           else{
               outs++;
               appendArea("\n" + "Out number " + outs + ".");
+              away.getLineup()[away.getBattingSpot()].incAbs();
           }
   
           hideBatters();
@@ -453,6 +458,7 @@
               bases[0] = null;
               outs+= 2;
               appendArea("\n" + "Double play! There are now " + outs + " outs.");
+              home.getLineup()[home.getBattingSpot()].incAbs();
           }
           //triple play, hit to infielder
           else if(outs == 0 && bases[0] != null && bases[1] != null && to == 0 && away.getAce().getField() > roll){
@@ -460,12 +466,14 @@
               bases[1] = null;
               outs+= 3;
               appendArea("\n" + "Triple play! There are now " + outs + " outs.");
+              home.getLineup()[home.getBattingSpot()].incAbs();
           }
           //double play, hit to infielder
           if(bases[0] != null && outs < 2 && to < 5 && away.getLineup()[to].getField() > roll){
               bases[0] = null;
               outs+= 2;
               appendArea("\n" + "Double play! There are now " + outs + " outs.");
+              home.getLineup()[home.getBattingSpot()].incAbs();
           }
           //triple play, hit to infielder
           else if(outs == 0 && bases[0] != null && bases[1] != null && to < 5 && away.getLineup()[to].getField() > roll){
@@ -473,6 +481,7 @@
               bases[1] = null;
               outs+= 3;
               appendArea("\n" + "Triple play! There are now " + outs + " outs.");
+              home.getLineup()[home.getBattingSpot()].incAbs();
           }
           //sac fly, hit to outfielder
           else if(outs < 2 && to > 4 && to < 8 && (bases[1] != null || bases[2] != null) && away.getLineup()[to].getField() > roll){
@@ -483,6 +492,7 @@
           else{
               outs++;
               appendArea("\n" + "Out number " + outs + ".");
+              home.getLineup()[home.getBattingSpot()].incAbs();
           }
   
           hideBatters();
@@ -1131,16 +1141,17 @@
               //get position ball was hit to
               to = Math.abs(rand.nextInt() % 9);
               if(outs < 3){
-                  away.getLineup()[away.getBattingSpot()].incAbs();
                   //out was/should be recorded
                   if(outcome <= 30){
                       //error on account of pitcher
                       if(to == 0 && errorCheck(home.getAce().getField())){
                           bases = awayError(bases, away.getLineup()[away.getBattingSpot()], to);
+                          away.getLineup()[away.getBattingSpot()].incAbs();
                       }
                       //error on account of position player
                       else if(errorCheck(home.getLineup()[to].getField())){
                           bases = awayError(bases, away.getLineup()[away.getBattingSpot()], to);
+                          away.getLineup()[away.getBattingSpot()].incAbs();
                       }
                       //no error, out(s) recorded
                       else{
@@ -1162,6 +1173,7 @@
                       bases = awaySingle(bases, away.getLineup()[away.getBattingSpot()], to);
                       away.getLineup()[away.getBattingSpot()].incHits();
                       away.incHits();
+                      away.getLineup()[away.getBattingSpot()].incAbs();
                   }
                   //double
                   else if(outcome <= 80){
@@ -1169,6 +1181,7 @@
                       bases = awayDouble(bases, away.getLineup()[away.getBattingSpot()], to);
                       away.getLineup()[away.getBattingSpot()].incHits();
                       away.incHits();
+                      away.getLineup()[away.getBattingSpot()].incAbs();
                   }
                   //HR
                   else if(outcome <= 93){
@@ -1176,6 +1189,7 @@
                       bases = awayHR(bases, away.getLineup()[away.getBattingSpot()]);
                       away.getLineup()[away.getBattingSpot()].incHits();
                       away.incHits();
+                      away.getLineup()[away.getBattingSpot()].incAbs();
                   }
                   //Triple
                   else{
@@ -1183,6 +1197,7 @@
                       bases = awayTriple(bases, away.getLineup()[away.getBattingSpot()]);
                       away.getLineup()[away.getBattingSpot()].incHits();
                       away.incHits();
+                      away.getLineup()[away.getBattingSpot()].incAbs();
                   }
   
                   away.nextBatter();
@@ -1235,16 +1250,17 @@
               //get position ball was hit to
               to = Math.abs(rand.nextInt() % 9);
               if(outs < 3){
-                  home.getLineup()[home.getBattingSpot()].incAbs();
                   //out/error
                   if(outcome <= 30){
                       //error by pitcher
                       if(to == 0 && errorCheck(away.getAce().getField())){
                           bases = homeError(bases, inning, home.getLineup()[home.getBattingSpot()], to);
+                          home.getLineup()[home.getBattingSpot()].incAbs();
                       }
                       //error by fielder
                       else if(errorCheck(away.getLineup()[to].getField())){
                           bases = homeError(bases, inning, home.getLineup()[home.getBattingSpot()], to);
+                          home.getLineup()[home.getBattingSpot()].incAbs();
                       }
                       //out(s)
                       else{
@@ -1270,6 +1286,7 @@
                       bases = homeSingle(bases, inning, home.getLineup()[home.getBattingSpot()], to);
                       home.getLineup()[home.getBattingSpot()].incHits();
                       home.incHits();
+                      home.getLineup()[home.getBattingSpot()].incAbs();
                       //walkoff check
                       if(inning >= 9 && home.getScore() > away.getScore()){
                           return;
@@ -1281,6 +1298,7 @@
                       bases = homeDouble(bases, inning, home.getLineup()[home.getBattingSpot()], to);
                       home.getLineup()[home.getBattingSpot()].incHits();
                       home.incHits();
+                      home.getLineup()[home.getBattingSpot()].incAbs();
                       //walkoff check
                       if(inning >= 9 && home.getScore() > away.getScore()){
                           return;
@@ -1292,6 +1310,7 @@
                       bases = homeHR(bases, inning, home.getLineup()[home.getBattingSpot()]);
                       home.getLineup()[home.getBattingSpot()].incHits();
                       home.incHits();
+                      home.getLineup()[home.getBattingSpot()].incAbs();
                       //walkoff check
                       if(inning >= 9 && home.getScore() > away.getScore()){
                           return;
@@ -1303,6 +1322,7 @@
                       bases = homeTriple(bases, inning, home.getLineup()[home.getBattingSpot()]);
                       home.getLineup()[home.getBattingSpot()].incHits();
                       home.incHits();
+                      home.getLineup()[home.getBattingSpot()].incAbs();
                       //walkoff check
                       if(inning >= 9 && home.getScore() > away.getScore()){
                           return;
