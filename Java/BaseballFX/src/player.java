@@ -1,6 +1,10 @@
+/*Mark Dubin
+  6/12/21
+  BaseballFX - Player Interface*/
+
 import java.util.Random;
 
-public interface player {
+public interface Player {
     public static Random rand = new Random();
     //return random number, between 1 and 5, to use for a specific player stat
     public static int randStats(){

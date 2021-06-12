@@ -1,23 +1,27 @@
-public class team {
-    private pitcher ace;
-    private batter[] lineup;
+/*Mark Dubin
+  6/12/21
+  BaseballFX - Team Class*/
+
+public class Team {
+    private Pitcher ace;
+    private Batter[] lineup;
     private String name;
     private int score, hits, errors, battingSpot = 0;
     private boolean isHome;
 
-    //team constructor, taking in one pitcher, batter array of 9 batters, team name, and home/away boolean
-    public team(pitcher pit, batter[] bats, String name, boolean site){
+    //team constructor, taking in one Pitcher, Batter array of 9 Batters, team name, and home/away boolean
+    public Team(Pitcher pit, Batter[] bats, String name, boolean site){
         this.ace = pit;
         this.lineup = bats;
         this.name = name;
         this.isHome = site;
     }
 
-    public pitcher getAce(){
+    public Pitcher getAce(){
         return ace;
     }
 
-    public batter[] getLineup(){
+    public Batter[] getLineup(){
         return lineup;
     }
 

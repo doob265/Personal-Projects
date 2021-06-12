@@ -1,14 +1,18 @@
+/*Mark Dubin
+  6/12/21
+  BaseballFX - Pitcher Class*/
+
 import java.util.Random;
 
-public class pitcher implements player{
+public class Pitcher implements Player{
     private String name;
     private char hand;
     private int num, acc, field, stam, velo;
 
     private static Random rand = new Random();
 
-    //pitcher constructor, taking in name, handedness, jersy number, and stats
-    public pitcher(String name, char hand, int field, int stam, int acc, int velo, int num){
+    //Pitcher constructor, taking in name, handedness, jersy number, and stats
+    public Pitcher(String name, char hand, int field, int stam, int acc, int velo, int num){
         this.name = name;
         this.hand = hand;
         this.num = num;
@@ -91,8 +95,8 @@ public class pitcher implements player{
         return ret;
     }
 
-    //generate new pitcher with randomized parameters
-    public static pitcher genPit(){
-        return new pitcher(randName(), randHand(), randStats(), randStats(), randStats(), randStats(), randStats());
+    //generate new Pitcher with randomized parameters
+    public static Pitcher genPit(){
+        return new Pitcher(randName(), randHand(), randStats(), randStats(), randStats(), randStats(), randStats());
     }
 }

@@ -1,3 +1,7 @@
+/*Mark Dubin
+  6/12/21
+  BaseballFX - App Class*/
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -190,14 +194,14 @@ public class App extends Application {
             @Override
             public void handle(ActionEvent event){
                 if(button.getText().equals("Start")){
-                    text.setText("Please enter the team name for the away team.");
+                    text.setText("Please enter the Team name for the away Team.");
                     button.setText("Next");
                     pane.getChildren().remove(button);
                     pane.getChildren().add(textArea);
                     pane.getChildren().add(button);
                 } else if(button.getText().equals("Next")){
                     if(strCheck(textArea.getText().toLowerCase())){
-                    text.setText("Please enter the team name for the home team.");
+                    text.setText("Please enter the Team name for the home Team.");
                     button.setText("Play");
                     awayName = textArea.getText();
                     textArea.setText("");
@@ -212,14 +216,14 @@ public class App extends Application {
                         root.getChildren().remove(pane);
                         root.getChildren().add(borderPane);
 
-                        // create new baseball instance passing in team names
-                        baseball b = new baseball(homeName, awayName, outputArea, bottomArea, awayArea, homeArea, lhb, rhb, firstRunner, secondRunner, thirdRunner, awayOnDeck, homeOnDeck);
-                        team home = b.getHome();
-                        batter[] homeLineup = home.getLineup();
+                        // create new baseball instance passing in Team names
+                        Baseball b = new Baseball(homeName, awayName, outputArea, bottomArea, awayArea, homeArea, lhb, rhb, firstRunner, secondRunner, thirdRunner, awayOnDeck, homeOnDeck);
+                        Team home = b.getHome();
+                        Batter[] homeLineup = home.getLineup();
                         homeArea.setText(home.getTeamName()+ " Lineup: ");
 
-                        team away = b.getAway();
-                        batter[] awayLineup = away.getLineup();
+                        Team away = b.getAway();
+                        Batter[] awayLineup = away.getLineup();
                         awayArea.setText(away.getTeamName() + " Lineup: ");
 
                         pane.setAlignment(Pos.TOP_CENTER);
@@ -231,7 +235,7 @@ public class App extends Application {
 
                         root.getChildren().addAll(pitcher, lhb, rhb, firstRunner, secondRunner, thirdRunner, firstBase, secondBase, thirdBase, shortStop, leftField, centerField, rightField, awayOnDeck, homeOnDeck);
 
-                        for(batter bat : homeLineup){
+                        for(Batter bat : homeLineup){
                             Platform.runLater(()->{
                                 homeArea.appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs());
                             });
@@ -241,7 +245,7 @@ public class App extends Application {
                             homeArea.appendText("\n" + "P: " + home.getAce().getName());
                         });
     
-                        for(batter bat : awayLineup){
+                        for(Batter bat : awayLineup){
                             Platform.runLater(()->{
                                 awayArea.appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs());
                             });
@@ -253,7 +257,7 @@ public class App extends Application {
 
                         bottomArea.setText("Inning:\tTop 1\tOuts:\t0\nScore:\t" + awayName + ": " + away.getScore() + ", " + homeName + ": " + home.getScore());
 
-                        Thread thread = new Thread(() ->{
+                        Thread thread = new Thread(() -> {
                             b.playBall();
                         });
                         thread.start();

@@ -1,14 +1,18 @@
+/*Mark Dubin
+  6/12/21
+  BaseballFX - Batter Class*/
+
 import java.util.Random;
 
-public class batter implements player {
+public class Batter implements Player {
     private String name;
     private char bhand, fhand;
     private int field, hit, speed, power, eye, pos, num, arm, hits = 0, abs = 0;
 
     private static Random rand = new Random();
 
-    //batter constructor, taking in name, handedness, jersy number, and stats
-    public batter(String name, char bhand, char fhand, int field, int hit, int speed, int pop, int eye, int arm, int pos, int num){
+    //Batter constructor, taking in name, handedness, jersy number, and stats
+    public Batter(String name, char bhand, char fhand, int field, int hit, int speed, int pop, int eye, int arm, int pos, int num){
         this.name = name;
         this.bhand = bhand;
         this.fhand = fhand;
@@ -111,9 +115,9 @@ public class batter implements player {
         return ret;
     }
 
-    //generate new batter with randomized parameters, count is defensive position/position in batting lineup
-    public static batter genBat(int count){
-        return new batter(randName(), randHand(), randHand(), randStats(), randStats(), randStats(), randStats(), randStats(), randStats(), count, randNum());
+    //generate new Batter with randomized parameters, count is defensive position/position in batting lineup
+    public static Batter genBat(int count){
+        return new Batter(randName(), randHand(), randHand(), randStats(), randStats(), randStats(), randStats(), randStats(), randStats(), count, randNum());
     }
 
     public int getHits(){

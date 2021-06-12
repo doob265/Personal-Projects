@@ -1,10 +1,8 @@
 /*Mark Dubin
-  8/23/20
-  Baseball Simulation*/
+  6/12/21
+  BaseballFX - Gameplay Class*/
 
   //imports
-  import java.util.concurrent.TimeUnit;
-
   import javafx.scene.control.TextArea;
   import javafx.scene.image.ImageView;
   import javafx.scene.media.Media;
@@ -13,16 +11,16 @@
   import java.util.Random;
   import javafx.application.Platform;
   
-      //baseball class, houses teams and outs
-      public class baseball{
+      //Baseball class, houses Teams and outs
+      public class Baseball{
           public Random rand = new Random();
           private boolean isTop;
-          private team home, away;
+          private Team home, away;
           private int outs, inning;
           private TextArea outpuTextArea, scoreArea, awayTextArea, homeTextArea;
           private ImageView lhb, rhb, firstRunner, secondRunner, thirdRunner, awayOnDeck, homeOnDeck;
-          //baseball constructor, taking in team names and constructing teams
-          public baseball(String h, String a, TextArea outputArea, TextArea sArea, TextArea awayArea, TextArea homeArea, ImageView lb, ImageView rb, ImageView f, ImageView s, ImageView t, ImageView awayNext, ImageView homeNext){
+          //Baseball constructor, taking in Team names and constructing Teams
+          public Baseball(String h, String a, TextArea outputArea, TextArea sArea, TextArea awayArea, TextArea homeArea, ImageView lb, ImageView rb, ImageView f, ImageView s, ImageView t, ImageView awayNext, ImageView homeNext){
               home = buildTeam(h, true);
               away = buildTeam(a, false);
               outpuTextArea = outputArea;
@@ -46,36 +44,35 @@
           isTop = top;
       }
   
-      public team getHome(){
+      public Team getHome(){
           return home;
       }
   
-      public team getAway(){
+      public Team getAway(){
           return away;
       }
   
-      //method used to construct team
-      public team buildTeam(String name, boolean site){
+      //method used to construct Team
+      public Team buildTeam(String name, boolean site){
           int i;
   
-          //batter array of 9 used to generate entire lineup
-          batter[] bats = new batter[9];
-          pitcher pit;
+          //Batter array of 9 used to generate entire lineup
+          Batter[] bats = new Batter[9];
+          Pitcher pit;
   
-          //generate 9 batters with i serving as defensive position/lineup order
+          //generate 9 Batters with i serving as defensive position/lineup order
           for(i = 2; i < 11; i++){
-              bats[i-2] = batter.genBat(i);
+              bats[i-2] = Batter.genBat(i);
           }
   
-          //generate pitcher
-          pit = pitcher.genPit();
+          //generate Pitcher
+          pit = Pitcher.genPit();
   
-          //take batters, pitcher, team name, and site boolean, and generate team
-          team temp = new team(pit, bats, name, site);
-          return temp;
+          //take Batters, Pitcher, Team name, and site boolean, and generate Team
+          return new Team(pit, bats, name, site);
       }
   
-      //ensure team name inputted is valid
+      //ensure Team name inputted is valid
       public static boolean strCheck(String word){
           int i;
           //if a single space is entered, return false
@@ -91,7 +88,7 @@
           return true;
       }
   
-      //adjusts letters of team names for proper capitalization
+      //adjusts letters of Team names for proper capitalization
       public static String capsFix(String word){
           int i;
           //get char array of string to easily adjust
@@ -102,7 +99,7 @@
           l = Character.toUpperCase(l);
           w[0] = l;
   
-          //go through team name, capitalizing first letter after space
+          //go through Team name, capitalizing first letter after space
           for(i = 0; i < word.length(); i++){
               if(word.codePointAt(i) == 32){
                   l = word.charAt(i+1);
@@ -117,8 +114,8 @@
           return word;
       }
   
-      //stealing base method for away team
-      public batter[] awaySteal(batter[] bases){
+      //stealing base method for away Team
+      public Batter[] awaySteal(Batter[] bases){
           String name;
           //calculations for randomization
           int r = Math.abs(rand.nextInt() % 5), resistance = (home.getLineup()[1].getArm() + home.getAce().getVelo()) / 2;
@@ -190,8 +187,8 @@
           return bases;
       }
   
-      //stealing base method for away team
-      public batter[] homeSteal(batter[] bases){
+      //stealing base method for away Team
+      public Batter[] homeSteal(Batter[] bases){
           String name;
           //calculations for randomization
           int r = Math.abs(rand.nextInt() % 5), resistance = (away.getLineup()[1].getArm() + away.getAce().getVelo()) / 2;
@@ -263,8 +260,8 @@
           return bases;
       }
   
-      //determines outcome of at bat, how many bases (if any) batter will advance
-      public int outcome(batter b, pitcher p){
+      //determines outcome of at bat, how many bases (if any) Batter will advance
+      public int outcome(Batter b, Pitcher p){
           int random, tb = 0, hit = (b.getHit() * b.getEye() * b.getPower() * b.getSpeed()) / 60, pitch = (p.getAcc() * p.getVelo()) / 25;
   
           //0 bases gained
@@ -279,10 +276,10 @@
           return tb;
       }
   
-      //method for away team hitting a sacrifice fly
-      public batter[] awaySacFly(batter[] bases, int to){
+      //method for away Team hitting a sacrifice fly
+      public Batter[] awaySacFly(Batter[] bases, int to){
           int r = Math.abs(rand.nextInt() % 5);
-          batter s, t;
+          Batter s, t;
           //Runners on 2nd and 3rd
           if(bases[1] != null && bases[2] != null){
               s = bases[1];
@@ -334,9 +331,9 @@
           return bases;
       }
   
-      public batter[] homeSacFly(batter[] bases, int to, int inning){
+      public Batter[] homeSacFly(Batter[] bases, int to, int inning){
           int r = Math.abs(rand.nextInt() % 5);
-          batter s, t;
+          Batter s, t;
           //Runners on 2nd and 3rd
           if(bases[1] != null && bases[2] != null){
               s = bases[1];
@@ -399,17 +396,17 @@
       }
   
       //method to handle away time recording an out or multiple outs
-      public void awayOut(batter[] bases, int to){
+      public void awayOut(Batter[] bases, int to){
           int roll;
           roll = Math.abs(rand.nextInt() % 5);
-          //double play, hit to pitcher
+          //double play, hit to Pitcher
           if(bases[0] != null && outs < 2 && to == 0 && home.getAce().getField() > roll){
               bases[0] = null;
               outs+= 2;
               appendArea("\n" +"Double play! There are now " + outs + " outs.");
               away.getLineup()[away.getBattingSpot()].incAbs();
           }
-          //triple play hit to pitcher
+          //triple play hit to Pitcher
           else if(outs == 0 && bases[0] != null && bases[1] != null && to == 0 && home.getAce().getField() > roll){
               bases[0] = null;
               bases[1] = null;
@@ -450,10 +447,10 @@
       }
   
       //method to handle home time recording an out or multiple outs
-      public void homeOut(batter[] bases, int to, int inning){
+      public void homeOut(Batter[] bases, int to, int inning){
           int roll;
           roll = Math.abs(rand.nextInt() % 5);
-          //double play, hit to pitcher
+          //double play, hit to Pitcher
           if(bases[0] != null && outs < 2 && to == 0 && away.getAce().getField() > roll){
               bases[0] = null;
               outs+= 2;
@@ -521,8 +518,8 @@
           return error;
       }
   
-      //method used to handle errors committed by home team
-      public batter[] awayError(batter[] bases, batter atBat, int to){
+      //method used to handle errors committed by home Team
+      public Batter[] awayError(Batter[] bases, Batter atBat, int to){
           int roll;
           roll = Math.abs(rand.nextInt() % 100);
           //one-base error
@@ -552,8 +549,8 @@
           return bases;
       }
   
-      //error used to handle errors committed by away team
-      public batter[] homeError(batter[] bases, int inning, batter atBat, int to){
+      //error used to handle errors committed by away Team
+      public Batter[] homeError(Batter[] bases, int inning, Batter atBat, int to){
           int roll;
           roll = Math.abs(rand.nextInt() % 100);
           //one-base error
@@ -583,8 +580,8 @@
           return bases;
       }
   
-      //method to handle away team walking
-      public batter[] awayWalk(batter[] bases, batter atBat){
+      //method to handle away Team walking
+      public Batter[] awayWalk(Batter[] bases, Batter atBat){
           //bases loaded
           if(bases[2] != null && bases[1] != null && bases[0] != null){
               appendArea("\n" + bases[2].getName() + " has scored from third!");
@@ -600,15 +597,15 @@
           } else if(bases[1] == null && bases[0] != null){
               bases[1] = bases[0];
           }
-          //put batter on 1st
+          //put Batter on 1st
           bases[0] = atBat;
           adjustRunners(bases);
           hideBatters();
           return bases;
       }
   
-      //method to handle home team walking
-      public batter[] homeWalk(batter[] bases, batter atBat){
+      //method to handle home Team walking
+      public Batter[] homeWalk(Batter[] bases, Batter atBat){
           //bases loaded
           if(bases[2] != null && bases[1] != null && bases[0] != null){
               appendArea("\n" + bases[2].getName() + " has scored from third!");
@@ -632,15 +629,15 @@
               return bases;
           }
   
-          //put batter on 1st
+          //put Batter on 1st
           bases[0] = atBat;
           adjustRunners(bases);
           hideBatters();
           return bases;
       }
   
-      //method to handle away team hitting a single
-      public batter[] awaySingle(batter[] bases, batter atBat, int to){
+      //method to handle away Team hitting a single
+      public Batter[] awaySingle(Batter[] bases, Batter atBat, int to){
           int i, r;
           r = rand.nextInt() % 5;
           //deal with each base in reverse order
@@ -676,15 +673,15 @@
                   bases[i] = null;
               }
           }
-          //put batter on 1st
+          //put Batter on 1st
           bases[0] = atBat;
           adjustRunners(bases);
           hideBatters();
           return bases;
       }
   
-      //method to handle home team hitting a single
-      public batter[] homeSingle(batter[] bases, int inning, batter atBat, int to){
+      //method to handle home Team hitting a single
+      public Batter[] homeSingle(Batter[] bases, int inning, Batter atBat, int to){
           int i, r;
           r = rand.nextInt() % 5;
   
@@ -727,7 +724,7 @@
                   return bases;
               }
           }
-          //put batter on 1st
+          //put Batter on 1st
           bases[0] = atBat;
           adjustRunners(bases);
   
@@ -735,8 +732,8 @@
           return bases;
       }
   
-      //method to handle away team hitting a double
-      public batter[] awayDouble(batter[] bases, batter atBat, int to){
+      //method to handle away Team hitting a double
+      public Batter[] awayDouble(Batter[] bases, Batter atBat, int to){
           int j, count = 0, r;
           r = rand.nextInt() % 5;
           //deal with each base in reverse
@@ -772,7 +769,7 @@
                   bases[j] = null;
               }
           }
-          //put batter on 2nd
+          //put Batter on 2nd
           bases[1] = atBat;
           adjustRunners(bases);
           //grammar
@@ -787,8 +784,8 @@
           return bases;
       }
   
-      //method to handle home team hitting a double
-      public batter[] homeDouble(batter[] bases, int inning, batter atBat, int to){
+      //method to handle home Team hitting a double
+      public Batter[] homeDouble(Batter[] bases, int inning, Batter atBat, int to){
           int j, count = 0, r;
           r = rand.nextInt() % 5;
   
@@ -831,7 +828,7 @@
                   return bases;
               }
           }
-          //put batter on 2nd
+          //put Batter on 2nd
           bases[1] = atBat;
           adjustRunners(bases);
   
@@ -847,8 +844,8 @@
           return bases;
       }
   
-      //method to handle away team hitting a triple
-      public batter[] awayTriple(batter[] bases, batter atBat){
+      //method to handle away Team hitting a triple
+      public Batter[] awayTriple(Batter[] bases, Batter atBat){
           int j, count = 0;
           //go through each base, if any has a Runner they score
           for(j = 2; j >= 0; j--){
@@ -860,7 +857,7 @@
                   clearPlayers();
               }
           }
-          //move batter to 3rd
+          //move Batter to 3rd
           bases[2] = atBat;
   
           //grammar check
@@ -876,8 +873,8 @@
           return bases;
       }
   
-      //method to handle home team hitting a triple
-      public batter[] homeTriple(batter[] bases, int inning, batter atBat){
+      //method to handle home Team hitting a triple
+      public Batter[] homeTriple(Batter[] bases, int inning, Batter atBat){
           int j, count = 0;
   
           //go through each base, any Runner scores
@@ -896,7 +893,7 @@
                   count++;
               }
           }
-          //put batter on 3rd
+          //put Batter on 3rd
           bases[2] = atBat;
           adjustRunners(bases);
   
@@ -912,8 +909,8 @@
           return bases;
       }
   
-      //method to handle away team hitting a HR
-      public batter[] awayHR(batter[] bases, batter atBat){
+      //method to handle away Team hitting a HR
+      public Batter[] awayHR(Batter[] bases, Batter atBat){
           int j, count = 0;
           //any Runner on base scores
           for(j = 0; j < 3; j++){
@@ -925,7 +922,7 @@
                   clearPlayers();
               }
           }
-          //add one more for the batter
+          //add one more for the Batter
           away.incScore(1);
           updateScoreArea();
           count++;
@@ -941,8 +938,8 @@
           return bases;
       }
   
-      //method to handle home team hitting a HR
-      public batter[] homeHR(batter[] bases, int inning, batter atBat){
+      //method to handle home Team hitting a HR
+      public Batter[] homeHR(Batter[] bases, int inning, Batter atBat){
           int j, count = 0;
   
           //any Runner on base scores
@@ -961,7 +958,7 @@
                   count++;
               }
           }
-          //add one more run for batter
+          //add one more run for Batter
           home.incScore(1);
           updateScoreArea();
           count++;
@@ -1012,23 +1009,23 @@
       public void finalScoreArea(){
           if(Platform.isFxApplicationThread()){
               if(away.getTeamName().length() >= 3 && home.getTeamName().length() >= 3){
-                getScoreArea().setText("\tR\tH\tE\n" + away.getTeamName().substring(0, 3) + "\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName().substring(0, 3) + "\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors());
+                getScoreArea().setText("\t\tR\tH\tE\n" + away.getTeamName().substring(0, 3) + "\t\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName().substring(0, 3) + "\t\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors());
               } else if(home.getTeamName().length() < 3 && away.getTeamName().length() >= 3){
-                getScoreArea().setText("\tR\tH\tE\n" + away.getTeamName().substring(0, 3) + "\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName() + "\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors());
+                getScoreArea().setText("\t\tR\tH\tE\n" + away.getTeamName().substring(0, 3) + "\t\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName() + "\t\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors());
               } else if(home.getTeamName().length() >= 3 && away.getTeamName().length() < 3){
-                getScoreArea().setText("\tR\tH\tE\n" + away.getTeamName() + "\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName().substring(0, 3) + "\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors());
+                getScoreArea().setText("\t\tR\tH\tE\n" + away.getTeamName() + "\t" + away.getScore() + "\t\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName().substring(0, 3) + "\t\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors());
               } else{
-                getScoreArea().setText("\tR\tH\tE\n" + away.getTeamName() + "\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName() + "\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors()); 
+                getScoreArea().setText("\t\tR\tH\tE\n" + away.getTeamName() + "\t" + away.getScore() + "\t\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName() + "\t\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors()); 
               }
           } else{
             if(away.getTeamName().length() >= 3 && home.getTeamName().length() >= 3){
-              Platform.runLater(() -> getScoreArea().setText("\tR\tH\tE\n" + away.getTeamName().substring(0, 3) + "\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName().substring(0, 3) + "\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors()));
+              Platform.runLater(() -> getScoreArea().setText("\t\tR\tH\tE\n" + away.getTeamName().substring(0, 3) + "\t\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName().substring(0, 3) + "\t\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors()));
             } else if(home.getTeamName().length() < 3 && away.getTeamName().length() >= 3){
-                Platform.runLater(() -> getScoreArea().setText("\tR\tH\tE\n" + away.getTeamName().substring(0, 3) + "\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName() + "\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors()));
+                Platform.runLater(() -> getScoreArea().setText("\t\tR\tH\tE\n" + away.getTeamName().substring(0, 3) + "\t\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName() + "\t\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors()));
               } else if(home.getTeamName().length() >= 3 && away.getTeamName().length() < 3){
-                Platform.runLater(() -> getScoreArea().setText("\tR\tH\tE\n" + away.getTeamName() + "\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName().substring(0, 3) + "\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors()));
+                Platform.runLater(() -> getScoreArea().setText("\t\tR\tH\tE\n" + away.getTeamName() + "\t\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName().substring(0, 3) + "\t\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors()));
               } else{
-                Platform.runLater(() -> getScoreArea().setText("\tR\tH\tE\n" + away.getTeamName() + "\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName() + "\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors())); 
+                Platform.runLater(() -> getScoreArea().setText("\t\tR\tH\tE\n" + away.getTeamName() + "\t\t" + away.getScore() + "\t" + away.getHits() + "\t" + away.getErrors() + "\n" +  home.getTeamName() + "\t\t" + home.getScore() + "\t" + home.getHits() + "\t" + home.getErrors())); 
               }
           }
       }
@@ -1036,13 +1033,13 @@
       public void updateAwayArea(){
           if(Platform.isFxApplicationThread()){
               awayTextArea.setText(away.getTeamName() + " Lineup: ");
-              for(batter bat : away.getLineup()){
+              for(Batter bat : away.getLineup()){
                   awayTextArea.appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs());
               }
               awayTextArea.appendText("\n" + "P: " + away.getAce().getName());
           } else{
               Platform.runLater(() -> awayTextArea.setText(away.getTeamName() + " Lineup: "));
-              for(batter bat : away.getLineup()){
+              for(Batter bat : away.getLineup()){
                   Platform.runLater(() -> awayTextArea.appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs()));
               }
               Platform.runLater(()->{
@@ -1054,13 +1051,13 @@
       public void updateHomeArea(){
           if(Platform.isFxApplicationThread()){
               homeTextArea.setText(home.getTeamName() + " Lineup: ");
-              for(batter bat : away.getLineup()){
+              for(Batter bat : away.getLineup()){
                   homeTextArea.appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs());
               }
               homeTextArea.appendText("\n" + "P: " + home.getAce().getName());
           } else{
               Platform.runLater(() -> homeTextArea.setText(home.getTeamName() + " Lineup: "));
-              for(batter bat : home.getLineup()){
+              for(Batter bat : home.getLineup()){
                   Platform.runLater(() -> homeTextArea.appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs()));
               }
               Platform.runLater(()->{
@@ -1086,7 +1083,7 @@
           homeOnDeck.setVisible(false);
       }
   
-      public void handedness(batter atBat, boolean top){
+      public void handedness(Batter atBat, boolean top){
           if(atBat.getBHand() == 'R'){
               rhb.setVisible(true);
               lhb.setVisible(false);
@@ -1101,7 +1098,7 @@
           }
       }
   
-      public void adjustRunners(batter[] bases){
+      public void adjustRunners(Batter[] bases){
           if(bases[0] != null){
               firstRunner.setVisible(true);
           } else{
@@ -1121,7 +1118,7 @@
   
       public void topInning(){
           int outcome, to, roll;
-          batter[] bases = new batter[3];
+          Batter[] bases = new Batter[3];
   
           //while loop will continue to run until top of inning ends
           while(outs < 3){
@@ -1159,7 +1156,7 @@
               if(outs < 3){
                   //out was/should be recorded
                   if(outcome <= 30){
-                      //error on account of pitcher
+                      //error on account of Pitcher
                       if(to == 0 && errorCheck(home.getAce().getField())){
                           bases = awayError(bases, away.getLineup()[away.getBattingSpot()], to);
                           away.getLineup()[away.getBattingSpot()].incAbs();
@@ -1230,7 +1227,7 @@
   
       public void bottomInning(){
           int outcome, to, roll;
-          batter[] bases = new batter[3];
+          Batter[] bases = new Batter[3];
   
           //will run until bottom of inning ends or walkoff
           while(outs < 3){
@@ -1268,7 +1265,7 @@
               if(outs < 3){
                   //out/error
                   if(outcome <= 30){
-                      //error by pitcher
+                      //error by Pitcher
                       if(to == 0 && errorCheck(away.getAce().getField())){
                           bases = homeError(bases, inning, home.getLineup()[home.getBattingSpot()], to);
                           home.getLineup()[home.getBattingSpot()].incAbs();
@@ -1370,7 +1367,7 @@
               clearPlayers();
               setInning(i);
               setTop(true);
-              appendArea("\n\n" +"Top of the " + i + " inning. ");
+              appendArea("\n\n" +"Top of the " + i + " inning.");
               updateScoreArea();
   
               try{
