@@ -218,11 +218,11 @@ public class App extends Application {
 
                         // create new baseball instance passing in Team names
                         Baseball b = new Baseball(homeName, awayName, outputArea, bottomArea, awayArea, homeArea, lhb, rhb, firstRunner, secondRunner, thirdRunner, awayOnDeck, homeOnDeck);
-                        Team home = b.getHome();
+                        Team home = b.getHomeTeam();
                         Batter[] homeLineup = home.getLineup();
                         homeArea.setText(home.getTeamName()+ " Lineup: ");
 
-                        Team away = b.getAway();
+                        Team away = b.getAwayTeam();
                         Batter[] awayLineup = away.getLineup();
                         awayArea.setText(away.getTeamName() + " Lineup: ");
 
