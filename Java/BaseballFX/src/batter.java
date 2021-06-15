@@ -89,7 +89,7 @@ public class Batter implements Player {
     //return either 'L' or 'R' to be used to determine a specific player's handidness
     public static char randHand(){
         int r = Math.abs(rand.nextInt());
-        if(r % 100 <= 10){
+        if(r % 100 <= 25){
             return 'L';
         }
         return 'R';

@@ -194,14 +194,14 @@ public class App extends Application {
             @Override
             public void handle(ActionEvent event){
                 if(button.getText().equals("Start")){
-                    text.setText("Please enter the Team name for the away Team.");
+                    text.setText("Please enter the team name for the away team.");
                     button.setText("Next");
                     pane.getChildren().remove(button);
                     pane.getChildren().add(textArea);
                     pane.getChildren().add(button);
                 } else if(button.getText().equals("Next")){
                     if(strCheck(textArea.getText().toLowerCase())){
-                    text.setText("Please enter the Team name for the home Team.");
+                    text.setText("Please enter the team name for the home team.");
                     button.setText("Play");
                     awayName = textArea.getText();
                     textArea.setText("");

@@ -17,6 +17,26 @@ public class Team {
         this.isHome = site;
     }
 
+    //method used to construct Team
+    public static Team buildTeam(String name, boolean site){
+        int i;
+
+        //Batter array of 9 used to generate entire lineup
+        Batter[] bats = new Batter[9];
+        Pitcher pit;
+
+        //generate 9 Batters with i serving as defensive position/lineup order
+        for(i = 2; i < 11; i++){
+            bats[i-2] = Batter.genBat(i);
+        }
+
+        //generate Pitcher
+        pit = Pitcher.genPit();
+
+        //take Batters, Pitcher, Team name, and site boolean, and generate Team
+        return new Team(pit, bats, name, site);
+    }
+
     public Pitcher getAce(){
         return ace;
     }
