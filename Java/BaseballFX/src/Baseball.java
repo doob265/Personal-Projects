@@ -3,7 +3,6 @@
   BaseballFX - Gameplay Class*/
 
 //imports
-import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -16,19 +15,14 @@ public class Baseball{
     private static boolean isTop;
     private static Team home, away;
     private static int outs, inning;
-    private static TextArea outputTextArea, scoreArea, awayTextArea, homeTextArea;
     private static ImageView awayOnDeck, homeOnDeck;
 
     //Baseball constructor, taking in Team names and constructing Teams
-    public Baseball(String h, String a, TextArea outputArea, TextArea sArea, TextArea awayArea, TextArea homeArea, ImageView awayNext, ImageView homeNext){
+    public Baseball(String h, String a, ImageView awayNext, ImageView homeNext){
         home = Team.buildTeam(h, true);
         away = Team.buildTeam(a, false);
-        outputTextArea = outputArea;
-        scoreArea = sArea;
         awayOnDeck = awayNext;
         homeOnDeck = homeNext;
-        awayTextArea = awayArea;
-        homeTextArea = homeArea;
     }
 
     public void setInning(int i){
@@ -45,22 +39,6 @@ public class Baseball{
 
     public static Team getAwayTeam(){
         return away;
-    }
-
-    public static TextArea getOutputTextArea(){
-        return outputTextArea;
-    }
-
-    public static TextArea getScoreArea(){
-        return scoreArea;
-    }
-
-    public static TextArea getHomeArea(){
-        return homeTextArea;
-    }
-
-    public static TextArea getAwayArea(){
-        return awayTextArea;
     }
 
     public static int getInning(){

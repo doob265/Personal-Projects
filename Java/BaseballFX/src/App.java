@@ -22,6 +22,7 @@ public class App extends Application {
     String awayName;
     String homeName;
     public static ImageView pitcher, firstRunner, secondRunner, thirdRunner, lhb, rhb, homeOnDeck, awayOnDeck, firstBase, secondBase, thirdBase, shortStop, leftField, centerField, rightField;
+    public static TextArea outputTextArea, scoreTextArea, homeTextArea, awayTextArea;
 
     public static ImageView getFirstRunner(){
         return firstRunner;
@@ -49,6 +50,22 @@ public class App extends Application {
 
     public static ImageView getAwayOnDeck(){
         return awayOnDeck;
+    }
+
+    public static TextArea getOutputTextArea(){
+        return outputTextArea;
+    }
+
+    public static TextArea getScoreArea(){
+        return scoreTextArea;
+    }
+
+    public static TextArea getHomeTextArea(){
+        return homeTextArea;
+    }
+
+    public static TextArea getAwayTextArea(){
+        return awayTextArea;
     }
 
     @Override public void start(Stage stage) throws InterruptedException{
@@ -81,31 +98,31 @@ public class App extends Application {
         textArea.setMaxWidth(150);
         textArea.setMaxHeight(5);
 
-        TextArea homeArea = new TextArea();
-        homeArea.setEditable(false);
-        homeArea.setMaxWidth(180);
-        homeArea.setMaxHeight(210);
-        homeArea.setStyle("text-area-background: green;");
+        homeTextArea = new TextArea();
+        homeTextArea.setEditable(false);
+        homeTextArea.setMaxWidth(180);
+        homeTextArea.setMaxHeight(210);
+        homeTextArea.setStyle("text-area-background: green;");
 
-        TextArea awayArea = new TextArea();
-        awayArea.setEditable(false);
-        awayArea.setMaxWidth(180);
-        awayArea.setMaxHeight(210);
-        awayArea.setStyle("text-area-background: green;");
+        awayTextArea = new TextArea();
+        awayTextArea.setEditable(false);
+        awayTextArea.setMaxWidth(180);
+        awayTextArea.setMaxHeight(210);
+        awayTextArea.setStyle("text-area-background: green;");
 
         BorderPane borderPane = new BorderPane();
         borderPane.setStyle("-fx-background-image: url(\"diamond.png\");" + "-fx-background-size: contain;");
         borderPane.prefWidthProperty().bind(stage.widthProperty());
         borderPane.prefHeightProperty().bind(stage.heightProperty());
 
-        TextArea outputArea = new TextArea();
-        outputArea.setEditable(false);
-        outputArea.setPrefHeight(100);
-        outputArea.setPrefColumnCount(2);
+        outputTextArea = new TextArea();
+        outputTextArea.setEditable(false);
+        outputTextArea.setPrefHeight(100);
+        outputTextArea.setPrefColumnCount(2);
 
-        TextArea bottomArea = new TextArea();
-        bottomArea.setEditable(false);
-        bottomArea.setPrefHeight(90);
+        scoreTextArea = new TextArea();
+        scoreTextArea.setEditable(false);
+        scoreTextArea.setPrefHeight(90);
 
         pitcher = new ImageView("stick_figure.png");
         pitcher.setX(490);
@@ -231,45 +248,45 @@ public class App extends Application {
                         root.getChildren().add(borderPane);
 
                         // create new baseball instance passing in Team names
-                        Baseball b = new Baseball(homeName, awayName, outputArea, bottomArea, awayArea, homeArea, awayOnDeck, homeOnDeck);
+                        Baseball b = new Baseball(homeName, awayName, awayOnDeck, homeOnDeck);
                         Team home = b.getHomeTeam();
                         Batter[] homeLineup = home.getLineup();
-                        homeArea.setText(home.getTeamName()+ " Lineup: ");
+                        homeTextArea.setText(home.getTeamName()+ " Lineup: ");
 
                         Team away = b.getAwayTeam();
                         Batter[] awayLineup = away.getLineup();
-                        awayArea.setText(away.getTeamName() + " Lineup: ");
+                        awayTextArea.setText(away.getTeamName() + " Lineup: ");
 
                         pane.setAlignment(Pos.TOP_CENTER);
 
-                        borderPane.setLeft(awayArea);
-                        borderPane.setRight(homeArea);
-                        borderPane.setBottom(bottomArea);
-                        borderPane.setTop(outputArea);
+                        borderPane.setLeft(awayTextArea);
+                        borderPane.setRight(homeTextArea);
+                        borderPane.setBottom(scoreTextArea);
+                        borderPane.setTop(outputTextArea);
 
                         root.getChildren().addAll(pitcher, lhb, rhb, firstRunner, secondRunner, thirdRunner, firstBase, secondBase, thirdBase, shortStop, leftField, centerField, rightField, awayOnDeck, homeOnDeck);
 
                         for(Batter bat : homeLineup){
                             Platform.runLater(()->{
-                                homeArea.appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs());
+                                homeTextArea.appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs());
                             });
                         }
     
                         Platform.runLater(()->{
-                            homeArea.appendText("\n" + "P: " + home.getAce().getName());
+                            homeTextArea.appendText("\n" + "P: " + home.getAce().getName());
                         });
     
                         for(Batter bat : awayLineup){
                             Platform.runLater(()->{
-                                awayArea.appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs());
+                                awayTextArea.appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs());
                             });
                         }
     
                         Platform.runLater(()->{
-                            awayArea.appendText("\n" + "P: " + away.getAce().getName());
+                            awayTextArea.appendText("\n" + "P: " + away.getAce().getName());
                         });
 
-                        bottomArea.setText("Inning:\tTop 1\tOuts:\t0\nScore:\t" + awayName + ": " + away.getScore() + ", " + homeName + ": " + home.getScore());
+                        scoreTextArea.setText("Inning:\tTop 1\tOuts:\t0\nScore:\t" + awayName + ": " + away.getScore() + ", " + homeName + ": " + home.getScore());
 
                         Thread thread = new Thread(() -> {
                             b.playBall();
