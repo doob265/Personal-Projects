@@ -6,6 +6,21 @@ import javafx.application.Platform;
 
 public class Visuals {
 
+    public static boolean strCheck(String word){
+        int i;
+        //if a single space is entered, or nothing is entered, return false
+        if(word.length() == 0 || word.codePointAt(0) == 32 || (word.length() == 1 && word.codePointAt(0) == 32)){
+            return false;
+        }
+        //ensures only letters and spaces have been entered
+        for(i = 0; i < word.length(); i++){
+            if(word.codePointAt(i) != 32 && (word.codePointAt(i) < 96 || word.codePointAt(i) > 123)){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static void appendArea(String msg){
         if (Platform.isFxApplicationThread()) {
             Baseball.getOutputTextArea().appendText(msg);
@@ -33,21 +48,21 @@ public class Visuals {
     public static void finalScoreArea(){
         if(Platform.isFxApplicationThread()){
             if(Baseball.getAwayTeam().getTeamName().length() >= 3 && Baseball.getHomeTeam().getTeamName().length() >= 3){
-            Baseball.getScoreArea().setText("\t\tR\tH\tE\n" + Baseball.getAwayTeam().getTeamName().substring(0, 3) + "\t\t" + Baseball.getAwayTeam().getScore() + "\t" + Baseball.getAwayTeam().getHits() + "\t" + Baseball.getAwayTeam().getErrors() + "\n" +  Baseball.getHomeTeam().getTeamName().substring(0, 3) + "\t" + Baseball.getHomeTeam().getScore() + "\t" + Baseball.getHomeTeam().getHits() + "\t" + Baseball.getHomeTeam().getErrors());
+            Baseball.getScoreArea().setText("\t\tR\tH\tE\n" + Baseball.getAwayTeam().getTeamName().substring(0, 3) + "\t\t" + Baseball.getAwayTeam().getScore() + "\t" + Baseball.getAwayTeam().getHits() + "\t" + Baseball.getAwayTeam().getErrors() + "\n" +  Baseball.getHomeTeam().getTeamName().substring(0, 3) + "\t\t" + Baseball.getHomeTeam().getScore() + "\t" + Baseball.getHomeTeam().getHits() + "\t" + Baseball.getHomeTeam().getErrors());
             } else if(Baseball.getHomeTeam().getTeamName().length() < 3 && Baseball.getAwayTeam().getTeamName().length() >= 3){
             Baseball.getScoreArea().setText("\t\tR\tH\tE\n" + Baseball.getAwayTeam().getTeamName().substring(0, 3) + "\t\t" + Baseball.getAwayTeam().getScore() + "\t" + Baseball.getAwayTeam().getHits() + "\t" + Baseball.getAwayTeam().getErrors() + "\n" +  Baseball.getHomeTeam().getTeamName() + "\t\t" + Baseball.getHomeTeam().getScore() + "\t" + Baseball.getHomeTeam().getHits() + "\t" + Baseball.getHomeTeam().getErrors());
             } else if(Baseball.getHomeTeam().getTeamName().length() >= 3 && Baseball.getAwayTeam().getTeamName().length() < 3){
-            Baseball.getScoreArea().setText("\t\tR\tH\tE\n" + Baseball.getAwayTeam().getTeamName() + "\t" + Baseball.getAwayTeam().getScore() + "\t\t" + Baseball.getAwayTeam().getHits() + "\t" + Baseball.getAwayTeam().getErrors() + "\n" +  Baseball.getHomeTeam().getTeamName().substring(0, 3) + "\t" + Baseball.getHomeTeam().getScore() + "\t" + Baseball.getHomeTeam().getHits() + "\t" + Baseball.getHomeTeam().getErrors());
+            Baseball.getScoreArea().setText("\t\tR\tH\tE\n" + Baseball.getAwayTeam().getTeamName() + "\t" + Baseball.getAwayTeam().getScore() + "\t\t" + Baseball.getAwayTeam().getHits() + "\t" + Baseball.getAwayTeam().getErrors() + "\n" +  Baseball.getHomeTeam().getTeamName().substring(0, 3) + "\t\t" + Baseball.getHomeTeam().getScore() + "\t" + Baseball.getHomeTeam().getHits() + "\t" + Baseball.getHomeTeam().getErrors());
             } else{
-            Baseball.getScoreArea().setText("\t\tR\tH\tE\n" + Baseball.getAwayTeam().getTeamName() + "\t" + Baseball.getAwayTeam().getScore() + "\t\t" + Baseball.getAwayTeam().getHits() + "\t" + Baseball.getAwayTeam().getErrors() + "\n" +  Baseball.getHomeTeam().getTeamName() + "\t" + Baseball.getHomeTeam().getScore() + "\t\t" + Baseball.getHomeTeam().getHits() + "\t" + Baseball.getHomeTeam().getErrors()); 
+            Baseball.getScoreArea().setText("\t\tR\tH\tE\n" + Baseball.getAwayTeam().getTeamName() + "\t" + Baseball.getAwayTeam().getScore() + "\t\t" + Baseball.getAwayTeam().getHits() + "\t" + Baseball.getAwayTeam().getErrors() + "\n" +  Baseball.getHomeTeam().getTeamName() + "\t\t" + Baseball.getHomeTeam().getScore() + "\t\t" + Baseball.getHomeTeam().getHits() + "\t" + Baseball.getHomeTeam().getErrors()); 
             }
         } else{
         if(Baseball.getAwayTeam().getTeamName().length() >= 3 && Baseball.getHomeTeam().getTeamName().length() >= 3){
-            Platform.runLater(() -> Baseball.getScoreArea().setText("\t\tR\tH\tE\n" + Baseball.getAwayTeam().getTeamName().substring(0, 3) + "\t\t" + Baseball.getAwayTeam().getScore() + "\t" + Baseball.getAwayTeam().getHits() + "\t" + Baseball.getAwayTeam().getErrors() + "\n" +  Baseball.getHomeTeam().getTeamName().substring(0, 3) + "\t" + Baseball.getHomeTeam().getScore() + "\t" + Baseball.getHomeTeam().getHits() + "\t" + Baseball.getHomeTeam().getErrors()));
+            Platform.runLater(() -> Baseball.getScoreArea().setText("\t\tR\tH\tE\n" + Baseball.getAwayTeam().getTeamName().substring(0, 3) + "\t\t" + Baseball.getAwayTeam().getScore() + "\t" + Baseball.getAwayTeam().getHits() + "\t" + Baseball.getAwayTeam().getErrors() + "\n" +  Baseball.getHomeTeam().getTeamName().substring(0, 3) + "\t\t" + Baseball.getHomeTeam().getScore() + "\t" + Baseball.getHomeTeam().getHits() + "\t" + Baseball.getHomeTeam().getErrors()));
         } else if(Baseball.getHomeTeam().getTeamName().length() < 3 && Baseball.getAwayTeam().getTeamName().length() >= 3){
             Platform.runLater(() -> Baseball.getScoreArea().setText("\t\tR\tH\tE\n" + Baseball.getAwayTeam().getTeamName().substring(0, 3) + "\t\t" + Baseball.getAwayTeam().getScore() + "\t" + Baseball.getAwayTeam().getHits() + "\t" + Baseball.getAwayTeam().getErrors() + "\n" +  Baseball.getHomeTeam().getTeamName() + "\t\t" + Baseball.getHomeTeam().getScore() + "\t" + Baseball.getHomeTeam().getHits() + "\t" + Baseball.getHomeTeam().getErrors()));
             } else if(Baseball.getHomeTeam().getTeamName().length() >= 3 && Baseball.getAwayTeam().getTeamName().length() < 3){
-            Platform.runLater(() -> Baseball.getScoreArea().setText("\t\tR\tH\tE\n" + Baseball.getAwayTeam().getTeamName() + "\t\t" + Baseball.getAwayTeam().getScore() + "\t" + Baseball.getAwayTeam().getHits() + "\t" + Baseball.getAwayTeam().getErrors() + "\n" +  Baseball.getHomeTeam().getTeamName().substring(0, 3) + "\t" + Baseball.getHomeTeam().getScore() + "\t" + Baseball.getHomeTeam().getHits() + "\t" + Baseball.getHomeTeam().getErrors()));
+            Platform.runLater(() -> Baseball.getScoreArea().setText("\t\tR\tH\tE\n" + Baseball.getAwayTeam().getTeamName() + "\t\t" + Baseball.getAwayTeam().getScore() + "\t" + Baseball.getAwayTeam().getHits() + "\t" + Baseball.getAwayTeam().getErrors() + "\n" +  Baseball.getHomeTeam().getTeamName().substring(0, 3) + "\t\t" + Baseball.getHomeTeam().getScore() + "\t" + Baseball.getHomeTeam().getHits() + "\t" + Baseball.getHomeTeam().getErrors()));
             } else{
             Platform.runLater(() -> Baseball.getScoreArea().setText("\t\tR\tH\tE\n" + Baseball.getAwayTeam().getTeamName() + "\t\t" + Baseball.getAwayTeam().getScore() + "\t" + Baseball.getAwayTeam().getHits() + "\t" + Baseball.getAwayTeam().getErrors() + "\n" +  Baseball.getHomeTeam().getTeamName() + "\t\t" + Baseball.getHomeTeam().getScore() + "\t" + Baseball.getHomeTeam().getHits() + "\t" + Baseball.getHomeTeam().getErrors())); 
             }
@@ -91,52 +106,52 @@ public class Visuals {
     }
 
     public static void clearPlayers(){
-        Baseball.getThirdRunner().setVisible(false);
-        Baseball.getSecondRunner().setVisible(false);
-        Baseball.getFirstRunner().setVisible(false);
-        Baseball.getLhb().setVisible(false);
-        Baseball.getRhb().setVisible(false);
-        Baseball.getAwayOnDeck().setVisible(false);
-        Baseball.getHomeOnDeck().setVisible(false);
+        App.getThirdRunner().setVisible(false);
+        App.getSecondRunner().setVisible(false);
+        App.getFirstRunner().setVisible(false);
+        App.getLhb().setVisible(false);
+        App.getRhb().setVisible(false);
+        App.getAwayOnDeck().setVisible(false);
+        App.getHomeOnDeck().setVisible(false);
     }
 
     public static void hideBatters(){
-        Baseball.getLhb().setVisible(false);
-        Baseball.getRhb().setVisible(false);
-        Baseball.getAwayOnDeck().setVisible(false);
-        Baseball.getHomeOnDeck().setVisible(false);
+        App.getLhb().setVisible(false);
+        App.getRhb().setVisible(false);
+        App.getAwayOnDeck().setVisible(false);
+        App.getHomeOnDeck().setVisible(false);
     }
 
     public static void handedness(Batter atBat){
         if(atBat.getBHand() == 'R'){
-            Baseball.getLhb().setVisible(false);
-            Baseball.getRhb().setVisible(true);
+            App.getLhb().setVisible(false);
+            App.getRhb().setVisible(true);
         } else{
-            Baseball.getLhb().setVisible(true);
-            Baseball.getRhb().setVisible(false);
+            App.getLhb().setVisible(true);
+            App.getRhb().setVisible(false);
         }
         if(Baseball.getIsTop()){
-            Baseball.getAwayOnDeck().setVisible(true);
+            App.getAwayOnDeck().setVisible(true);
         } else{
-            Baseball.getHomeOnDeck().setVisible(true);
+            App.getHomeOnDeck().setVisible(true);
         }
     }
 
     public static void adjustRunners(Batter[] bases){
         if(bases[0] != null){
-            Baseball.getFirstRunner().setVisible(true);
+            App.getFirstRunner().setVisible(true);
         } else{
-            Baseball.getFirstRunner().setVisible(false);
+            App.getFirstRunner().setVisible(false);
         }
         if(bases[1] != null){
-            Baseball.getSecondRunner().setVisible(true);
+            App.getSecondRunner().setVisible(true);
         } else{
-            Baseball.getSecondRunner().setVisible(false);
+            App.getSecondRunner().setVisible(false);
         }
         if(bases[2] != null){
-            Baseball.getThirdRunner().setVisible(true);
+            App.getThirdRunner().setVisible(true);
         } else{
-            Baseball.getThirdRunner().setVisible(false);
+            App.getThirdRunner().setVisible(false);
         }
     }
 }

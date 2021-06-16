@@ -17,19 +17,14 @@ public class Baseball{
     private static Team home, away;
     private static int outs, inning;
     private static TextArea outputTextArea, scoreArea, awayTextArea, homeTextArea;
-    private static ImageView lhb, rhb, firstRunner, secondRunner, thirdRunner, awayOnDeck, homeOnDeck;
+    private static ImageView awayOnDeck, homeOnDeck;
 
     //Baseball constructor, taking in Team names and constructing Teams
-    public Baseball(String h, String a, TextArea outputArea, TextArea sArea, TextArea awayArea, TextArea homeArea, ImageView lb, ImageView rb, ImageView f, ImageView s, ImageView t, ImageView awayNext, ImageView homeNext){
+    public Baseball(String h, String a, TextArea outputArea, TextArea sArea, TextArea awayArea, TextArea homeArea, ImageView awayNext, ImageView homeNext){
         home = Team.buildTeam(h, true);
         away = Team.buildTeam(a, false);
         outputTextArea = outputArea;
         scoreArea = sArea;
-        lhb = lb;
-        rhb = rb;
-        firstRunner = f;
-        secondRunner = s;
-        thirdRunner = t;
         awayOnDeck = awayNext;
         homeOnDeck = homeNext;
         awayTextArea = awayArea;
@@ -78,34 +73,6 @@ public class Baseball{
 
     public static void incOuts(int num){
         outs+= num;
-    }
-
-    public static ImageView getFirstRunner(){
-        return firstRunner;
-    }
-
-    public static ImageView getSecondRunner(){
-        return secondRunner;
-    }
-
-    public static ImageView getThirdRunner(){
-        return thirdRunner;
-    }
-
-    public static ImageView getLhb(){
-        return lhb;
-    }
-
-    public static ImageView getRhb(){
-        return rhb;
-    }
-
-    public static ImageView getHomeOnDeck(){
-        return homeOnDeck;
-    }
-
-    public static ImageView getAwayOnDeck(){
-        return awayOnDeck;
     }
 
     public static boolean getIsTop(){
