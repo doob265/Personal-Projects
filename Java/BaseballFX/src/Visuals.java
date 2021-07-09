@@ -18,6 +18,7 @@ public class Visuals {
                 return false;
             }
         }
+
         return true;
     }
 

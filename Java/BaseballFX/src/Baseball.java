@@ -100,7 +100,7 @@ public class Baseball{
 
         //while loop will continue to run until top of inning ends
         while(outs < 3){
-            //prevents infinite loop in the case of extreme outlier case
+            //prevents infinite loop in the case of extreme outlier
             if(away.getScore() > 100 || home.getScore() > 100){
                 Visuals.appendArea("\n" + "Score exceeded");
                 return;
@@ -136,12 +136,12 @@ public class Baseball{
                 if(outcome <= 30){
                     //error on account of Pitcher
                     if(to == 0 && errorCheck(home.getAce().getField())){
-                        bases = AwayActions.awayError(bases, away.getLineup()[away.getBattingSpot()], to);
+                        bases = AwayActions.awayError(bases, away.getLineup()[away.getBattingSpot()], home.getLineup()[to]);
                         away.getLineup()[away.getBattingSpot()].incAbs();
                     }
                     //error on account of position player
                     else if(errorCheck(home.getLineup()[to].getField())){
-                        bases = AwayActions.awayError(bases, away.getLineup()[away.getBattingSpot()], to);
+                        bases = AwayActions.awayError(bases, away.getLineup()[away.getBattingSpot()], home.getLineup()[to]);
                         away.getLineup()[away.getBattingSpot()].incAbs();
                     }
                     //no error, out(s) recorded
@@ -161,7 +161,7 @@ public class Baseball{
                 //single
                 else if(outcome <= 65){
                     Visuals.appendArea("\n" +"Single!");
-                    bases = AwayActions.awaySingle(bases, away.getLineup()[away.getBattingSpot()], to);
+                    bases = AwayActions.awaySingle(bases, away.getLineup()[away.getBattingSpot()], home.getLineup()[to]);
                     away.getLineup()[away.getBattingSpot()].incHits();
                     away.incHits();
                     away.getLineup()[away.getBattingSpot()].incAbs();
@@ -169,7 +169,7 @@ public class Baseball{
                 //double
                 else if(outcome <= 80){
                     Visuals.appendArea("\n" +"Double!");
-                    bases = AwayActions.awayDouble(bases, away.getLineup()[away.getBattingSpot()], to);
+                    bases = AwayActions.awayDouble(bases, away.getLineup()[away.getBattingSpot()], home.getLineup()[to]);
                     away.getLineup()[away.getBattingSpot()].incHits();
                     away.incHits();
                     away.getLineup()[away.getBattingSpot()].incAbs();
@@ -245,12 +245,12 @@ public class Baseball{
                 if(outcome <= 30){
                     //error by Pitcher
                     if(to == 0 && errorCheck(away.getAce().getField())){
-                        bases = HomeActions.homeError(bases, home.getLineup()[home.getBattingSpot()], to);
+                        bases = HomeActions.homeError(bases, home.getLineup()[home.getBattingSpot()], away.getLineup()[to]);
                         home.getLineup()[home.getBattingSpot()].incAbs();
                     }
                     //error by fielder
                     else if(errorCheck(away.getLineup()[to].getField())){
-                        bases = HomeActions.homeError(bases, home.getLineup()[home.getBattingSpot()], to);
+                        bases = HomeActions.homeError(bases, home.getLineup()[home.getBattingSpot()], away.getLineup()[to]);
                         home.getLineup()[home.getBattingSpot()].incAbs();
                     }
                     //out(s)
@@ -274,7 +274,7 @@ public class Baseball{
                 //single
                 else if(outcome <= 65){
                     Visuals.appendArea("\n" +"Single!");
-                    bases = HomeActions.homeSingle(bases, home.getLineup()[home.getBattingSpot()], to);
+                    bases = HomeActions.homeSingle(bases, home.getLineup()[home.getBattingSpot()], away.getLineup()[to]);
                     home.getLineup()[home.getBattingSpot()].incHits();
                     home.incHits();
                     home.getLineup()[home.getBattingSpot()].incAbs();
@@ -286,7 +286,7 @@ public class Baseball{
                 //double
                 else if(outcome <= 80){
                     Visuals.appendArea("\n" +"Double!");
-                    bases = HomeActions.homeDouble(bases, home.getLineup()[home.getBattingSpot()], to);
+                    bases = HomeActions.homeDouble(bases, home.getLineup()[home.getBattingSpot()], away.getLineup()[to]);
                     home.getLineup()[home.getBattingSpot()].incHits();
                     home.incHits();
                     home.getLineup()[home.getBattingSpot()].incAbs();

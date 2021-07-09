@@ -197,28 +197,28 @@ public class HomeActions {
     }
 
     //error used to handle errors committed by away Team
-    public static Batter[] homeError(Batter[] bases, Batter atBat, int to){
+    public static Batter[] homeError(Batter[] bases, Batter atBat, Batter to){
         int roll;
         roll = Math.abs(rand.nextInt() % 100);
         //one-base error
         if(roll <= 70){
-            Visuals.appendArea("\n" +"Error! " + atBat.getName() + " made it to 1st base!");
+            Visuals.appendArea("\n" + "Error by " + to.getName() + "! " + atBat.getName() + " made it to 1st base!");
             //hit methods used since errors function in exact same way
             bases = homeSingle(bases, atBat, to);
         }
         //two-base error
         else if(roll >= 71 && roll <= 90){
-            Visuals.appendArea("\n" +"Error! " + atBat.getName() + " made it to 2nd base!");
+            Visuals.appendArea("\n" + "Error by " + to.getName() + "! " + atBat.getName() + " made it to 2nd base!");
             bases = homeDouble(bases, atBat, to);
         }
         //three-base error
         else if(roll >= 91 && roll <= 97){
-            Visuals.appendArea("\n" +"Error! " + atBat.getName() + " made it to 3rd base!");
+            Visuals.appendArea("\n" + "Error by " + to.getName() + "! " + atBat.getName() + " made it to 3rd base!");
             bases = homeTriple(bases, atBat);
         }
         //four-base error
         else{
-            Visuals.appendArea("\n" +"Error! " + atBat.getName() + " came all the way around to score!");
+            Visuals.appendArea("\n" + "Error by " + to.getName() + "! " + atBat.getName() + " came all the way around to score!");
             bases = homeHR(bases);
         }
 
@@ -260,7 +260,7 @@ public class HomeActions {
     }
 
     //method to handle home Team hitting a single
-    public static Batter[] homeSingle(Batter[] bases, Batter atBat, int to){
+    public static Batter[] homeSingle(Batter[] bases, Batter atBat, Batter to){
         int i, r;
         r = rand.nextInt() % 5;
 
@@ -275,10 +275,10 @@ public class HomeActions {
                 Visuals.updateScoreArea();
             }
             //Runner on 2nd will try to score
-            else if(bases[i] != null && r > 2 && i == 1 && bases[i].getSpeed() > 2 && to > 4 && to != 8){
+            else if(bases[i] != null && r > 2 && i == 1 && bases[i].getSpeed() > 2 && to.getPos() > 4 && to.getPos() != 8){
                 r = rand.nextInt() % 5;
                 //thrown out
-                if(Baseball.getAwayTeam().getLineup()[to].getArm() > r && Baseball.getAwayTeam().getLineup()[to].getArm() > bases[i].getSpeed()){
+                if(to.getArm() > r && to.getArm() > bases[i].getSpeed()){
                     Baseball.incOuts(1);
                     Visuals.appendArea("\n" +bases[i].getName() + " was thrown out trying to come in to score from second! Out number " + Baseball.getOuts());
                     bases[i] = null;
@@ -312,7 +312,7 @@ public class HomeActions {
     }
 
     //method to handle home Team hitting a double
-    public static Batter[] homeDouble(Batter[] bases, Batter atBat, int to){
+    public static Batter[] homeDouble(Batter[] bases, Batter atBat, Batter to){
         int j, count = 0, r;
         r = rand.nextInt() % 5;
 
@@ -327,10 +327,10 @@ public class HomeActions {
                 count++;
             }
             //Runner on 1st will try to score
-            else if(bases[j] != null && r > 2 && j == 0 && bases[j].getSpeed() > 3 && to > 4 && to != 8){
+            else if(bases[j] != null && r > 2 && j == 0 && bases[j].getSpeed() > 3 && to.getPos() > 4 && to.getPos() != 8){
                 r = rand.nextInt() % 5;
                 //thrown out
-                if(Baseball.getAwayTeam().getLineup()[to].getArm() > r && Baseball.getAwayTeam().getLineup()[to].getArm() > bases[j].getSpeed()){
+                if(to.getArm() > r && to.getArm() > bases[j].getSpeed()){
                     Baseball.incOuts(1);
                     Visuals.appendArea("\n" +bases[j].getName() + " was thrown out trying to come in to score from first! Out number " + Baseball.getOuts());
                     bases[j] = null;
@@ -384,7 +384,7 @@ public class HomeActions {
                 Visuals.clearPlayers();
                 //walkoff checker
                 if(Baseball.getInning() >= 9 && Baseball.getHomeTeam().getScore() > Baseball.getAwayTeam().getScore()){
-                    Visuals.appendArea("\n\n" +"Walkoff! Game over! The final score is " + Baseball.getAwayTeam().getTeamName() + " " + Baseball.getAwayTeam().getScore() + ", " + Baseball.getHomeTeam().getTeamName() + " " + Baseball.getHomeTeam().getScore() + "!");
+                    Visuals.appendArea("\n\n" + "Walkoff! Game over! The final score is " + Baseball.getAwayTeam().getTeamName() + " " + Baseball.getAwayTeam().getScore() + ", " + Baseball.getHomeTeam().getTeamName() + " " + Baseball.getHomeTeam().getScore() + "!");
                     Visuals.finalScoreArea();
                     return bases;
                 }

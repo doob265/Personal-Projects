@@ -187,28 +187,28 @@ public class AwayActions {
     }
 
     //method used to handle errors committed by home Team
-    public static Batter[] awayError(Batter[] bases, Batter atBat, int to){
+    public static Batter[] awayError(Batter[] bases, Batter atBat, Batter to){
         int roll;
         roll = Math.abs(rand.nextInt() % 100);
         //one-base error
         if(roll <= 70){
-            Visuals.appendArea("\n" +"Error! " + atBat.getName() + " made it to 1st base!");
+            Visuals.appendArea("\n" + "Error by " + to.getName() + "! " + atBat.getName() + " made it to 1st base!");
             //hit methods used since errors function in exact same way
             bases = awaySingle(bases, atBat, to);
         }
         //two-base error
         else if(roll >= 71 && roll <= 90){
-            Visuals.appendArea("\n" +"Error! " + atBat.getName() + " made it to 2nd base!");
+            Visuals.appendArea("\n" + "Error by " + to.getName() + "! " + atBat.getName() + " made it to 2nd base!");
             bases = awayDouble(bases, atBat, to);
         }
         //three-base error
         else if(roll >= 91 && roll <= 97){
-            Visuals.appendArea("\n" +"Error! " + atBat.getName() + " made it to 3rd base!");
+            Visuals.appendArea("\n" + "Error by " + to.getName() + "! " + atBat.getName() + " made it to 3rd base!");
             bases = awayTriple(bases, atBat);
         }
         //four-base error
         else{
-            Visuals.appendArea("\n" +"Error! " + atBat.getName() + " came all the way around to score!");
+            Visuals.appendArea("\n" + "Error by " + to.getName() + "! " + atBat.getName() + " came all the way around to score!");
             bases = awayHR(bases);
         }
 
@@ -242,7 +242,7 @@ public class AwayActions {
     }
 
     //method to handle away Team hitting a single
-    public static Batter[] awaySingle(Batter[] bases, Batter atBat, int to){
+    public static Batter[] awaySingle(Batter[] bases, Batter atBat, Batter to){
         int i, r;
         r = rand.nextInt() % 5;
         //deal with each base in reverse order
@@ -256,10 +256,10 @@ public class AwayActions {
                 Visuals.updateScoreArea();
             }
             //Runner on 2nd will try to score
-            else if(bases[i] != null && r > 2 && i == 1 && bases[i].getSpeed() > 2 && to > 4 && to != 8){
+            else if(bases[i] != null && r > 2 && i == 1 && bases[i].getSpeed() > 2 && to.getPos() > 4 && to.getPos() != 8){
                 r = rand.nextInt() % 5;
                 //thrown out
-                if(Baseball.getHomeTeam().getLineup()[to].getArm() > r && Baseball.getHomeTeam().getLineup()[to].getArm() > bases[i].getSpeed()){
+                if(to.getArm() > r && to.getArm() > bases[i].getSpeed()){
                     Baseball.incOuts(1);
                     Visuals.appendArea("\n" +bases[i].getName() + " was thrown out trying to come in to score from second! Out number " + Baseball.getOuts());
                     bases[i] = null;
@@ -286,7 +286,7 @@ public class AwayActions {
     }
 
     //method to handle away Team hitting a double
-    public static Batter[] awayDouble(Batter[] bases, Batter atBat, int to){
+    public static Batter[] awayDouble(Batter[] bases, Batter atBat, Batter to){
         int j, count = 0, r;
         r = rand.nextInt() % 5;
         //deal with each base in reverse
@@ -300,10 +300,10 @@ public class AwayActions {
                 count++;
             }
             //Runner on 1st will try to score
-            else if(bases[j] != null && r > 2 && j == 0 && bases[j].getSpeed() > 3 && to > 4 && to != 8){
+            else if(bases[j] != null && r > 2 && j == 0 && bases[j].getSpeed() > 3 && to.getPos() > 4 && to.getPos() != 8){
                 r = rand.nextInt() % 5;
                 //thrown out
-                if(Baseball.getHomeTeam().getLineup()[to].getArm() > r && Baseball.getHomeTeam().getLineup()[to].getArm() > bases[j].getSpeed()){
+                if(to.getArm() > r && to.getArm() > bases[j].getSpeed()){
                     Baseball.incOuts(1);
                     Visuals.appendArea("\n" +bases[j].getName() + " was thrown out trying to come in to score from first! Out number " + Baseball.getOuts());
                     bases[j] = null;
@@ -385,10 +385,10 @@ public class AwayActions {
         count++;
         //grammar check
         if(count > 1){
-            Visuals.appendArea("\n" +count + " runs have scored!");
+            Visuals.appendArea("\n" + count + " runs have scored!");
         }
         else if(count > 0){
-            Visuals.appendArea("\n" +count + " run has scored!");
+            Visuals.appendArea("\n" + count + " run has scored!");
         }
 
         Visuals.hideBatters();
