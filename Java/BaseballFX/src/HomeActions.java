@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class HomeActions {
 
-    public static Random rand = new Random();
+    private static Random rand = new Random();
     
     //stealing base method for away Team
     public static Batter[] homeSteal(Batter[] bases){

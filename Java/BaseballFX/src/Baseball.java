@@ -11,7 +11,7 @@ import java.util.Random;
 
 //Baseball class, houses Teams and outs
 public class Baseball{
-    public Random rand = new Random();
+    private Random rand = new Random();
     private static boolean isTop;
     private static Team home, away;
     private static int outs, inning;
@@ -146,7 +146,11 @@ public class Baseball{
                     }
                     //no error, out(s) recorded
                     else{
-                        AwayActions.awayOut(bases, to);
+                        if(to == 0){
+                            AwayActions.awayOut(bases, home.getAce(), to);
+                        } else{
+                            AwayActions.awayOut(bases, home.getLineup()[to], to);
+                        }
                     }
                 }
                 //walk

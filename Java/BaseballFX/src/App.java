@@ -19,10 +19,10 @@ import javafx.event.ActionEvent;
 import javafx.scene.layout.BorderPane;
 
 public class App extends Application {
-    String awayName;
-    String homeName;
-    public static ImageView pitcher, firstRunner, secondRunner, thirdRunner, lhb, rhb, homeOnDeck, awayOnDeck, firstBase, secondBase, thirdBase, shortStop, leftField, centerField, rightField;
-    public static TextArea outputTextArea, scoreTextArea, homeTextArea, awayTextArea;
+    private String awayName;
+    private String homeName;
+    private static ImageView pitcher, firstRunner, secondRunner, thirdRunner, lhb, rhb, homeOnDeck, awayOnDeck, firstBase, secondBase, thirdBase, shortStop, leftField, centerField, rightField;
+    private static TextArea outputTextArea, scoreTextArea, homeTextArea, awayTextArea;
 
     public static ImageView getFirstRunner(){
         return firstRunner;
@@ -102,13 +102,11 @@ public class App extends Application {
         homeTextArea.setEditable(false);
         homeTextArea.setMaxWidth(180);
         homeTextArea.setMaxHeight(210);
-        homeTextArea.setStyle("text-area-background: green;");
 
         awayTextArea = new TextArea();
         awayTextArea.setEditable(false);
         awayTextArea.setMaxWidth(180);
         awayTextArea.setMaxHeight(210);
-        awayTextArea.setStyle("text-area-background: green;");
 
         BorderPane borderPane = new BorderPane();
         borderPane.setStyle("-fx-background-image: url(\"diamond.png\");" + "-fx-background-size: contain;");

@@ -5,7 +5,7 @@
 import java.util.Random;
 public class AwayActions {
     
-    public static Random rand = new Random();
+    private static Random rand = new Random();
     
     //stealing base method for away Team
     public static Batter[] awaySteal(Batter[] bases){
@@ -136,18 +136,19 @@ public class AwayActions {
     }
 
     //method to handle away time recording an out or multiple outs
-    public static void awayOut(Batter[] bases, int to){
+    public static void awayOut(Batter[] bases, Player fielder, int to){
         int roll;
         roll = Math.abs(rand.nextInt() % 5);
         //double play, hit to Pitcher
-        if(bases[0] != null && Baseball.getOuts() < 2 && to == 0 && Baseball.getHomeTeam().getAce().getField() > roll){
+        if(bases[0] != null && Baseball.getOuts() < 2 && fielder instanceof Pitcher && ((Pitcher)fielder).getField() > roll){
+            String first = bases[0].getName();
             bases[0] = null;
             Baseball.incOuts(2);
-            Visuals.appendArea("\n" +"Double play! There are now " + Baseball.getOuts() + " outs.");
+            Visuals.appendArea("\n" + "A comebacker to the mound, snagged by " + ((Pitcher)fielder).getName() + ", and they're able to double off " + first + " at first! There are now " + Baseball.getOuts() + " outs.");
             Baseball.getAwayTeam().getLineup()[Baseball.getAwayTeam().getBattingSpot()].incAbs();
         }
         //triple play hit to Pitcher
-        else if(Baseball.getOuts() == 0 && bases[0] != null && bases[1] != null && to == 0 && Baseball.getHomeTeam().getAce().getField() > roll){
+        else if(Baseball.getOuts() == 0 && bases[0] != null && bases[1] != null && fielder instanceof Pitcher && ((Pitcher)fielder).getField() > roll){
             bases[0] = null;
             bases[1] = null;
             Baseball.incOuts(3);
