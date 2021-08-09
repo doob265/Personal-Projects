@@ -21,18 +21,23 @@ public class AwayActions {
                 bases[1] = bases[0];
                 bases[0] = null;
                 Visuals.appendArea("\n" +bases[2].getName() + " was able to steal third, and " + bases[1].getName() + " was able to steal second!");
+                bases[2].incSbs();
+                bases[1].incSbs();
             }
             //thrown out at 3rd
             else{
                 name = bases[1].getName();
+                bases[1].incCs();
                 bases[1] = bases[0];
                 bases[0] = null;
                 Baseball.incOuts(1);
                 if(Baseball.getOuts() >= 3){
-                    Visuals.appendArea("\n" +name + " tried to steal third, but was thrown out by the catcher, " + Baseball.getHomeTeam().getLineup()[1].getName() + "! Out number " + Baseball.getOuts() + ".");
+                    Visuals.appendArea("\n" + name + " tried to steal third, but was thrown out by the catcher, " + Baseball.getHomeTeam().getLineup()[1].getName() + "! Out number " + Baseball.getOuts() + ".");
+
                 }
                 else{
                     Visuals.appendArea("\n" +name + " tried to steal third, but was thrown out by the catcher, " + Baseball.getHomeTeam().getLineup()[1].getName() + "! Out number " + Baseball.getOuts() + ". " + bases[1].getName() + " was able to steal second!");
+                    bases[1].incSbs();
                 }
             }
         }
@@ -43,10 +48,12 @@ public class AwayActions {
                 bases[1] = bases[0];
                 bases[0] = null;
                 Visuals.appendArea("\n" +bases[1].getName() + " was able to steal second!");
+                bases[1].incSbs();
             }
             //thrown out
             else{
                 name = bases[0].getName();
+                bases[0].incCs();
                 bases[0] = null;
                 Baseball.incOuts(1);
                 Visuals.appendArea("\n" +name + " tried to steal second, but was thrown out by the catcher, " + Baseball.getHomeTeam().getLineup()[1].getName() + "! Out number " + Baseball.getOuts() + ".");
@@ -59,10 +66,12 @@ public class AwayActions {
                 bases[2] = bases[1];
                 bases[1] = null;
                 Visuals.appendArea("\n" +bases[2].getName() + " was able to steal third!");
+                bases[2].incSbs();
             }
             //thrown out
             else{
                 name = bases[1].getName();
+                bases[1].incCs();
                 bases[1] = null;
                 Baseball.incOuts(1);
                 Visuals.appendArea("\n" +name + " tried to steal third, but was thrown out by the catcher, " + Baseball.getHomeTeam().getLineup()[1].getName() + "! Out number " + Baseball.getOuts() + ".");
@@ -81,7 +90,7 @@ public class AwayActions {
     }
 
     //method for away Team hitting a sacrifice fly
-    public static Batter[] awaySacFly(Batter[] bases, int to){
+    public static Batter[] awaySacFly(Batter[] bases, int to, Batter atBat){
         int r = Math.abs(rand.nextInt() % 5);
         Batter s, t;
         //Runners on 2nd and 3rd
@@ -93,6 +102,8 @@ public class AwayActions {
             Baseball.getAwayTeam().incScore(1);
             Visuals.updateScoreArea();
             Visuals.appendArea("\n" +"Batter hit a sac fly. " + t.getName() + " comes around to score, " + s.getName() + " advances to third. Out number " + Baseball.getOuts() + ".");
+            t.incRuns();
+            atBat.incSfs();
         }
         //Runner on 2nd
         else if(bases[1] != null){
@@ -101,14 +112,14 @@ public class AwayActions {
                 s = bases[1];
                 bases[2] = bases[1];
                 bases[1] = null;
-                Visuals.appendArea("\n" +"Batter hit a sac fly, " + s.getName() + " advances to third. Out number " + Baseball.getOuts() + ".");
+                Visuals.appendArea("\n" + "Batter hit a ball to the outfield, caught, " + s.getName() + " advances to third. Out number " + Baseball.getOuts() + ".");
             }
             //thrown out
             else{
                 s = bases[1];
                 bases[1] = null;
                 Baseball.incOuts(1);
-                Visuals.appendArea("\n" +"Batter hit a sac fly, " + s.getName() + " got doubled off trying to advance to third! Out number " + Baseball.getOuts() + ".");
+                Visuals.appendArea("\n" +"Batter hit a ball to the outfield, caught, but " + s.getName() + " got doubled off trying to advance to third! Out number " + Baseball.getOuts() + ".");
             }
         }
         //Runner on 3rd
@@ -120,6 +131,8 @@ public class AwayActions {
                 Baseball.getAwayTeam().incScore(1);
                 Visuals.updateScoreArea();
                 Visuals.appendArea("\n" +"Batter hit a sac fly, " + t.getName() + " comes around to score! Out number " + Baseball.getOuts() + ".");
+                t.incRuns();
+                atBat.incSfs();
             }
             //thrown out
             else{
@@ -136,7 +149,7 @@ public class AwayActions {
     }
 
     //method to handle away time recording an out or multiple outs
-    public static void awayOut(Batter[] bases, Player fielder, int to){
+    public static void awayOut(Batter[] bases, Player fielder, int to, Batter atBat){
         int roll;
         roll = Math.abs(rand.nextInt() % 5);
         //double play, hit to Pitcher
@@ -144,6 +157,7 @@ public class AwayActions {
             String first = bases[0].getName();
             bases[0] = null;
             Baseball.incOuts(2);
+            atBat.incGidps();
             Visuals.appendArea("\n" + "A comebacker to the mound, snagged by " + ((Pitcher)fielder).getName() + ", and they're able to double off " + first + " at first! There are now " + Baseball.getOuts() + " outs.");
             Baseball.getAwayTeam().getLineup()[Baseball.getAwayTeam().getBattingSpot()].incAbs();
         }
@@ -159,6 +173,7 @@ public class AwayActions {
         else if(bases[0] != null && Baseball.getOuts() < 2 && to < 5 && Baseball.getHomeTeam().getLineup()[to].getField() > roll){
             bases[0] = null;
             Baseball.incOuts(2);
+            atBat.incGidps();
             Visuals.appendArea("\n" + "Double play! There are now " + Baseball.getOuts() + " outs.");
             Baseball.getAwayTeam().getLineup()[Baseball.getAwayTeam().getBattingSpot()].incAbs();
         }
@@ -173,7 +188,7 @@ public class AwayActions {
         //sac fly hit to outfielder
         else if(Baseball.getOuts() < 2 && to > 4 && to < 8 && (bases[1] != null || bases[2] != null) && Baseball.getAwayTeam().getLineup()[to].getField() > roll){
             Baseball.incOuts(1);
-            bases = awaySacFly(bases, to);
+            bases = awaySacFly(bases, to, atBat);
         }
         //ordinary out
         else{
@@ -210,7 +225,7 @@ public class AwayActions {
         //four-base error
         else{
             Visuals.appendArea("\n" + "Error by " + to.getName() + "! " + atBat.getName() + " came all the way around to score!");
-            bases = awayHR(bases);
+            bases = awayHR(bases, atBat);
         }
 
         Baseball.getAwayTeam().incErrors();
@@ -222,9 +237,11 @@ public class AwayActions {
     public static Batter[] awayWalk(Batter[] bases, Batter atBat){
         //bases loaded
         if(bases[2] != null && bases[1] != null && bases[0] != null){
+            bases[2].incRuns();
             Visuals.appendArea("\n" + bases[2].getName() + " has scored from third!");
             bases[2] = bases[1];
             bases[1] = bases[0];
+            atBat.incRbis();
             Baseball.getAwayTeam().incScore(1);
             Visuals.updateScoreArea();
         //runners on 1st and 2nd, no runner on 3rd
@@ -235,8 +252,10 @@ public class AwayActions {
         } else if(bases[1] == null && bases[0] != null){
             bases[1] = bases[0];
         }
+
         //put Batter on 1st
         bases[0] = atBat;
+        atBat.incWalks();
         Visuals.adjustRunners(bases);
         Visuals.hideBatters();
         return bases;
@@ -252,7 +271,9 @@ public class AwayActions {
             //Runner on 3rd comes in to score
             if(i == 2 && bases[i] != null){
                 Visuals.appendArea("\n" + bases[i].getName() + " has scored from third!");
+                bases[i].incRuns();
                 bases[i] = null;
+                atBat.incRbis();
                 Baseball.getAwayTeam().incScore(1);
                 Visuals.updateScoreArea();
             }
@@ -267,6 +288,8 @@ public class AwayActions {
                 }
                 //scores
                 else{
+                    bases[i].incRuns();
+                    atBat.incRbis();
                     Baseball.getAwayTeam().incScore(1);
                     Visuals.updateScoreArea();
                     Visuals.appendArea("\n" +bases[i].getName() + " has scored from second!");
@@ -295,7 +318,9 @@ public class AwayActions {
             r = rand.nextInt() % 5;
             //Runner on 2nd or 3rd come in to score
             if(j >= 1 && bases[j] != null){
+                bases[j].incRuns();
                 bases[j] = null;
+                atBat.incRbis();
                 Baseball.getAwayTeam().incScore(1);
                 Visuals.updateScoreArea();
                 count++;
@@ -306,11 +331,13 @@ public class AwayActions {
                 //thrown out
                 if(to.getArm() > r && to.getArm() > bases[j].getSpeed()){
                     Baseball.incOuts(1);
-                    Visuals.appendArea("\n" +bases[j].getName() + " was thrown out trying to come in to score from first! Out number " + Baseball.getOuts());
+                    Visuals.appendArea("\n" + bases[j].getName() + " was thrown out trying to come in to score from first! Out number " + Baseball.getOuts());
                     bases[j] = null;
                 }
                 //scores
                 else{
+                    bases[j].incRuns();
+                    atBat.incRbis();
                     Baseball.getAwayTeam().incScore(1);
                     Visuals.updateScoreArea();
                     count++;
@@ -328,12 +355,12 @@ public class AwayActions {
         Visuals.adjustRunners(bases);
         //grammar
         if(count > 1){
-            Visuals.appendArea("\n" +count + " runs have scored!");
+            Visuals.appendArea("\n" + count + " runs have scored!");
         }
         else if(count > 0){
-            Visuals.appendArea("\n" +count + " run has scored!");
+            Visuals.appendArea("\n" + count + " run has scored!");
         }
-        count = 0;
+
         Visuals.hideBatters();
         return bases;
     }
@@ -344,7 +371,9 @@ public class AwayActions {
         //go through each base, if any has a Runner they score
         for(j = 2; j >= 0; j--){
             if(bases[j] != null){
+                bases[j].incRuns();
                 bases[j] = null;
+                atBat.incRbis();
                 Baseball.getAwayTeam().incScore(1);
                 Visuals.updateScoreArea();
                 count++;
@@ -368,12 +397,14 @@ public class AwayActions {
     }
 
     //method to handle away Team hitting a HR
-    public static Batter[] awayHR(Batter[] bases){
+    public static Batter[] awayHR(Batter[] bases, Batter atBat){
         int j, count = 0;
         //any Runner on base scores
         for(j = 0; j < 3; j++){
             if(bases[j] != null){
+                bases[j].incRuns();
                 bases[j] = null;
+                atBat.incRbis();
                 Baseball.getAwayTeam().incScore(1);
                 Visuals.updateScoreArea();
                 count++;
@@ -381,6 +412,8 @@ public class AwayActions {
             }
         }
         //add one more for the Batter
+        atBat.incRuns();
+        atBat.incRbis();
         Baseball.getAwayTeam().incScore(1);
         Visuals.updateScoreArea();
         count++;

@@ -147,9 +147,9 @@ public class Baseball{
                     //no error, out(s) recorded
                     else{
                         if(to == 0){
-                            AwayActions.awayOut(bases, home.getAce(), to);
+                            AwayActions.awayOut(bases, home.getAce(), to, away.getLineup()[away.getBattingSpot()]);
                         } else{
-                            AwayActions.awayOut(bases, home.getLineup()[to], to);
+                            AwayActions.awayOut(bases, home.getLineup()[to], to, away.getLineup()[away.getBattingSpot()]);
                         }
                     }
                 }
@@ -161,12 +161,14 @@ public class Baseball{
                     } else{
                         Visuals.appendArea("\n" + home.getAce().getName() + " has walked " + away.getLineup()[away.getBattingSpot()].getName() + ".");
                     }
+                    away.getLineup()[away.getBattingSpot()].incWalks();
                 }
                 //single
                 else if(outcome <= 65){
                     Visuals.appendArea("\n" +"Single!");
                     bases = AwayActions.awaySingle(bases, away.getLineup()[away.getBattingSpot()], home.getLineup()[to]);
                     away.getLineup()[away.getBattingSpot()].incHits();
+                    away.getLineup()[away.getBattingSpot()].incSingles();
                     away.incHits();
                     away.getLineup()[away.getBattingSpot()].incAbs();
                 }
@@ -175,14 +177,16 @@ public class Baseball{
                     Visuals.appendArea("\n" +"Double!");
                     bases = AwayActions.awayDouble(bases, away.getLineup()[away.getBattingSpot()], home.getLineup()[to]);
                     away.getLineup()[away.getBattingSpot()].incHits();
+                    away.getLineup()[away.getBattingSpot()].incDoubles();
                     away.incHits();
                     away.getLineup()[away.getBattingSpot()].incAbs();
                 }
                 //HR
                 else if(outcome <= 93){
                     Visuals.appendArea("\n" +"HR!");
-                    bases = AwayActions.awayHR(bases);
+                    bases = AwayActions.awayHR(bases, away.getLineup()[away.getBattingSpot()]);
                     away.getLineup()[away.getBattingSpot()].incHits();
+                    away.getLineup()[away.getBattingSpot()].incHrs();
                     away.incHits();
                     away.getLineup()[away.getBattingSpot()].incAbs();
                 }
@@ -191,6 +195,7 @@ public class Baseball{
                     Visuals.appendArea("\n" +"Triple!");
                     bases = AwayActions.awayTriple(bases, away.getLineup()[away.getBattingSpot()]);
                     away.getLineup()[away.getBattingSpot()].incHits();
+                    away.getLineup()[away.getBattingSpot()].incTriples();
                     away.incHits();
                     away.getLineup()[away.getBattingSpot()].incAbs();
                 }
@@ -259,7 +264,7 @@ public class Baseball{
                     }
                     //out(s)
                     else{
-                        HomeActions.homeOut(bases, to, inning);
+                        HomeActions.homeOut(bases, to, inning, home.getLineup()[home.getBattingSpot()]);
                     }
                     //walkoff check
                     if(inning >= 9 && home.getScore() > away.getScore()){
@@ -272,14 +277,16 @@ public class Baseball{
                     if(outcome > 32){
                         Visuals.appendArea("\n" + home.getAce().getName() + " just hit " + away.getLineup()[away.getBattingSpot()].getName() + " with the pitch!");
                     } else{
-                        Visuals.appendArea("\n" + away.getAce().getName() + " has walked " + home.getLineup()[home.getBattingSpot()].getName());
+                        Visuals.appendArea("\n" + away.getAce().getName() + " has walked " + home.getLineup()[home.getBattingSpot()].getName() + ".");
                     }
+                    home.getLineup()[home.getBattingSpot()].incWalks();
                 }
                 //single
                 else if(outcome <= 65){
                     Visuals.appendArea("\n" +"Single!");
                     bases = HomeActions.homeSingle(bases, home.getLineup()[home.getBattingSpot()], away.getLineup()[to]);
                     home.getLineup()[home.getBattingSpot()].incHits();
+                    home.getLineup()[home.getBattingSpot()].incSingles();
                     home.incHits();
                     home.getLineup()[home.getBattingSpot()].incAbs();
                     //walkoff check
@@ -292,6 +299,7 @@ public class Baseball{
                     Visuals.appendArea("\n" +"Double!");
                     bases = HomeActions.homeDouble(bases, home.getLineup()[home.getBattingSpot()], away.getLineup()[to]);
                     home.getLineup()[home.getBattingSpot()].incHits();
+                    home.getLineup()[home.getBattingSpot()].incDoubles();
                     home.incHits();
                     home.getLineup()[home.getBattingSpot()].incAbs();
                     //walkoff check
@@ -302,8 +310,9 @@ public class Baseball{
                 //HR
                 else if(outcome <= 93){
                     Visuals.appendArea("\n" +"HR!");
-                    bases = HomeActions.homeHR(bases);
+                    bases = HomeActions.homeHR(bases, home.getLineup()[home.getBattingSpot()]);
                     home.getLineup()[home.getBattingSpot()].incHits();
+                    home.getLineup()[home.getBattingSpot()].incHrs();
                     home.incHits();
                     home.getLineup()[home.getBattingSpot()].incAbs();
                     //walkoff check
@@ -316,6 +325,7 @@ public class Baseball{
                     Visuals.appendArea("\n" + "Triple!");
                     bases = HomeActions.homeTriple(bases, home.getLineup()[home.getBattingSpot()]);
                     home.getLineup()[home.getBattingSpot()].incHits();
+                    home.getLineup()[home.getBattingSpot()].incTriples();
                     home.incHits();
                     home.getLineup()[home.getBattingSpot()].incAbs();
                     //walkoff check
@@ -367,7 +377,11 @@ public class Baseball{
             //game over check, if true return
             if(i == 9 && home.getScore() > away.getScore()){
                 Visuals.appendArea("\n\n" +"Game over! The final score is " + away.getTeamName() + " " + away.getScore() + ", " + home.getTeamName() + " " + home.getScore() + ".");
+                Visuals.clearPlayers();
+                Visuals.clearFielders();
                 Visuals.finalScoreArea();
+                Visuals.finalAwayArea();
+                Visuals.finalHomeArea();
                 return;
             }
 
@@ -417,7 +431,11 @@ public class Baseball{
         }
 
         //game over
+        Visuals.clearPlayers();
+        Visuals.clearFielders();
         Visuals.finalScoreArea();
+        Visuals.finalAwayArea();
+        Visuals.finalHomeArea();
     }
 
     //if game goes to extra innings, this method will take over for gameplay

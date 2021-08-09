@@ -7,7 +7,7 @@ import java.util.Random;
 public class Batter implements Player {
     private String name;
     private char bhand, fhand;
-    private int field, hit, speed, power, eye, pos, num, arm, hits = 0, abs = 0;
+    private int field, hit, speed, power, eye, pos, num, arm, hits = 0, abs = 0, singles = 0, dbls = 0, triples = 0, hrs = 0, walks = 0, sbs = 0, cs = 0, sfs = 0, runs = 0, rbis = 0, gidps = 0, errors = 0;
 
     private static Random rand = new Random();
 
@@ -134,5 +134,102 @@ public class Batter implements Player {
 
     public void incAbs(){
         abs++;
+    }
+
+    public int getSingles(){
+        return singles;
+    }
+
+    public void incSingles(){
+        singles++;
+    }
+
+    public int getDoubles(){
+        return dbls;
+    }
+
+    public void incDoubles(){
+        dbls++;
+    }
+
+    public int getTriples(){
+        return triples;
+    }
+
+    public void incTriples(){
+        triples++;
+    }
+
+    public int getHrs(){
+        return hrs;
+    }
+
+    public void incHrs(){
+        hrs++;
+    }
+
+    public int getWalks(){
+        return walks;
+    }
+
+    public void incWalks(){
+        walks++;
+    }
+
+    public int getSbs(){
+        return sbs;
+    }
+
+    public void incSbs(){
+        sbs++;
+    }
+
+    public int getCs(){
+        return cs;
+    }
+
+    public void incCs(){
+        cs++;
+    }
+
+    public int getRuns(){
+        return runs;
+    }
+
+    public void incRuns(){
+        runs++;
+    }
+
+    public int getRbis(){
+        return rbis;
+    }
+
+    public void incRbis(){
+        rbis++;
+    }
+
+    public int getSfs(){
+        return sfs;
+    }
+
+    public void incSfs(){
+        sfs++;
+        rbis++;
+    }
+
+    public int getGidps(){
+        return gidps;
+    }
+
+    public void incGidps(){
+        gidps++;
+    }
+
+    public int getErrors(){
+        return errors;
+    }
+
+    public void incErrors(){
+        errors++;
     }
 }

@@ -24,6 +24,39 @@ public class App extends Application {
     private static ImageView pitcher, firstRunner, secondRunner, thirdRunner, lhb, rhb, homeOnDeck, awayOnDeck, firstBase, secondBase, thirdBase, shortStop, leftField, centerField, rightField;
     private static TextArea outputTextArea, scoreTextArea, homeTextArea, awayTextArea;
 
+
+    public static ImageView getPitcher(){
+        return pitcher;
+    }
+    
+    public static ImageView getFirstBase(){
+        return firstBase;
+    }
+
+    public static ImageView getSecondBase(){
+        return secondBase;
+    }
+
+    public static ImageView getThirdBase(){
+        return thirdBase;
+    }
+
+    public static ImageView getShortStop(){
+        return shortStop;
+    }
+
+    public static ImageView getLeftField(){
+        return leftField;
+    }
+
+    public static ImageView getCenterField(){
+        return centerField;
+    }
+
+    public static ImageView getRightField(){
+        return rightField;
+    }
+
     public static ImageView getFirstRunner(){
         return firstRunner;
     }

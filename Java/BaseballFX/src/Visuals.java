@@ -88,6 +88,22 @@ public class Visuals {
         }
     }
 
+    public static void finalAwayArea(){
+        if(Platform.isFxApplicationThread()){
+            App.getAwayTextArea().setMaxWidth(400);
+            App.getAwayTextArea().setText(Baseball.getAwayTeam().getTeamName() + " Final Results: ");
+            for(Batter bat : Baseball.getAwayTeam().getLineup()){
+                App.getAwayTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs() + "  " + finalBatterStats(bat));
+            }
+        } else{
+            Platform.runLater(() -> App.getAwayTextArea().setMaxWidth(400));
+            Platform.runLater(() -> App.getAwayTextArea().setText(Baseball.getAwayTeam().getTeamName() + " Final Results: "));
+            for(Batter bat : Baseball.getAwayTeam().getLineup()){
+                Platform.runLater(() -> App.getAwayTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs() + "  " + finalBatterStats(bat)));
+            }
+        }
+    }
+
     public static void updateHomeArea(){
         if(Platform.isFxApplicationThread()){
             App.getHomeTextArea().setText(Baseball.getHomeTeam().getTeamName() + " Lineup: ");
@@ -106,6 +122,69 @@ public class Visuals {
         }
     }
 
+    public static void finalHomeArea(){
+        if(Platform.isFxApplicationThread()){
+            App.getHomeTextArea().setMaxWidth(400);
+            App.getHomeTextArea().setText(Baseball.getHomeTeam().getTeamName() + " Final Results: ");
+            for(Batter bat : Baseball.getHomeTeam().getLineup()){
+                App.getHomeTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs() + "  " + finalBatterStats(bat));
+            }
+        } else{
+            Platform.runLater(() -> App.getHomeTextArea().setMaxWidth(400));
+            Platform.runLater(() -> App.getHomeTextArea().setText(Baseball.getHomeTeam().getTeamName() + " Final Results: "));
+            for(Batter bat : Baseball.getHomeTeam().getLineup()){
+                Platform.runLater(() -> App.getHomeTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs() + "  " + finalBatterStats(bat)));
+            }
+        }
+    }
+
+    public static String finalBatterStats(Batter batter){
+        String stats = "";
+
+        if(batter.getWalks() > 0){
+            stats = stats.concat(batter.getWalks() + " BB, ");
+        }
+        if(batter.getSingles() > 0){
+            stats = stats.concat(batter.getSingles() + " 1B, ");
+        }
+        if(batter.getDoubles() > 0){
+            stats = stats.concat(batter.getDoubles() + " 2B, ");
+        }
+        if(batter.getTriples() > 0){
+            stats = stats.concat(batter.getTriples() + " 3B, ");
+        }
+        if(batter.getHrs() > 0){
+            stats = stats.concat(batter.getHrs() + " HR, ");
+        }
+        if(batter.getSfs() > 0){
+            stats = stats.concat(batter.getSfs() + " SF, ");
+        }
+        if(batter.getRuns() > 0){
+            stats = stats.concat(batter.getRuns() + " R, ");
+        }
+        if(batter.getRbis() > 0){
+            stats = stats.concat(batter.getRbis() + " RBI, ");
+        }
+        if(batter.getSbs() > 0){
+            stats = stats.concat(batter.getSbs() + " SB, ");
+        }
+        if(batter.getCs() > 0){
+            stats = stats.concat(batter.getCs() + " CS, ");
+        }
+        if(batter.getGidps() > 0){
+            stats = stats.concat(batter.getGidps() + " GIDP, ");
+        }
+        if(batter.getErrors() > 0){
+            stats = stats.concat(batter.getErrors() + " E, ");
+        }
+
+        if(stats.length() > 0){
+            stats = stats.substring(0, stats.length() - 2);
+        }
+
+        return stats;
+    }
+
     public static void clearPlayers(){
         App.getThirdRunner().setVisible(false);
         App.getSecondRunner().setVisible(false);
@@ -114,6 +193,17 @@ public class Visuals {
         App.getRhb().setVisible(false);
         App.getAwayOnDeck().setVisible(false);
         App.getHomeOnDeck().setVisible(false);
+    }
+
+    public static void clearFielders(){
+        App.getPitcher().setVisible(false);
+        App.getFirstBase().setVisible(false);
+        App.getSecondBase().setVisible(false);
+        App.getThirdBase().setVisible(false);
+        App.getShortStop().setVisible(false);
+        App.getLeftField().setVisible(false);
+        App.getCenterField().setVisible(false);
+        App.getRightField().setVisible(false);
     }
 
     public static void hideBatters(){
