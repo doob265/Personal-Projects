@@ -198,6 +198,13 @@ public class HomeActions {
             Baseball.incOuts(1);
             bases = homeSacFly(bases, to, inning, atBat);
         }
+        //strikeout
+        else if(to == 1){
+            Baseball.incOuts(1);
+            Visuals.appendArea("\n" + Baseball.getAwayTeam().getAce().getName() + " struck him out! Out number " + Baseball.getOuts() + ".");
+            Baseball.getAwayTeam().getAce().incStrikeOuts();
+            atBat.incStrikeOuts();
+        }
         //ordinary out
         else{
             Baseball.incOuts(1);
@@ -391,10 +398,10 @@ public class HomeActions {
 
         //grammar check
         if(count > 1){
-            Visuals.appendArea("\n" +count + " runs have scored!");
+            Visuals.appendArea("\n" + count + " runs have scored!");
         }
         else if(count > 0){
-            Visuals.appendArea("\n" +count + " run has scored!");
+            Visuals.appendArea("\n" + count + " run has scored!");
         }
 
         return bases;
@@ -462,11 +469,14 @@ public class HomeActions {
         count++;
         
         //grammar check
-        if(count > 1){
-            Visuals.appendArea("\n" +count + " runs have scored!");
+        if(count == 4){
+            Visuals.appendArea("GRAND SLAM!!\n" + count + " runs have scored!");
+        }
+        else if(count > 1){
+            Visuals.appendArea("HR!\n" + count + " runs have scored!");
         }
         else if(count > 0){
-            Visuals.appendArea("\n" +count + " run has scored!");
+            Visuals.appendArea("HR!\n" + count + " run has scored!");
         }
 
         Visuals.hideBatters();

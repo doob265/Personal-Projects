@@ -7,7 +7,8 @@ import java.util.Random;
 public class Pitcher implements Player{
     private String name;
     private char hand;
-    private int num, acc, field, stam, velo;
+    private int num, acc, field, stam, velo, ks = 0, walks = 0;
+    private boolean W = false;
 
     private static Random rand = new Random();
 
@@ -48,6 +49,30 @@ public class Pitcher implements Player{
 
     public int getVelo(){
         return velo;
+    }
+
+    public int getWalks(){
+        return walks;
+    }
+
+    public void incWalks(){
+        walks++;
+    }
+
+    public int getStrikeOuts(){
+        return ks;
+    }
+
+    public void incStrikeOuts(){
+        ks++;
+    }
+
+    public boolean getResult(){
+        return W;
+    }
+
+    public void isWinner(){
+        W = true;
     }
 
     //return random number, between 1 and 5, to use for a specific player stat

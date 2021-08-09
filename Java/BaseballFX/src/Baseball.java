@@ -162,6 +162,7 @@ public class Baseball{
                         Visuals.appendArea("\n" + home.getAce().getName() + " has walked " + away.getLineup()[away.getBattingSpot()].getName() + ".");
                     }
                     away.getLineup()[away.getBattingSpot()].incWalks();
+                    home.getAce().incWalks();
                 }
                 //single
                 else if(outcome <= 65){
@@ -174,7 +175,7 @@ public class Baseball{
                 }
                 //double
                 else if(outcome <= 80){
-                    Visuals.appendArea("\n" +"Double!");
+                    Visuals.appendArea("\n" + "Double!");
                     bases = AwayActions.awayDouble(bases, away.getLineup()[away.getBattingSpot()], home.getLineup()[to]);
                     away.getLineup()[away.getBattingSpot()].incHits();
                     away.getLineup()[away.getBattingSpot()].incDoubles();
@@ -183,7 +184,6 @@ public class Baseball{
                 }
                 //HR
                 else if(outcome <= 93){
-                    Visuals.appendArea("\n" +"HR!");
                     bases = AwayActions.awayHR(bases, away.getLineup()[away.getBattingSpot()]);
                     away.getLineup()[away.getBattingSpot()].incHits();
                     away.getLineup()[away.getBattingSpot()].incHrs();
@@ -280,6 +280,7 @@ public class Baseball{
                         Visuals.appendArea("\n" + away.getAce().getName() + " has walked " + home.getLineup()[home.getBattingSpot()].getName() + ".");
                     }
                     home.getLineup()[home.getBattingSpot()].incWalks();
+                    away.getAce().incWalks();
                 }
                 //single
                 else if(outcome <= 65){
@@ -309,7 +310,6 @@ public class Baseball{
                 }
                 //HR
                 else if(outcome <= 93){
-                    Visuals.appendArea("\n" +"HR!");
                     bases = HomeActions.homeHR(bases, home.getLineup()[home.getBattingSpot()]);
                     home.getLineup()[home.getBattingSpot()].incHits();
                     home.getLineup()[home.getBattingSpot()].incHrs();
@@ -377,6 +377,7 @@ public class Baseball{
             //game over check, if true return
             if(i == 9 && home.getScore() > away.getScore()){
                 Visuals.appendArea("\n\n" +"Game over! The final score is " + away.getTeamName() + " " + away.getScore() + ", " + home.getTeamName() + " " + home.getScore() + ".");
+                home.getAce().isWinner();
                 Visuals.clearPlayers();
                 Visuals.clearFielders();
                 Visuals.finalScoreArea();
@@ -431,6 +432,11 @@ public class Baseball{
         }
 
         //game over
+        if(home.getScore() > away.getScore()){
+            home.getAce().isWinner();
+        } else{
+            away.getAce().isWinner();
+        }
         Visuals.clearPlayers();
         Visuals.clearFielders();
         Visuals.finalScoreArea();

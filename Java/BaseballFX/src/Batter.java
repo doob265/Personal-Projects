@@ -7,7 +7,7 @@ import java.util.Random;
 public class Batter implements Player {
     private String name;
     private char bhand, fhand;
-    private int field, hit, speed, power, eye, pos, num, arm, hits = 0, abs = 0, singles = 0, dbls = 0, triples = 0, hrs = 0, walks = 0, sbs = 0, cs = 0, sfs = 0, runs = 0, rbis = 0, gidps = 0, errors = 0;
+    private int field, hit, speed, power, eye, pos, num, arm, hits = 0, abs = 0, singles = 0, dbls = 0, triples = 0, hrs = 0, walks = 0, sbs = 0, cs = 0, sfs = 0, runs = 0, rbis = 0, gidps = 0, errors = 0, ks = 0;
 
     private static Random rand = new Random();
 
@@ -24,50 +24,6 @@ public class Batter implements Player {
         this.pos = pos;
         this.num = num;
         this.arm = arm;
-    }
-
-    public String getName(){
-        return name;
-    }
-
-    public char getBHand(){
-        return bhand;
-    }
-
-    public char getFHand(){
-        return fhand;
-    }
-
-    public int getField(){
-        return field;
-    }
-
-    public int getHit(){
-        return hit;
-    }
-
-    public int getSpeed(){
-        return speed;
-    }
-
-    public int getPower(){
-        return power;
-    }
-
-    public int getEye(){
-        return eye;
-    }
-
-    public int getPos(){
-        return pos;
-    }
-
-    public int getNum(){
-        return num;
-    }
-
-    public int getArm(){
-        return arm;
     }
 
     //return random number, between 1 and 5, to use for a specific player stat
@@ -118,6 +74,50 @@ public class Batter implements Player {
     //generate new Batter with randomized parameters, count is defensive position/position in batting lineup
     public static Batter genBat(int count){
         return new Batter(randName(), randHand(), randHand(), randStats(), randStats(), randStats(), randStats(), randStats(), randStats(), count, randNum());
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public char getBHand(){
+        return bhand;
+    }
+
+    public char getFHand(){
+        return fhand;
+    }
+
+    public int getField(){
+        return field;
+    }
+
+    public int getHit(){
+        return hit;
+    }
+
+    public int getSpeed(){
+        return speed;
+    }
+
+    public int getPower(){
+        return power;
+    }
+
+    public int getEye(){
+        return eye;
+    }
+
+    public int getPos(){
+        return pos;
+    }
+
+    public int getNum(){
+        return num;
+    }
+
+    public int getArm(){
+        return arm;
     }
 
     public int getHits(){
@@ -231,5 +231,13 @@ public class Batter implements Player {
 
     public void incErrors(){
         errors++;
+    }
+
+    public int getStrikeOuts(){
+        return ks;
+    }
+
+    public void incStrikeOuts(){
+        ks++;
     }
 }
