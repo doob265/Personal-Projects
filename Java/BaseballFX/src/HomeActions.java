@@ -470,13 +470,13 @@ public class HomeActions {
         
         //grammar check
         if(count == 4){
-            Visuals.appendArea("GRAND SLAM!!\n" + count + " runs have scored!");
+            Visuals.appendArea("\nGRAND SLAM!!\n" + count + " runs have scored!");
         }
         else if(count > 1){
-            Visuals.appendArea("HR!\n" + count + " runs have scored!");
+            Visuals.appendArea("\nHR!\n" + count + " runs have scored!");
         }
         else if(count > 0){
-            Visuals.appendArea("HR!\n" + count + " run has scored!");
+            Visuals.appendArea("\nHR!\n" + count + " run has scored!");
         }
 
         Visuals.hideBatters();

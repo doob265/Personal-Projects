@@ -279,7 +279,7 @@ public class App extends Application {
                         root.getChildren().add(borderPane);
 
                         // create new baseball instance passing in Team names
-                        Baseball b = new Baseball(homeName, awayName, awayOnDeck, homeOnDeck);
+                        Baseball b = new Baseball(homeName, awayName);
                         Team home = b.getHomeTeam();
                         Batter[] homeLineup = home.getLineup();
                         homeTextArea.setText(home.getTeamName()+ " Lineup: ");

@@ -15,14 +15,11 @@ public class Baseball{
     private static boolean isTop;
     private static Team home, away;
     private static int outs, inning;
-    private static ImageView awayOnDeck, homeOnDeck;
 
     //Baseball constructor, taking in Team names and constructing Teams
-    public Baseball(String h, String a, ImageView awayNext, ImageView homeNext){
+    public Baseball(String h, String a){
         home = Team.buildTeam(h, true);
         away = Team.buildTeam(a, false);
-        awayOnDeck = awayNext;
-        homeOnDeck = homeNext;
     }
 
     public void setInning(int i){
@@ -107,8 +104,8 @@ public class Baseball{
             }
             Visuals.appendArea("\n" + "Now up to bat, number " + away.getLineup()[away.getBattingSpot()].getNum() + ", " + away.getLineup()[away.getBattingSpot()].getName() + "!");
             Visuals.handedness(away.getLineup()[away.getBattingSpot()]);
-            awayOnDeck.setVisible(true);
-            homeOnDeck.setVisible(false);
+            App.getAwayOnDeck().setVisible(true);
+            App.getHomeOnDeck().setVisible(false);
 
             try{
                 Thread.sleep(1000);
@@ -225,8 +222,8 @@ public class Baseball{
             }
             Visuals.appendArea("\n" +"Now up to bat, number " + home.getLineup()[home.getBattingSpot()].getNum() + ", " + home.getLineup()[home.getBattingSpot()].getName() + "!");
             Visuals.handedness(home.getLineup()[home.getBattingSpot()]);
-            awayOnDeck.setVisible(false);
-            homeOnDeck.setVisible(true);
+            App.getAwayOnDeck().setVisible(false);
+            App.getHomeOnDeck().setVisible(true);
 
             try{
                 Thread.sleep(1000);

@@ -76,14 +76,14 @@ public class Visuals {
             for(Batter bat : Baseball.getAwayTeam().getLineup()){
                 App.getAwayTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs());
             }
-            App.getAwayTextArea().appendText("\n" + "P: " + Baseball.getAwayTeam().getAce().getName());
+            App.getAwayTextArea().appendText("\n" + "P: " + Baseball.getAwayTeam().getAce().getName() + " (" + Baseball.getAwayTeam().getAce().getHand() + ")");
         } else{
             Platform.runLater(() -> App.getAwayTextArea().setText(Baseball.getAwayTeam().getTeamName() + " Lineup: "));
             for(Batter bat : Baseball.getAwayTeam().getLineup()){
                 Platform.runLater(() -> App.getAwayTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs()));
             }
             Platform.runLater(()->{
-                App.getAwayTextArea().appendText("\n" + "P: " + Baseball.getAwayTeam().getAce().getName());
+                App.getAwayTextArea().appendText("\n" + "P: " + Baseball.getAwayTeam().getAce().getName() + " (" + Baseball.getAwayTeam().getAce().getHand() + ")");
             });
         }
     }
@@ -93,17 +93,17 @@ public class Visuals {
             App.getAwayTextArea().setMaxWidth(400);
             App.getAwayTextArea().setText(Baseball.getAwayTeam().getTeamName() + " Final Results: ");
             for(Batter bat : Baseball.getAwayTeam().getLineup()){
-                App.getAwayTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs() + "  " + finalBatterStats(bat));
+                App.getAwayTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs() + ", " + finalBatterStats(bat));
             }
-            App.getAwayTextArea().appendText("\n" + "P: " + Baseball.getAwayTeam().getAce().getName() + " " + finalPitcherStats(Baseball.getAwayTeam().getAce()));
+            App.getAwayTextArea().appendText("\n" + "P: " + Baseball.getAwayTeam().getAce().getName() + " (" + Baseball.getAwayTeam().getAce().getHand() + ") " + finalPitcherStats(Baseball.getAwayTeam().getAce()));
         } else{
             Platform.runLater(() -> App.getAwayTextArea().setMaxWidth(400));
             Platform.runLater(() -> App.getAwayTextArea().setText(Baseball.getAwayTeam().getTeamName() + " Final Results: "));
             for(Batter bat : Baseball.getAwayTeam().getLineup()){
-                Platform.runLater(() -> App.getAwayTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs() + "  " + finalBatterStats(bat)));
+                Platform.runLater(() -> App.getAwayTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs() + ", " + finalBatterStats(bat)));
             }
             Platform.runLater(()->{
-                App.getAwayTextArea().appendText("\n" + "P: " + Baseball.getAwayTeam().getAce().getName() + " " + finalPitcherStats(Baseball.getAwayTeam().getAce()));
+                App.getAwayTextArea().appendText("\n" + "P: " + Baseball.getAwayTeam().getAce().getName() + " (" + Baseball.getAwayTeam().getAce().getHand() + ") " + finalPitcherStats(Baseball.getAwayTeam().getAce()));
             });
         }
     }
@@ -114,14 +114,14 @@ public class Visuals {
             for(Batter bat : Baseball.getAwayTeam().getLineup()){
                 App.getHomeTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs());
             }
-            App.getHomeTextArea().appendText("\n" + "P: " + Baseball.getHomeTeam().getAce().getName());
+            App.getHomeTextArea().appendText("\n" + "P: " + Baseball.getHomeTeam().getAce().getName() + " (" + Baseball.getHomeTeam().getAce().getHand() + ")");
         } else{
             Platform.runLater(() -> App.getHomeTextArea().setText(Baseball.getHomeTeam().getTeamName() + " Lineup: "));
             for(Batter bat : Baseball.getHomeTeam().getLineup()){
                 Platform.runLater(() -> App.getHomeTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs()));
             }
             Platform.runLater(()->{
-                App.getHomeTextArea().appendText("\n" + "P: " + Baseball.getHomeTeam().getAce().getName());
+                App.getHomeTextArea().appendText("\n" + "P: " + Baseball.getHomeTeam().getAce().getName() + " (" + Baseball.getHomeTeam().getAce().getHand() + ")");
             });
         }
     }
@@ -131,17 +131,17 @@ public class Visuals {
             App.getHomeTextArea().setMaxWidth(400);
             App.getHomeTextArea().setText(Baseball.getHomeTeam().getTeamName() + " Final Results: ");
             for(Batter bat : Baseball.getHomeTeam().getLineup()){
-                App.getHomeTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs() + "  " + finalBatterStats(bat));
+                App.getHomeTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs() + ", " + finalBatterStats(bat));
             }
-            App.getHomeTextArea().appendText("\n" + "P: " + Baseball.getHomeTeam().getAce().getName() + " " + finalPitcherStats(Baseball.getHomeTeam().getAce()));
+            App.getHomeTextArea().appendText("\n" + "P: " + Baseball.getHomeTeam().getAce().getName() + " (" + Baseball.getAwayTeam().getAce().getHand() + ") " + finalPitcherStats(Baseball.getHomeTeam().getAce()));
         } else{
             Platform.runLater(() -> App.getHomeTextArea().setMaxWidth(400));
             Platform.runLater(() -> App.getHomeTextArea().setText(Baseball.getHomeTeam().getTeamName() + " Final Results: "));
             for(Batter bat : Baseball.getHomeTeam().getLineup()){
-                Platform.runLater(() -> App.getHomeTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs() + "  " + finalBatterStats(bat)));
+                Platform.runLater(() -> App.getHomeTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs() + ", " + finalBatterStats(bat)));
             }
             Platform.runLater(()->{
-                App.getHomeTextArea().appendText("\n" + "P: " + Baseball.getHomeTeam().getAce().getName() + " " + finalPitcherStats(Baseball.getHomeTeam().getAce()));
+                App.getHomeTextArea().appendText("\n" + "P: " + Baseball.getHomeTeam().getAce().getName() + " (" + Baseball.getAwayTeam().getAce().getHand() + ") " + finalPitcherStats(Baseball.getHomeTeam().getAce()));
             });
         }
     }
