@@ -17,13 +17,18 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.BorderPane;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class App extends Application {
     private String awayName;
     private String homeName;
     private static ImageView pitcher, firstRunner, secondRunner, thirdRunner, lhb, rhb, homeOnDeck, awayOnDeck, firstBase, secondBase, thirdBase, shortStop, leftField, centerField, rightField;
     private static TextArea outputTextArea, scoreTextArea, homeTextArea, awayTextArea;
-
+    private static ArrayList<String> fNames = new ArrayList<>();
+    private static ArrayList<String> lNames = new ArrayList<>();
 
     public static ImageView getPitcher(){
         return pitcher;
@@ -101,6 +106,38 @@ public class App extends Application {
         return awayTextArea;
     }
 
+    public static ArrayList<String> getFirstNames(){
+        return fNames;
+    }
+
+    public static ArrayList<String> getLastNames(){
+        return lNames;
+    }
+
+    private void genNameBanks(){
+        Scanner scanner = null;
+        String name;
+        try{
+        scanner = new Scanner(new File("src/male-first-names.txt"));
+        } catch(FileNotFoundException e){
+            e.printStackTrace();
+        }
+        while(scanner.hasNextLine()){
+            name = scanner.nextLine().toLowerCase();
+            fNames.add(name.substring(0,1).toUpperCase() + name.substring(1));
+        }
+        try{
+        scanner = new Scanner(new File("src/last-names.txt"));
+        } catch(FileNotFoundException e){
+            e.printStackTrace();
+        }
+        while(scanner.hasNextLine()){
+            name = scanner.nextLine().toLowerCase();
+            lNames.add(name.substring(0,1).toUpperCase() + name.substring(1));
+        }
+        scanner.close();
+    }
+
     @Override public void start(Stage stage) throws InterruptedException{
 
         Group root = new Group();
@@ -133,12 +170,12 @@ public class App extends Application {
 
         homeTextArea = new TextArea();
         homeTextArea.setEditable(false);
-        homeTextArea.setMaxWidth(180);
+        homeTextArea.setMaxWidth(200);
         homeTextArea.setMaxHeight(210);
 
         awayTextArea = new TextArea();
         awayTextArea.setEditable(false);
-        awayTextArea.setMaxWidth(180);
+        awayTextArea.setMaxWidth(200);
         awayTextArea.setMaxHeight(210);
 
         BorderPane borderPane = new BorderPane();
@@ -277,6 +314,8 @@ public class App extends Application {
                         pane.getChildren().removeAll(pane.getChildren());
                         root.getChildren().remove(pane);
                         root.getChildren().add(borderPane);
+
+                        genNameBanks();
 
                         // create new baseball instance passing in Team names
                         Baseball b = new Baseball(homeName, awayName);

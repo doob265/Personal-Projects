@@ -93,14 +93,14 @@ public class Visuals {
             App.getAwayTextArea().setMaxWidth(400);
             App.getAwayTextArea().setText(Baseball.getAwayTeam().getTeamName() + " Final Results: ");
             for(Batter bat : Baseball.getAwayTeam().getLineup()){
-                App.getAwayTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs() + ", " + finalBatterStats(bat));
+                App.getAwayTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs() + finalBatterStats(bat));
             }
             App.getAwayTextArea().appendText("\n" + "P: " + Baseball.getAwayTeam().getAce().getName() + " (" + Baseball.getAwayTeam().getAce().getHand() + ") " + finalPitcherStats(Baseball.getAwayTeam().getAce()));
         } else{
             Platform.runLater(() -> App.getAwayTextArea().setMaxWidth(400));
             Platform.runLater(() -> App.getAwayTextArea().setText(Baseball.getAwayTeam().getTeamName() + " Final Results: "));
             for(Batter bat : Baseball.getAwayTeam().getLineup()){
-                Platform.runLater(() -> App.getAwayTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs() + ", " + finalBatterStats(bat)));
+                Platform.runLater(() -> App.getAwayTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs() + finalBatterStats(bat)));
             }
             Platform.runLater(()->{
                 App.getAwayTextArea().appendText("\n" + "P: " + Baseball.getAwayTeam().getAce().getName() + " (" + Baseball.getAwayTeam().getAce().getHand() + ") " + finalPitcherStats(Baseball.getAwayTeam().getAce()));
@@ -131,14 +131,14 @@ public class Visuals {
             App.getHomeTextArea().setMaxWidth(400);
             App.getHomeTextArea().setText(Baseball.getHomeTeam().getTeamName() + " Final Results: ");
             for(Batter bat : Baseball.getHomeTeam().getLineup()){
-                App.getHomeTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs() + ", " + finalBatterStats(bat));
+                App.getHomeTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs() + finalBatterStats(bat));
             }
             App.getHomeTextArea().appendText("\n" + "P: " + Baseball.getHomeTeam().getAce().getName() + " (" + Baseball.getAwayTeam().getAce().getHand() + ") " + finalPitcherStats(Baseball.getHomeTeam().getAce()));
         } else{
             Platform.runLater(() -> App.getHomeTextArea().setMaxWidth(400));
             Platform.runLater(() -> App.getHomeTextArea().setText(Baseball.getHomeTeam().getTeamName() + " Final Results: "));
             for(Batter bat : Baseball.getHomeTeam().getLineup()){
-                Platform.runLater(() -> App.getHomeTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs() + ", " + finalBatterStats(bat)));
+                Platform.runLater(() -> App.getHomeTextArea().appendText("\n" + (bat.getPos() - 1) + ". " + bat.getName() + " (" + bat.getBHand() + ") " + bat.getHits() + " - " + bat.getAbs() + finalBatterStats(bat)));
             }
             Platform.runLater(()->{
                 App.getHomeTextArea().appendText("\n" + "P: " + Baseball.getHomeTeam().getAce().getName() + " (" + Baseball.getAwayTeam().getAce().getHand() + ") " + finalPitcherStats(Baseball.getHomeTeam().getAce()));
@@ -147,7 +147,7 @@ public class Visuals {
     }
 
     public static String finalBatterStats(Batter batter){
-        String stats = "";
+        String stats = ", ";
 
         if(batter.getWalks() > 0){
             stats = stats.concat(batter.getWalks() + " BB, ");
@@ -193,7 +193,11 @@ public class Visuals {
             stats = stats.substring(0, stats.length() - 2);
         }
 
-        return stats;
+        if(stats.length() == 2){
+            return "";
+        } else{
+            return stats;
+        }
     }
 
     public static String finalPitcherStats(Pitcher pitcher){

@@ -159,7 +159,7 @@ public class AwayActions {
             Baseball.incOuts(2);
             atBat.incGidps();
             Visuals.appendArea("\n" + "A comebacker to the mound, snagged by " + ((Pitcher)fielder).getName() + ", and they're able to double off " + first + " at first! There are now " + Baseball.getOuts() + " outs.");
-            Baseball.getAwayTeam().getLineup()[Baseball.getAwayTeam().getBattingSpot()].incAbs();
+            atBat.incAbs();
         }
         //triple play hit to Pitcher
         else if(Baseball.getOuts() == 0 && bases[0] != null && bases[1] != null && fielder instanceof Pitcher && ((Pitcher)fielder).getField() > roll){
@@ -167,7 +167,7 @@ public class AwayActions {
             bases[1] = null;
             Baseball.incOuts(3);
             Visuals.appendArea("\n" + "Triple play! There are now " + Baseball.getOuts() + " outs.");
-            Baseball.getAwayTeam().getLineup()[Baseball.getAwayTeam().getBattingSpot()].incAbs();
+            atBat.incAbs();
         }
         //double play, hit to infielder
         else if(bases[0] != null && Baseball.getOuts() < 2 && to < 5 && Baseball.getHomeTeam().getLineup()[to].getField() > roll){
@@ -175,7 +175,7 @@ public class AwayActions {
             Baseball.incOuts(2);
             atBat.incGidps();
             Visuals.appendArea("\n" + "Double play! There are now " + Baseball.getOuts() + " outs.");
-            Baseball.getAwayTeam().getLineup()[Baseball.getAwayTeam().getBattingSpot()].incAbs();
+            atBat.incAbs();
         }
         //triple play hit to infielder
         else if(Baseball.getOuts() == 0 && bases[0] != null && bases[1] != null && to < 5 && Baseball.getHomeTeam().getLineup()[to].getField() > roll){
@@ -183,7 +183,7 @@ public class AwayActions {
             bases[1] = null;
             Baseball.incOuts(3);
             Visuals.appendArea("\n" + "Triple play! There are now " + Baseball.getOuts() + " outs.");
-            Baseball.getAwayTeam().getLineup()[Baseball.getAwayTeam().getBattingSpot()].incAbs();
+            atBat.incAbs();
         }
         //sac fly hit to outfielder
         else if(Baseball.getOuts() < 2 && to > 4 && to < 8 && (bases[1] != null || bases[2] != null) && Baseball.getAwayTeam().getLineup()[to].getField() > roll){
@@ -191,17 +191,18 @@ public class AwayActions {
             bases = awaySacFly(bases, to, atBat);
         }
         //strikeout
-        else if(to == 1){
+        else if((Baseball.getHomeTeam().getAce().getAcc() * Baseball.getHomeTeam().getAce().getVelo()) / 2 > (atBat.getEye() * atBat.getHit()) / 2 && rand.nextInt() % 2 == 0){
             Baseball.incOuts(1);
             Visuals.appendArea("\n" + Baseball.getHomeTeam().getAce().getName() + " struck him out! Out number " + Baseball.getOuts() + ".");
             Baseball.getHomeTeam().getAce().incStrikeOuts();
             atBat.incStrikeOuts();
+            atBat.incAbs();
         }
         //ordinary out
         else{
             Baseball.incOuts(1);
             Visuals.appendArea("\n" + "Out number " + Baseball.getOuts() + ".");
-            Baseball.getAwayTeam().getLineup()[Baseball.getAwayTeam().getBattingSpot()].incAbs();
+            atBat.incAbs();
         }
 
         Visuals.hideBatters();
@@ -361,7 +362,10 @@ public class AwayActions {
         bases[1] = atBat;
         Visuals.adjustRunners(bases);
         //grammar
-        if(count > 1){
+        if(count == 3){
+            Visuals.appendArea("\nIt's a bases-clearing double!\n" + count + " runs have scored!");
+        }
+        else if(count > 1){
             Visuals.appendArea("\n" + count + " runs have scored!");
         }
         else if(count > 0){
@@ -391,8 +395,11 @@ public class AwayActions {
         bases[2] = atBat;
 
         //grammar check
-        if(count > 1){
-            Visuals.appendArea("\n" +count + " runs have scored!");
+        if(count == 3){
+            Visuals.appendArea("\nIt's a bases-clearing triple!\n" + count + " runs have scored!");
+        }
+        else if(count > 1){
+            Visuals.appendArea("\n" + count + " runs have scored!");
         }
         else if(count > 0){
             Visuals.appendArea("\n" +count + " run has scored!");

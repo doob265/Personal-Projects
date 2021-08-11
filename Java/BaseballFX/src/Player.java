@@ -2,7 +2,11 @@
   6/12/21
   BaseballFX - Player Interface*/
 
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public interface Player {
     public static Random rand = new Random();
@@ -34,19 +38,16 @@ public interface Player {
     //method used to generate random player names
     public static String randName(){
         //name banks for first and last names
-        String[] fname = {"Joe", "Bob", "Mark", "John", "Jim", "Tom", "Austin", "Brandon", "Max", "Rob", "Joe", "Sam", "Brad", "Chad", "Tim", "David", "Caleb"};
-        String[] lname = {"Smith", "Jones", "Miller", "Davis", "Hamilton", "Ford", "Sanchez", "Johnson", "Wallace", "Davis"};
-
-        //stores length of arrays
-        int flen = fname.length, llen = lname.length;
+        ArrayList<String> fNames = App.getFirstNames();
+        ArrayList<String> lNames = App.getLastNames();
 
         //get random first name, copy it into return String
-        int r = Math.abs(rand.nextInt() % flen);
-        String ret = new String(fname[r]);
+        int r = Math.abs(rand.nextInt() % fNames.size());
+        String ret = new String(fNames.get(r));
 
         //get random last name, concat it to end of chosen first name
-        r = Math.abs(rand.nextInt() % llen);
-        ret = ret.concat(" " + lname[r]);
+        r = Math.abs(rand.nextInt() % lNames.size());
+        ret = ret.concat(" " + lNames.get(r));
 
         return ret;
     }

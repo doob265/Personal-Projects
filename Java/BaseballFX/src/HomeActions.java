@@ -167,7 +167,7 @@ public class HomeActions {
             Baseball.incOuts(2);
             atBat.incGidps();
             Visuals.appendArea("\n" + "Double play! There are now " + Baseball.getOuts()+ " outs.");
-            Baseball.getHomeTeam().getLineup()[Baseball.getHomeTeam().getBattingSpot()].incAbs();
+            atBat.incAbs();
         }
         //triple play, hit to infielder
         else if(Baseball.getOuts()== 0 && bases[0] != null && bases[1] != null && to == 0 && Baseball.getAwayTeam().getAce().getField() > roll){
@@ -175,7 +175,7 @@ public class HomeActions {
             bases[1] = null;
             Baseball.incOuts(3);
             Visuals.appendArea("\n" + "Triple play! There are now " + Baseball.getOuts()+ " outs.");
-            Baseball.getHomeTeam().getLineup()[Baseball.getHomeTeam().getBattingSpot()].incAbs();
+            atBat.incAbs();
         }
         //double play, hit to infielder
         if(bases[0] != null && Baseball.getOuts()< 2 && to < 5 && Baseball.getAwayTeam().getLineup()[to].getField() > roll){
@@ -183,7 +183,7 @@ public class HomeActions {
             Baseball.incOuts(2);
             atBat.incGidps();
             Visuals.appendArea("\n" + "Double play! There are now " + Baseball.getOuts()+ " outs.");
-            Baseball.getHomeTeam().getLineup()[Baseball.getHomeTeam().getBattingSpot()].incAbs();
+            atBat.incAbs();
         }
         //triple play, hit to infielder
         else if(Baseball.getOuts()== 0 && bases[0] != null && bases[1] != null && to < 5 && Baseball.getAwayTeam().getLineup()[to].getField() > roll){
@@ -191,7 +191,7 @@ public class HomeActions {
             bases[1] = null;
             Baseball.incOuts(3);
             Visuals.appendArea("\n" + "Triple play! There are now " + Baseball.getOuts()+ " outs.");
-            Baseball.getHomeTeam().getLineup()[Baseball.getHomeTeam().getBattingSpot()].incAbs();
+            atBat.incAbs();
         }
         //sac fly, hit to outfielder
         else if(Baseball.getOuts()< 2 && to > 4 && to < 8 && (bases[1] != null || bases[2] != null) && Baseball.getAwayTeam().getLineup()[to].getField() > roll){
@@ -199,17 +199,18 @@ public class HomeActions {
             bases = homeSacFly(bases, to, inning, atBat);
         }
         //strikeout
-        else if(to == 1){
+        else if((Baseball.getAwayTeam().getAce().getAcc() * Baseball.getAwayTeam().getAce().getVelo()) / 2 > (atBat.getEye() * atBat.getHit()) / 2 && rand.nextInt() % 2 == 0){
             Baseball.incOuts(1);
             Visuals.appendArea("\n" + Baseball.getAwayTeam().getAce().getName() + " struck him out! Out number " + Baseball.getOuts() + ".");
             Baseball.getAwayTeam().getAce().incStrikeOuts();
             atBat.incStrikeOuts();
+            atBat.incAbs();
         }
         //ordinary out
         else{
             Baseball.incOuts(1);
             Visuals.appendArea("\n" + "Out number " + Baseball.getOuts()+ ".");
-            Baseball.getHomeTeam().getLineup()[Baseball.getHomeTeam().getBattingSpot()].incAbs();
+            atBat.incAbs();
         }
 
         Visuals.hideBatters();
@@ -397,7 +398,10 @@ public class HomeActions {
         Visuals.hideBatters();
 
         //grammar check
-        if(count > 1){
+        if(count == 3){
+            Visuals.appendArea("\nIt's a bases-clearing double!\n" + count + " runs have scored!");
+        }
+        else if(count > 1){
             Visuals.appendArea("\n" + count + " runs have scored!");
         }
         else if(count > 0){
@@ -434,8 +438,11 @@ public class HomeActions {
         Visuals.adjustRunners(bases);
 
         //grammar check
-        if(count > 1){
-            Visuals.appendArea("\n" +count + " runs have scored!");
+        if(count == 3){
+            Visuals.appendArea("\nIt's a bases-clearing triple!\n" + count + " runs have scored!");
+        }
+        else if(count > 1){
+            Visuals.appendArea("\n" + count + " runs have scored!");
         }
         else if(count > 0){
             Visuals.appendArea("\n" +count + " run has scored!");
@@ -483,7 +490,7 @@ public class HomeActions {
 
         //walkoff check
         if(Baseball.getInning() >= 9 && Baseball.getHomeTeam().getScore() > Baseball.getAwayTeam().getScore()){
-            Visuals.appendArea("\n\n" +"Walkoff! Game over! The final score is " + Baseball.getAwayTeam().getTeamName() + " " + Baseball.getAwayTeam().getScore() + ", " + Baseball.getHomeTeam().getTeamName() + " " + Baseball.getHomeTeam().getScore() + "!");
+            Visuals.appendArea("\n\n" + "Walkoff! Game over! The final score is " + Baseball.getAwayTeam().getTeamName() + " " + Baseball.getAwayTeam().getScore() + ", " + Baseball.getHomeTeam().getTeamName() + " " + Baseball.getHomeTeam().getScore() + "!");
             Visuals.finalScoreArea();
             return bases;
         }
